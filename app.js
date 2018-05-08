@@ -3,17 +3,17 @@ var express = require('express');
 var session = require('cookie-session');
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
+var db = require('./config/db');
 
 var app = express();
-var db = require('db');
 
 app.use(session({
 	name: 'session',
 	keys: ['M42atchaW?baridoN'],
 }))
 
-var register = require('./routes/register');
-app.use('/register', register)
+
+app.use('/register', require('./routes/register'))
 
 app.get('/', function(req, res) {
 	res.render('home.ejs');

@@ -4,6 +4,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var argon2 = require('argon2');
+var db = require('../config/db');
 
 router.get('/', function(req, res) {
 
@@ -22,18 +23,19 @@ router.post('/', urlencodedParser, function (req, res) {
 		argon2.hash(req.body.password).then(hash => {
 			console.log(hash);
 })
-   connection.query(‘CREATE TABLE tecst’, function(err, result) {
+	db.query('SELECT id FROM accounts WHERE login = ? OR email = ?', [req.body.login, req.body.email], function(err, result) {
+		if (err) throw err;
+
+        numRows = result.length;
+        console.log(numRows);
+        if (numRows < 1)
+        {
+        db.query('INSERT INTO accounts (login, email, password) VALUES (?, ?, ?)', [req.body.login, req.body.email, hash], function(err, result) {
         if (err) throw err;
-        else console.log(‘success’);
-    });
-    db.query(‘CREATE TABLE test’, function(err, result) {
-        if (err) throw err;
-        else console.log(‘success’);
-    });
-    db.query(‘INSERT INTO accounts (login) VALUES (?)’, [req.body.login], function(err, result) {
-        if (err) throw err;
-        else console.log(‘success’);
-    });
+        else console.log('success');
+    }); }
+	});
+
     console.log(req.body.password);
 }
 	res.redirect('/');
