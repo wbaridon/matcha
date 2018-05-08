@@ -23,7 +23,17 @@ router.post('/', urlencodedParser, function (req, res) {
 		argon2.hash(req.body.password).then(hash => {
 			console.log(hash);
 })
-	db.query('SELECT id FROM accounts WHERE login = ? OR email = ?', [req.body.login, req.body.email], function(err, result) {
+	var model = require('../models/test.js');
+	
+	userExist = model.userExist(req.body.login, req.body.email);
+	if (userExist == 0) {
+
+	}
+	else {
+		res.render('error.ejs', {error: 'Utilisateur ou email déjà existant' });
+	}
+
+	/*db.query('SELECT id FROM accounts WHERE login = ? OR email = ?', [req.body.login, req.body.email], function(err, result) {
 		if (err) throw err;
 
         numRows = result.length;
@@ -34,7 +44,7 @@ router.post('/', urlencodedParser, function (req, res) {
         if (err) throw err;
         else console.log('success');
     }); }
-	});
+	});*/
 
     console.log(req.body.password);
 }
