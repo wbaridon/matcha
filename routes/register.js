@@ -22,8 +22,19 @@ router.post('/', urlencodedParser, function (req, res) {
 		argon2.hash(req.body.password).then(hash => {
 			console.log(hash);
 })
-	console.log(req.body.login);
-	console.log(req.body.password);
+   connection.query(‘CREATE TABLE tecst’, function(err, result) {
+        if (err) throw err;
+        else console.log(‘success’);
+    });
+    db.query(‘CREATE TABLE test’, function(err, result) {
+        if (err) throw err;
+        else console.log(‘success’);
+    });
+    db.query(‘INSERT INTO accounts (login) VALUES (?)’, [req.body.login], function(err, result) {
+        if (err) throw err;
+        else console.log(‘success’);
+    });
+    console.log(req.body.password);
 }
 	res.redirect('/');
 })
