@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var app = express();
+var db = require('db');
 
 app.use(session({
 	name: 'session',
