@@ -30,7 +30,7 @@ router.post('/', urlencodedParser, function (req, res) {
         console.log(numRows);
         if (numRows < 1)
         {
-        db.query('INSERT INTO accounts (login, email, password) VALUES (?, ?, ?)', [req.body.login, req.body.email, hash], function(err, result) {
+        db.query('INSERT INTO accounts (login, email, password) VALUES (?, ?, ?)', [req.body.login, req.body.email, req.body.password], function(err, result) {
         if (err) throw err;
         else console.log('success');
     }); }
