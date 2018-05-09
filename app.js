@@ -42,6 +42,8 @@ app.get('/', function(req, res) {
 	@click.once pour ecouter event que une fois .prevent pour changer la defaut behaviour
 	// two way binding <input type='text' v-model='name' pour l'attacher a name et ainsi le name sera update
 	au lieu de mettre dans method pour computed on met dans computed pour uniquement maj si changement
+	// dynamic classes v-bind:class="{available: available}" -- c'est un objet donc une seule accolade
+	data available: false si on met true available apparaitra au dessus en tant que class
 	*/
 })
 
