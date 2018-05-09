@@ -7,6 +7,7 @@ var db = require('./config/db');
 
 var app = express();
 // app.set('view engine', 'ejs'); pour ne pas mettre .ejs dans les render
+app.use('/public', express.static('public'));
 app.use(session({
 	name: 'session',
 	keys: ['M42atchaW?baridoN'],

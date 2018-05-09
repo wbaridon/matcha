@@ -1,6 +1,6 @@
 var db = require('../config/db');
 
-exports.userExist = function (login, email) {
+module.exports.userExist = function (login, email) {
 	console.log(login);
 	db.query('SELECT id FROM accounts WHERE login = ? OR email = ?', [login, email], function(err, result) {
 		if (err) throw err;
