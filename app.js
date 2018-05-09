@@ -18,6 +18,31 @@ app.use('/register', require('./routes/register'))
 
 app.get('/', function(req, res) {
 	res.render('home.ejs');
+	/* Test prochain de vue
+	new Vue({
+		el: '#vue-app',
+		data: {
+			name: 'Test',   et dans vue app html on pourra mettre {{ name }}
+			website: 'www.test.fr' // data binding pr href par exemple v-bind:href="website" raccourci :href
+			// on peut bind le input pour value
+			// si on veut inserer aussi les balises a on fait balise p v-html="websitetagexemple"
+		},
+		methods: {
+		greet: function(time) // pour l'appeller {{greet('afternoon')}}
+			return 'Good' + time + '' + this.name;
+		},
+		add: function(){
+		this.age++;
+	}
+	});
+
+	// button v-on:click="methode add ou code avec age++ par exemple si on avait un age " pour faire des events
+	// on peut externaliser la methode idem avec add et substract en method
+	// raccourci @click @dblclick @mousemove
+	@click.once pour ecouter event que une fois .prevent pour changer la defaut behaviour
+	// two way binding <input type='text' v-model='name' pour l'attacher a name et ainsi le name sera update
+	au lieu de mettre dans method pour computed on met dans computed pour uniquement maj si changement
+	*/
 })
 
 .use(function(req, res, next) {
