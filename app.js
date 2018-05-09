@@ -6,7 +6,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var db = require('./config/db');
 
 var app = express();
-
+// app.set('view engine', 'ejs'); pour ne pas mettre .ejs dans les render
 app.use(session({
 	name: 'session',
 	keys: ['M42atchaW?baridoN'],
@@ -25,4 +25,3 @@ app.get('/', function(req, res) {
 });
 
 app.listen(8080);
-
