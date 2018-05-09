@@ -12,6 +12,8 @@ router.get('/', function(req, res) {
 })
 
 router.get('/about', function(req, res) {
+	var model = require('../models/test.js');
+	console.log(model.test());
 	res.send('About');
 })
 
@@ -23,15 +25,18 @@ router.post('/', urlencodedParser, function (req, res) {
 		argon2.hash(req.body.password).then(hash => {
 			console.log(hash);
 })
-	var model = require('../models/test.js');
-	
-	userExist = model.userExist(req.body.login, req.body.email);
-	if (userExist == 0) {
+	var model = require('../models/account.js');
 
-	}
-	else {
-		res.render('error.ejs', {error: 'Utilisateur ou email déjà existant' });
-	}
+	model.userExist(req.body.login, req.body.email, function(err, data) {
+		user = data;
+		console.log(user + 'dans boucle user exist');
+		if (user == 0){
+			console.log('Insertion en bdd a faire')
+		}
+		else
+			res.render('error.ejs', {error: 'Utilisateur ou email déjà existant' });
+	});
+	//console.log('User exist fonction = ' + model.userExist(req.body.login, req.body.email));
 
 	/*db.query('SELECT id FROM accounts WHERE login = ? OR email = ?', [req.body.login, req.body.email], function(err, result) {
 		if (err) throw err;
@@ -48,7 +53,7 @@ router.post('/', urlencodedParser, function (req, res) {
 
     console.log(req.body.password);
 }
-	res.redirect('/');
+	//res.redirect('/');
 })
 
 module.exports = router;
