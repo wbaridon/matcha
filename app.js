@@ -44,7 +44,31 @@ app.get('/', function(req, res) {
 	au lieu de mettre dans method pour computed on met dans computed pour uniquement maj si changement
 	// dynamic classes v-bind:class="{available: available}" -- c'est un objet donc une seule accolade
 	data available: false si on met true available apparaitra au dessus en tant que class
+
+	// conditionnal v-if="error" si faux n'apparait pas, la valeur est dans nos datas
+	// on peut avoir aussi v-else-if
+	// v-show='error' similaire mais difference apparait dans le dom avec display none
+	// v-for exemple li vi-for"x in name">{{name}}</li> Si on a un objet avec plusieurs propriete dans une ligne
+	// on peut faire le meme mais avec {{test.name}} {{test.age}} et pour output l'index on met (x, index) avec {{index}}
+	// possible de faire template v-for et </template> si on veut pas rajouter une balise
+	Pour creer plusieurs vues on va faire var one = new Vue ...
+	La variable permet de les faire interargir exemple button v-on:click="changeTitle">
+	et on creer la methode dans app 2 changeTitle: function() { one.title = ... }
+	on peut aussi changer les choses en dehors des vues two.title = ...;
+	Pour faire un template avec un vue on peut utiliser un compenent pour l utiliser a plusieurs endroits
+	Vue.component('name', {
+	template: '<p>test</p>'
+}); et pour l utiliser dans la vue on met dans le index html <name></name>
+si on veut mettre des data doit etre une fonction qui retourne un objet
+data: function () {
+return {
+	name: 'Yoshi'
+}
+}
+pour donner une ref a un element ref="test" et dans la vue on peut y acceder apres this.$refs.test.value pour acceder a la valeur par exemple
+// pour stylise uniquement un compenent on fait <style scoped></style>
 	*/
+
 })
 
 .use(function(req, res, next) {
