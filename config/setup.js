@@ -13,7 +13,7 @@ console.log('Database matcha created')
 connection.query ('USE matcha')
 
 var sql = 'CREATE TABLE IF NOT EXISTS accounts \
-(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, login VARCHAR(50),\
+(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, activation INT DEFAULT 0, login VARCHAR(50), \
 password VARCHAR(128), email VARCHAR(50), name VARCHAR(50), firstname VARCHAR(50))';
 
 connection.query(sql);

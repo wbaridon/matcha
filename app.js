@@ -15,6 +15,7 @@ app.use(session({
 
 
 app.use('/register', require('./routes/register'))
+app.use('/login', require('./routes/login'))
 
 app.get('/', function(req, res) {
 	res.render('home.ejs');

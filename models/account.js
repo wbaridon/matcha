@@ -18,3 +18,9 @@ module.exports.createUser = function (user) {
 			}
 		});
 }
+
+module.exports.userLogin = function (login, callback) {
+	db.query('SELECT password FROM accounts WHERE login = ?', [login], function(err, result) {
+		callback(null, result);
+	});
+}
