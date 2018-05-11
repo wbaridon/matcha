@@ -7,7 +7,12 @@
     </head>
     <body>
         <app-header></app-header>
-        <router-view/>
+        <div class='cover'>
+            <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
+        </div>
+        <div class="content">
+          <router-view/>
+        </div>
         <app-footer></app-footer>
     </body>
   </html>
@@ -33,4 +38,29 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+h2 {
+  margin: 0;
+}
+.content {
+  padding: 5%;
+  margin : 2% 5% 2% 5%;
+  border: 1px solid lightgrey;
+}
+.cover {
+  width: 100%;
+  height: 350px;
+  background-color: lightgrey;
+  border-bottom: solid 1px grey;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 2.5em;
+}
+.cover:hover {
+  background-color: black;
+  opacity: 0.4;
+}
+
 </style>
