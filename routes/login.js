@@ -16,13 +16,20 @@ router.post('/', urlencodedParser, function (req, res) {
 			password: req.body.password,
 		}
     model.userLogin(user.login, function (err, data) {
-  
+
       console.log(data);
       if (data.length > 0) {
         data = data[0].password;
         argon2.verify(data, user.password).then(match => {
           if (match) {
-            console.log('oui');
+            model.userIsActivate(user.login, function (err, data) {
+              if (data[0].activation == 1)
+              console.log('oui');
+              else {
+                console.log('merci activer compte');
+              }
+            })
+
           }
           else {
             console.log('non');

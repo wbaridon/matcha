@@ -19,6 +19,7 @@ app.use('/login', require('./routes/login'))
 
 app.get('/', function(req, res) {
 	res.render('home.ejs');
+	
 	/* Test prochain de vue
 	new Vue({
 		el: '#vue-app',

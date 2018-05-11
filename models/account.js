@@ -24,3 +24,9 @@ module.exports.userLogin = function (login, callback) {
 		callback(null, result);
 	});
 }
+
+module.exports.userIsActivate = function (login, callback) {
+	db.query('SELECT activation FROM accounts WHERE login = ?', [login], function(err, result) {
+		callback(null, result);
+	});
+}
