@@ -1,12 +1,23 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Titre non gere</title>
+    </head>
+    <body>
+        <app-header></app-header>
+        <router-view/>
+    </body>
+  </html>
 </template>
 
 <script>
+import Header from './components/Header.vue'
 export default {
-  name: 'App'
+  components: {
+    'app-header': Header
+  }
 }
 </script>
 
