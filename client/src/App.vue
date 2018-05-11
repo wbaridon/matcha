@@ -8,15 +8,18 @@
     <body>
         <app-header></app-header>
         <router-view/>
+        <app-footer></app-footer>
     </body>
   </html>
 </template>
 
 <script>
 import Header from './components/Header.vue'
+import Footer from './components/Footer.vue'
 export default {
   components: {
-    'app-header': Header
+    'app-header': Header,
+    'app-footer': Footer
   }
 }
 </script>
