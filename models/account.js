@@ -6,8 +6,15 @@ module.exports.userExist = function (login, email, callback) {
 	});
 }
 
-module.exports.test = function () {
-	console.log('Entre dans test');
-	var test = 'test';
-	return (test);
+module.exports.createUser = function (user) {
+	db.query('INSERT INTO accounts\
+		(login, email, password, name, firstname) \
+		VALUES (?,?,?,?,?)',
+	 	[user.login, user.email, user.password, user.name, user.firstname],
+		function (err, result) {
+			if (err) throw err;
+			else {
+				console.log('User created');
+			}
+		});
 }

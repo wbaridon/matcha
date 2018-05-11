@@ -12,7 +12,11 @@ connection.query('CREATE DATABASE IF NOT EXISTS matcha')
 console.log('Database matcha created')
 connection.query ('USE matcha')
 
-connection.query('CREATE TABLE IF NOT EXISTS accounts (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, login VARCHAR(50), password VARCHAR(128), email VARCHAR(50))')
+var sql = 'CREATE TABLE IF NOT EXISTS accounts \
+(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, login VARCHAR(50),\
+password VARCHAR(128), email VARCHAR(50), name VARCHAR(50), firstname VARCHAR(50))';
+
+connection.query(sql);
 console.log('Table accounts created')
 
 connection.end()
