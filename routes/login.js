@@ -16,7 +16,22 @@ router.post('/', urlencodedParser, function (req, res) {
 			password: req.body.password,
 		}
     model.userLogin(user.login, function (err, data) {
+  
       console.log(data);
+      if (data.length > 0) {
+        data = data[0].password;
+        argon2.verify(data, user.password).then(match => {
+          if (match) {
+            console.log('oui');
+          }
+          else {
+            console.log('non');
+          }
+        })
+      }
+      else {
+        res.render('error.ejs', {error: 'Utilisateur ou mot de passe faux'});
+      }
     });
   }
   else {
