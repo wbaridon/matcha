@@ -45,4 +45,8 @@ router.post('/', urlencodedParser, function (req, res) {
     res.render('error.ejs', {error: 'Merci de remplir tous les champs'});
   }
 });
+
+router.post('/test', function (req, res) {
+console.log(Data);
+});
 module.exports = router;
