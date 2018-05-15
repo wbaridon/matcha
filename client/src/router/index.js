@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import Register from '@/components/Register'
 import Reset from '@/components/Reset'
 import Posts from '@/components/Posts'
+import Profile from '@/components/Profile'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/posts',
       name: 'Posts',
       component: Posts
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile
     }
   ]
 })
