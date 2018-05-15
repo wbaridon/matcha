@@ -1,9 +1,13 @@
 <template>
   <div class="profile">
     <h1>Mon profil</h1>
-    <a href="#">Changer mes informations</a>
+    <a href="#">Changer mes informations</a><br><br>
     <h2> {{firstname}} {{name}} </h2>
-    {{email}}
+    {{email}}<br>
+    {{sexualOrientation}}<br>
+    {{type}}
+    <h3>QUI SUIS JE?</h3>
+    {{biography}}
     <h3>VOS PASSIONS</h3>
     <div id='interests'>
       <div v-for="interest in interests" v-bind:key="interest">
@@ -16,9 +20,7 @@
         </form>
       </div>
     </div>
-    {{biography}}
-    {{sexualOrientation}}
-    {{type}}
+
   </div>
 </template>
 
@@ -52,6 +54,6 @@ export default {
     border-radius: 15px;
     padding: 5px;
     color: white;
-    margin: 2px;
+    margin: 3px;
   }
 </style>
