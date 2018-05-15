@@ -7,7 +7,7 @@
       <div class="element">
         <form class="form-inline" method='post' v-on:submit.prevent="userLogin">
           <input type="text" name="login" value="" v-model="login" placeholder="Login">
-          <input type="password" name="password" value="" placeholder="Mot de passe">
+          <input type="password" name="password" v-model="password" value="" placeholder="Mot de passe">
           <input type="submit" name="submit" value="Se connecter">
         </form>
       </div>
@@ -24,14 +24,16 @@ import Login from '@/services/LoginService'
 export default {
   data () {
     return {
-      login: ''
+      login: '',
+      password: ''
     }
   },
   methods: {
-    async userLogin () {
-      alert(this.login)
-      const response = await Login.test(this.login)
-      console.log(response)
+    userLogin () {
+      Login.test({
+        login: this.login,
+        password: this.password
+      })
     }
   }
 }

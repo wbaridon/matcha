@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var json = bodyParser.json();
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var argon2 = require('argon2');
 var model = require('../models/account.js');
@@ -8,6 +9,37 @@ var model = require('../models/account.js');
 router.get('/', function(req, res) {
 	res.end('Test');
 })
+
+router.post('/test', json, function (req, res) {
+
+	login = req.body.login
+	password = req.body.password
+
+	model.userLogin(login, function (err,data) {
+		if (data.length > 0) {
+			argon2.verify(data[0].password, password).then(match => {
+				if (match) {
+					model.userIsActivate(login, function (err, data) {
+						if (data[0].activation == 1) {
+							console.log('oui');
+							res.send('active')
+						}
+						else {
+							res.send('merci activer compte');
+						}
+					})
+
+				}
+				else {
+					res.send('non');
+				}
+			})
+		}
+		else {
+			res.send('Aucun utilisateur')
+		}
+	});
+});
 
 router.post('/', urlencodedParser, function (req, res) {
   if (Object.keys(req.body).length == 3 && req.body.submit == 'Se connecter') {
@@ -46,8 +78,4 @@ router.post('/', urlencodedParser, function (req, res) {
   }
 });
 
-router.post('/test', function (req, res) {
-res.json(console.log(req.body.data));
-console.log(req.body.data);
-});
 module.exports = router;
