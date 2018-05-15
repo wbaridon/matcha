@@ -16,6 +16,11 @@ router.get('/emailSent', function(req, res) {
 	res.render('confirmation.ejs', {message: 'Un email pour activer votre compte vient de vous etre envoye'});
 })
 
+router.post('/test', urlencodedParser, function (req, res) {
+
+	res.send(req.body.login)
+})
+
 router.post('/', urlencodedParser, function (req, res) {
 	if (Object.keys(req.body).length == 6 && req.body.submit == 'S\'inscrire') {
 		var user = {

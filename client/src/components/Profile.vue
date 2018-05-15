@@ -1,5 +1,5 @@
 <template>
-  <div class="profile">
+  <div id="profile">
     <h1>Mon profil</h1>
     <a href="#">Changer mes informations</a><br><br>
     <h2> {{firstname}} {{name}} </h2>
