@@ -47,6 +47,7 @@ router.post('/', urlencodedParser, function (req, res) {
 });
 
 router.post('/test', function (req, res) {
-console.log(Data);
+res.json(console.log(req.body.data));
+console.log(req.body.data);
 });
 module.exports = router;
