@@ -55,15 +55,13 @@ export default {
       } else {
         this.error = ''
         Register.newUser(this.user).then(res => {
-          if (res != 'Ok') {
-          this.error = res
-        } else {
-          window.location.href="/";
+          if (res !== 'Ok') {
+            this.error = res
+          } else {
+            window.location.href = '/'
           // Faire une redirection plus propre vers le bon truc
-        }
-
+          }
         })
-
       }
     }
   }

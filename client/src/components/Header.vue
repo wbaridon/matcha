@@ -38,37 +38,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  body, h1 {
-    margin: 0;
-  }
-  header {
-    background-color: #24292e;
-    padding: 12px;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  nav {
-    display: flex;
-  }
-  .element {
-    margin: 10px;
-  }
-  .element a {
-    margin: 5px;
-  }
-  a {
-    color: lightgrey;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  a:hover {
-    color: white;
-  }
-  .form-inline {
-    display: inline;
-  }
-</style>

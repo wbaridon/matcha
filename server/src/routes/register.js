@@ -50,7 +50,7 @@ router.post('/', urlencodedParser, function (req, res) {
 		}
 		console.log('enter in boucle');
 	} else {
-		res.send('error pas 5 champs a retraite');
+		res.send('Merci de remplir tous les champs');
 	}
 	model.userExist(user.login, user.email, function(err, data) {
 		if (data == 0) {

@@ -1,0 +1,40 @@
+
+header {
+  flex-direction: column;
+}
+#branding {
+  padding-bottom: 10px;
+}
+nav {
+  flex-direction: column;
+  background-color:  rgba(255, 255, 255, 0.1);
+}
+.form-inline {
+  display: flex;
+  flex-direction: column;
+}
+input {
+  margin: 5px;
+  height: 25px;
+  text-align: center;
+}
+input[type=submit] {
+  background-color: white;
+}
+.element {
+  text-align: center;
+}
+
+/* Cover */
+.cover {
+  height: inherit;
+  padding: 10px 0px 10px 0;
+  background-color: #24292e;
+  font-size: 1em;
+}
+
+.content {
+  min-height: 29vh;
+  border: none;
+  text-align: center;
+}

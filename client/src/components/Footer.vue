@@ -19,8 +19,6 @@ export default {
     justify-content: center;
     align-items: center;
     background-color: #24292e;
-    position: absolute;
-    bottom: 0;
     width: 100%;
   }
 </style>
