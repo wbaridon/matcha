@@ -53,8 +53,17 @@ export default {
       this.missingFirstname || this.missingName) {
         event.preventDefault()
       } else {
-        this.error = Register.newUser(this.user)
-        console.log(error)
+        this.error = ''
+        Register.newUser(this.user).then(res => {
+          if (res != 'Ok') {
+          this.error = res
+        } else {
+          window.location.href="/";
+          // Faire une redirection plus propre vers le bon truc
+        }
+
+        })
+
       }
     }
   }
