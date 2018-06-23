@@ -2,6 +2,7 @@
   <div>
     <h1>S'inscrire</h1>
     <form class="register" method='post' v-on:submit.prevent="validateForm">
+      {{error}}
       <label for="login">Login</label>
       <input :class="{ 'is-invalid': attemptSubmit && missingLogin }" type="text" name="login" value="" v-model="user.login">
       <p class='error' v-if="missingLogin && attemptSubmit">Merci de renseigner un login.</p>
@@ -27,6 +28,7 @@ import Register from '@/services/RegisterService'
 export default {
   data () {
     return {
+      error: '',
       user: {
         login: '',
         email: '',
@@ -51,7 +53,8 @@ export default {
       this.missingFirstname || this.missingName) {
         event.preventDefault()
       } else {
-        Register.newUser(this.user)
+        this.error = Register.newUser(this.user)
+        console.log(error)
       }
     }
   }

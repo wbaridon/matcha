@@ -13,16 +13,34 @@ router.get('/', function(req, res) {
 })
 
 router.get('/emailSent', function(req, res) {
-	res.render('confirmation.ejs', {message: 'Un email pour activer votre compte vient de vous etre envoye'});
+	res.send('Un email pour activer votre compte vient de vous etre envoye');
+	// A check;
 })
+function sendMail(user) {
+	var tunnel = mail.createTransport ({
+		service: 'gmail',
+		auth: {
+				user: 'matchawb@gmail.com',
+				pass: '42camagru'
+		}
+	});
 
-router.post('/test', urlencodedParser, function (req, res) {
-
-	res.send(req.body.login)
-})
-
+	var mailOptions = {
+		from: 'matchawb@gmail.com',
+		to: user.email,
+		subject: 'Confirmation compte matcha',
+		text: 'Bonjour ' + user.firstname + ', et bienvenue sur matcha!'
+	};
+	tunnel.sendMail(mailOptions, function(err, info){
+		if (err) {
+			console.log(err);
+		} else {
+			console.log('Email sent:' + info.response);
+		}
+	});
+}
 router.post('/', urlencodedParser, function (req, res) {
-	if (Object.keys(req.body).length == 6 && req.body.submit == 'S\'inscrire') {
+	if (Object.keys(req.body).length == 5) {
 		var user = {
 			login: req.body.login,
 			password: req.body.password,
@@ -30,44 +48,24 @@ router.post('/', urlencodedParser, function (req, res) {
 			name: req.body.name,
 			firstname: req.body.firstname
 		}
-		model.userExist(user.login, user.email, function(err, data) {
-			if (data == 0) {
-				argon2.hash(user.password).then(hash => {
-					user.password = hash;
-					model.createUser(user);
-					var tunnel = mail.createTransport ({
-						service: 'gmail',
-						auth: {
-								user: 'matchawb@gmail.com',
-								pass: '42camagru'
-						}
-					});
-
-					var mailOptions = {
-						from: 'matchawb@gmail.com',
-						to: user.email,
-						subject: 'Confirmation compte matcha',
-						text: 'Test envoi email'
-					};
-					tunnel.sendMail(mailOptions, function(err, info){
-						if (err) {
-							console.log(err);
-						} else {
-							console.log('Email sent:' + info.response);
-						}
-					});
-					res.redirect('/register/emailSent');
-				})
-			}
-			else {
-				res.render('error.ejs', {error: 'Utilisateur ou mail déjà existant'});
-			}
-		})
-
+		console.log('enter in boucle');
+	} else {
+		res.send('error pas 5 champs a retraite');
 	}
-		else
-
-			res.render('error.ejs', {error: 'Merci de remplir tous les champs'});
+	model.userExist(user.login, user.email, function(err, data) {
+		if (data == 0) {
+			argon2.hash(user.password).then(hash => {
+				user.password = hash;
+				model.createUser(user);
+				sendMail(user);
+				res.redirect('/register/emailSent');
+			})
+		}
+		else {
+			console.log('user exist');
+			res.send('Cet utilisateur ou email existe deja');
+		}
+	})
 })
 
 module.exports = router;
