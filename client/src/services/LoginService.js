@@ -1,7 +1,12 @@
 import Api from '@/services/Api'
 
 export default {
-  test (test) {
-    return Api().post('login/test', test).then(function (response) { console.log(response) })
+  logIn (user) {
+    return Api().post('login/', user).then(function (response) {
+      console.log(response)
+      var token = response.data
+      localStorage.setItem('user-token', token)
+      return (response)
+    })
   }
 }

@@ -6,8 +6,8 @@
     <nav>
       <div class="element">
         <form class="form-inline" method='post' v-on:submit.prevent="userLogin">
-          <input type="text" name="login" value="" v-model="login" placeholder="Login">
-          <input type="password" name="password" v-model="password" value="" placeholder="Mot de passe">
+          <input type="text" name="login" value="" v-model="user.login" placeholder="Login">
+          <input type="password" name="password" v-model="user.password" value="" placeholder="Mot de passe">
           <input type="submit" name="submit" value="Se connecter">
         </form>
       </div>
@@ -24,16 +24,15 @@ import Login from '@/services/LoginService'
 export default {
   data () {
     return {
-      login: '',
-      password: ''
+      user: {
+        login: '',
+        password: ''
+      }
     }
   },
   methods: {
     userLogin () {
-      Login.test({
-        login: this.login,
-        password: this.password
-      })
+      Login.logIn(this.user)
     }
   }
 }
