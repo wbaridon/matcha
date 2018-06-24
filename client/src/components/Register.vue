@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>S'inscrire</h1>
-    <form class="register" method='post' v-on:submit.prevent="validateForm">
+    <form v-if="formSent" class="register" method='post' v-on:submit.prevent="validateForm">
       {{error}}
       <label for="login">Login</label>
       <input :class="{ 'is-invalid': attemptSubmit && missingLogin }" type="text" name="login" value="" v-model="user.login">
@@ -12,6 +12,8 @@
       <label for="password">Mot de passe </label>
       <input :class="{ 'is-invalid': attemptSubmit && missingPassword }" type="password" name="password" value="" v-model="user.password">
       <p class='error' v-if="missingPassword && attemptSubmit">Merci de renseigner un mot de passe.</p>
+      <p class='error' v-if="weakPassword && attemptSubmit">Votre mot de passe doit contenir des chiffres et des lettres.</p>
+      <p class='error' v-if="lengthPassword && attemptSubmit">Votre mot de passe doit contenir minimum 6 carateres.</p>
       <label for="firstname">Prenom </label>
       <input :class="{ 'is-invalid': attemptSubmit && missingFirstname }" type="text" name="firstname" value="" v-model="user.firstname">
       <p class='error' v-if="missingFirstname && attemptSubmit">Merci de renseigner un prenom.</p>
@@ -20,6 +22,7 @@
       <p class='error' v-if="missingName && attemptSubmit">Merci de renseigner un nom.</p>
       <input type="submit" name="submit" value="S'inscrire">
     </form>
+    <p v-if="!formSent">{{confirmation}}</p>
   </div>
 </template>
 
@@ -29,6 +32,7 @@ export default {
   data () {
     return {
       error: '',
+      confirmation: '',
       user: {
         login: '',
         email: '',
@@ -36,7 +40,8 @@ export default {
         firstname: '',
         name: ''
       },
-      attemptSubmit: false
+      attemptSubmit: false,
+      formSent: true
     }
   },
   computed: {
@@ -44,21 +49,37 @@ export default {
     missingEmail: function () { return this.user.email === '' },
     missingPassword: function () { return this.user.password === '' },
     missingFirstname: function () { return this.user.firstname === '' },
-    missingName: function () { return this.user.name === '' }
+    missingName: function () { return this.user.name === '' },
+    weakPassword: function () {
+      var number = /\d/.test(this.user.password)
+      var alpha = /[a-zA-Z]/.test(this.user.password)
+      if (!number || !alpha) {
+        return 1
+      }
+    },
+    lengthPassword: function () {
+      if (this.user.password.length < 6) {
+        return 1
+      }
+    }
   },
   methods: {
     validateForm: function (event) {
       this.attemptSubmit = true
+      this.formSent = false
       if (this.missingLogin || this.missingEmail || this.missingPassword /
-      this.missingFirstname || this.missingName) {
+      this.missingFirstname || this.missingName || this.weakPassword || this.lengthPassword) {
+        this.formSent = true
         event.preventDefault()
       } else {
         this.error = ''
         Register.newUser(this.user).then(res => {
           if (res !== 'Ok') {
             this.error = res
+            this.formSent = true
           } else {
-            window.location.href = '/'
+            this.confirmation = 'Un email de confirmation vient de vous etre envoyé'
+
           // Faire une redirection plus propre vers le bon truc
           }
         })

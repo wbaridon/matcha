@@ -12,10 +12,7 @@ router.get('/', function(req, res) {
 	res.render('error.ejs', {error: 'Aucun message'});
 })
 
-router.get('/emailSent', function(req, res) {
-	res.send('Un email pour activer votre compte vient de vous etre envoye');
-	// A check;
-})
+
 function sendMail(user) {
 	var tunnel = mail.createTransport ({
 		service: 'gmail',
@@ -58,7 +55,7 @@ router.post('/', urlencodedParser, function (req, res) {
 				user.password = hash;
 				model.createUser(user);
 				sendMail(user);
-				res.redirect('/register/emailSent');
+				res.send('Ok');
 			})
 		}
 		else {
