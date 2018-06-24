@@ -5,7 +5,7 @@ export default {
     return Api().post('login/', user).then(function (response) {
       console.log(response)
       var token = response.data
-      localStorage.setItem('user-token', token)
+      localStorage.token = token
       return (response)
     })
   }
