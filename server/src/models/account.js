@@ -6,11 +6,17 @@ module.exports.userExist = function (login, email, callback) {
 	});
 }
 
+module.exports.userId = function (login, callback) {
+	db.query('SELECT id FROM accounts WHERE login = ?', [login], function(err, result) {
+		callback(null, result);
+	});
+}
+
 module.exports.createUser = function (user) {
 	db.query('INSERT INTO accounts\
-		(login, email, password, name, firstname) \
-		VALUES (?,?,?,?,?)',
-	 	[user.login, user.email, user.password, user.name, user.firstname],
+		(login, email, password) \
+		VALUES (?,?,?)',
+	 	[user.login, user.email, user.password],
 		function (err, result) {
 			if (err) throw err;
 			else {
