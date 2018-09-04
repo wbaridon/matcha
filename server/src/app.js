@@ -15,6 +15,8 @@ app.use(session({secret: 'test'}))
 app.use(cors())
 app.use('/register', require('./routes/register'))
 app.use('/login', require('./routes/login'))
+app.use('/activate', require('./routes/activate'))
+app.use('/setup', require('./routes/setup'))
 
 /* app.get('/posts', (req, res) => {
    res.send(

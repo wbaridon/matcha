@@ -23,21 +23,24 @@ function sendMail(user) {
 				pass: '42camagru'
 		}
 	});
-
-	var mailOptions = {
-		from: 'matchawb@gmail.com',
-		to: user.email,
-		subject: 'Confirmation compte matcha',
-		text: 'Bonjour ' + user.firstname + ', et bienvenue sur matcha!'
-	};
-	tunnel.sendMail(mailOptions, function(err, info){
-		if (err) {
-			console.log(err);
-		} else {
-			console.log('Email sent:' + info.response);
-		}
+	argon2.hash(user.email + user.timestamp).then(hash => {
+		var mailOptions = {
+			from: 'matchawb@gmail.com',
+			to: user.email,
+			subject: 'Confirmation compte matcha',
+			text: 'Bonjour ' + user.firstname + ', et bienvenue sur matcha! Cliquez sur ce lien pour activer votre compte : http://localhost:8080/activate?email=' + user.email + '&key=' + hash
+		};
+		tunnel.sendMail(mailOptions, function(err, info){
+			if (err) {
+				console.log(err);
+			} else {
+				console.log('Email sent:' + info.response);
+			}
+		});
 	});
 }
+
+
 router.post('/', urlencodedParser, function (req, res) {
 	if (Object.keys(req.body).length == 5) {
 		var user = {
@@ -45,7 +48,8 @@ router.post('/', urlencodedParser, function (req, res) {
 			password: req.body.password,
 			email: req.body.email,
 			name: req.body.name,
-			firstname: req.body.firstname
+			firstname: req.body.firstname,
+			timestamp: Date.now()
 		}
 		console.log('enter in boucle');
 	} else {
