@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS accounts ( \
     login VARCHAR(50), \
     password VARCHAR(128), \
     email VARCHAR(50), \
-    timestamp INT NOT NULL);',' \
+    timestamp BIGINT NOT NULL);',' \
 \
 CREATE TABLE IF NOT EXISTS profiles ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
@@ -52,7 +52,10 @@ let fun = callback => {
             sql.forEach((elem, index) => {
               connection.query(elem);
               if (sql.length - 1 == index)
+              {
                 console.log('All tables created');
+                callback();
+              }
             });     
           });
         });
