@@ -14,6 +14,7 @@
       <div class="element">
         <a href="/login/reset">Mot de passe oublié?</a>
         <a href="/register">Inscription</a>
+        {{error}}
       </div>
     </nav>
   </header>
@@ -24,6 +25,7 @@ import Login from '@/services/LoginService'
 export default {
   data () {
     return {
+      error: '',
       user: {
         login: '',
         password: ''
@@ -32,7 +34,9 @@ export default {
   },
   methods: {
     userLogin () {
-      Login.logIn(this.user)
+      Login.logIn(this.user).then(res => {
+        this.error = res.data
+      })
     }
   }
 }
