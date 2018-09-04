@@ -6,20 +6,14 @@ var connection = mysql.createConnection({
   password: "123456"
 });
 
-connection.connect();
-connection.query('CREATE DATABASE IF NOT EXISTS matcha')
-
-console.log('Database matcha created')
-connection.query ('USE matcha')
-
-var sql = '\
+var sql = ['\
 CREATE TABLE IF NOT EXISTS accounts ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
     activation INT DEFAULT 0, \
     login VARCHAR(50), \
     password VARCHAR(128), \
     email VARCHAR(50), \
-    timestamp INT NOT NULL); \
+    timestamp INT NOT NULL);',' \
 \
 CREATE TABLE IF NOT EXISTS profiles ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
@@ -29,7 +23,7 @@ CREATE TABLE IF NOT EXISTS profiles ( \
     gender TINYINT DEFAULT 0, \
     age INT NOT NULL DEFAULT 0, \
     sexuality TINYINT DEFAULT 0, \
-    bio TEXT); \
+    bio TEXT);',' \
 \
 CREATE TABLE IF NOT EXISTS interests ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
@@ -43,10 +37,26 @@ CREATE TABLE IF NOT EXISTS interests ( \
     fat TINYINT DEFAULT 0, \
     skinny TINYINT DEFAULT 0, \
     sport TINYINT DEFAULT 0, \
-    drink TINYINT DEFAULT 0);';
+    drink TINYINT DEFAULT 0);'];
 
+let fun = callback => {
+      connection.connect(err => {
+      if (err) throw err;
+        console.log('Connected !');
+        connection.query('CREATE DATABASE IF NOT EXISTS matcha', (err, result) => {
+          if (err) throw err;
+          console.log('Database matcha created');
+          connection.query('USE matcha', (err, result) => {
+            if (err) throw err;
+            console.log('Database matcha selected');
+            sql.forEach((elem, index) => {
+              connection.query(elem);
+              if (sql.length - 1 == index)
+                console.log('All tables created');
+            });     
+          });
+        });
+      });
+    };
 
-connection.query(sql);
-console.log('Table accounts created')
-
-connection.end()
+module.exports = fun;

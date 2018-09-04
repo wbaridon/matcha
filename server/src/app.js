@@ -6,6 +6,7 @@ const passport = require('passport')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const app = express()
+const setup = require('./config/setup');
 
 app.use(morgan('tiny'))
 app.use(bodyParser.json())
@@ -13,10 +14,12 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(cookieParser())
 app.use(session({secret: 'test'}))
 app.use(cors())
-app.use('/register', require('./routes/register'))
-app.use('/login', require('./routes/login'))
-app.use('/activate', require('./routes/activate'))
-app.use('/setup', require('./routes/setup'))
+
+setup(() => {
+  app.use('/register', require('./routes/register'))
+  app.use('/login', require('./routes/login'))
+  app.use('/activate', require('./routes/activate'))
+});
 
 /* app.get('/posts', (req, res) => {
    res.send(
