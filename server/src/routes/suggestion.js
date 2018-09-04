@@ -5,12 +5,10 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var suggestionList = require('../models/suggestionList.js');
 
-router.get('/', function(req, res) {
+router.post('/', function(req, res) {
 	suggestionList.showList(result => {
-		console.log(result);
+		res.send(result)
 	})
-
-	res.send('test');
 })
 
 module.exports = router;
