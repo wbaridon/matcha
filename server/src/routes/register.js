@@ -4,7 +4,9 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var argon2 = require('argon2');
-var model = require('../models/account.js');
+var account = require('../models/account.js');
+var profile = require('../models/profile.js');
+var interests = require('../models/interests.js');
 var mail = require('nodemailer');
 
 router.get('/', function(req, res) {
@@ -49,11 +51,15 @@ router.post('/', urlencodedParser, function (req, res) {
 	} else {
 		res.send('Merci de remplir tous les champs');
 	}
-	model.userExist(user.login, user.email, function(err, data) {
+	account.userExist(user.login, user.email, function(err, data) {
 		if (data == 0) {
 			argon2.hash(user.password).then(hash => {
 				user.password = hash;
-				model.createUser(user);
+				account.createUser(user);
+				account.userId(user.login, function(login, res) { 
+					profile.createUser(user, res[0].id);
+					interests.createUser(res[0].id);
+				});
 				sendMail(user);
 				res.send('Ok');
 			})

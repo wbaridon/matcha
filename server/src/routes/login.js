@@ -6,6 +6,8 @@ var model = require('../models/account.js');
 
 router.post('/', function (req, res) {
 	console.log(req.body)
+	var test = require('../models/profile.js');
+	test.updateUser(0, 'aaa', 'bbb', 'ccc');
 	login = req.body.login
 	password = req.body.password
 	model.userLogin(login, function (err,data) {
