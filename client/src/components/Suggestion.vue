@@ -1,7 +1,7 @@
 <template>
   <div id="suggestion">
     <h1>Liste suggestion</h1>
-      <div v-for="list in result">
+      <div v-for="list in result" :key="list.id">
       {{list.login}}
     </div>
   </div>
@@ -13,7 +13,7 @@ export default {
   name: 'suggestion',
   data () {
     return {
-      result: [ ]
+      result: []
     }
   },
   mounted () {
@@ -22,7 +22,6 @@ export default {
   methods: {
     getAll () {
       Suggestion.getAll(callback => {
-        console.log(callback)
         this.result = callback.data
       })
     }
