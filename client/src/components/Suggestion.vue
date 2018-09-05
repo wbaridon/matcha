@@ -1,8 +1,23 @@
 <template>
   <div id="suggestion">
     <h1>Liste suggestion</h1>
-      <div v-for="list in result" :key="list.id">
-      {{list.login}}
+      Trier les profils par:
+      <select id="sortProfile">
+        <option value="age">Age</option>
+        <option value="localisation">Localisation</option>
+        <option value="popularite">Popularite</option>
+        <option value="tag">Tags en commun</option>
+      </select><br>
+      // Rajouter un filtre par intervale age, localisation, popularite et tags<br>
+      // Bloquer la vue de la page si profil etendue non remplis
+      <div v-for="list in result" :key="list.id" class="card">
+      <h2>{{list.login}}</h2><br>
+      Pourcentage de compatibilite (A confirmer)
+      Orientation Sexuel
+      Proximite geographique
+      Interet commun
+      Score de popularite<br>
+      <a href="#"> Voir son profil >></a>
     </div>
   </div>
 </template>
@@ -30,5 +45,13 @@ export default {
 </script>
 
 <style>
+.card {
+margin: 10px;
+padding: 10px;
+border: solid 2px lightgrey;
+}
+.card:hover {
+background-color: rgba(192,192,192,0.2);
 
+}
 </style>
