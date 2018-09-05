@@ -1,8 +1,8 @@
 <template>
   <div id="myprofile">
     <h1>Mon profil</h1>
-    <h2> {{firstname}} {{name}} </h2>
-    {{email}}<br>
+    <h2> {{user.firstname}} {{user.name}} </h2>
+    {{user.email}}<br>
     {{sexualOrientation}}<br>
     {{type}}
     <h3>QUI SUIS JE? </h3>
@@ -30,7 +30,10 @@ export default {
   data () {
     return {
       user: {
-        id: ''
+        id: '',
+        firstname: '',
+        name: '',
+        email: ''
       },
       result: [ ],
       // Quand il y aura la sauvegarde enlever les valeurs par defaut
@@ -52,7 +55,7 @@ export default {
   methods: {
     getProfile () {
       Profile.viewProfile(this.user, callback => {
-        this.result = callback.data
+        this.user = callback
       })
     }
   }
