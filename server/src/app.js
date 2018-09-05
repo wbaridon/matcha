@@ -16,6 +16,7 @@ app.use(cors())
 app.use('/register', require('./routes/register'))
 app.use('/login', require('./routes/login'))
 app.use('/suggestion', require('./routes/suggestion'))
+app.use('/profile', require('./routes/profile'))
 
 /* app.get('/posts', (req, res) => {
    res.send(
