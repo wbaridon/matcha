@@ -1,8 +1,8 @@
 <template>
-  <div id="myprofile">
-    <h1>Mon profil</h1>
-    <h2> {{user.firstname}} {{user.name}} </h2>
+  <div id="profile">
+    <h1>{{user.firstname}} {{user.name}}</h1>
     {{user.email}}<br>
+    Score de popularite: <br>
     {{sexualOrientation}}<br>
     {{type}}
     <h3>QUI SUIS JE? </h3>
@@ -26,7 +26,7 @@
 <script>
 import Profile from '@/services/ProfileService'
 export default {
-  name: 'myprofile',
+  name: 'profile',
   data () {
     return {
       user: {
@@ -42,10 +42,7 @@ export default {
       biography: 'Petit texte pour me presenter',
       interests: ['php', 'html'], // Liste possible sous forme de tags
       pictures: '', // 5 images max dont une pour le profil
-      name: 'Dubois',
-      firstname: 'Nicolas',
-      email: 'wbaridon@gmail.com',
-      password: 'test'
+
     }
   },
   mounted () {
