@@ -23,10 +23,28 @@
 <script>
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
+import Login from '@/services/LoginService'
 export default {
+  data () {
+    return {
+      isAuth: false
+    }
+  },
   components: {
     'app-header': Header,
     'app-footer': Footer
+  },
+  mounted () {
+    this.checkAuth()
+  },
+  methods: {
+    checkAuth () {
+      Login.checkAuth(this.$cookie.get('authToken')).then(res => {
+        this.isAuth = res.result
+        //this.$cookie.delete('authToken')
+        console.log(this.isAuth)
+      })
+    }
   }
 }
 </script>

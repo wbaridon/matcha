@@ -17,7 +17,7 @@
       Proximite geographique
       Interet commun
       Score de popularite<br>
-      <a href="#"> Voir son profil >></a>
+      <router-link :to="'/profile/' + list.id">Voir son profil >></router-link>
     </div>
   </div>
 </template>

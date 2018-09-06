@@ -5,6 +5,7 @@ import Register from '@/components/Register'
 import Reset from '@/components/Reset'
 import Posts from '@/components/Posts'
 import Profile from '@/components/Profile'
+import Myprofile from '@/components/Myprofile'
 import Suggestion from '@/components/Suggestion'
 
 Vue.use(Router)
@@ -39,6 +40,11 @@ export default new Router({
     },
     {
       path: '/profile',
+      name: 'myprofile',
+      component: Myprofile
+    },
+    {
+      path: '/profile/:userId',
       name: 'profile',
       component: Profile
     }
