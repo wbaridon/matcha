@@ -1,0 +1,27 @@
+{
+    interests: [
+        geek
+        bio
+        vegan
+        piercing
+        beard
+        tall
+        fat
+        skinny
+        sport
+        drink
+        stay all night
+    ]
+    firstNames: [
+        Jean
+        Pierre
+        Josianne
+        Kiki
+    ]
+    lastNames: [
+        Bon
+        Sanstitre
+        Smith
+        Dupont
+    ]
+}

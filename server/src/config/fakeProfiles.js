@@ -1,20 +1,25 @@
 const mysql = require('mysql');
-const db = require('../config/db');
-const path = require( 'path' );
-const read = require( 'utils-fs-read-hjson' );
+const db = require('./db');
+const config = require('./config');
 const account = require('../models/account');
 
 /******************************************************************************/
 const LOGIN_RANDOM_INT = 10000;
 const MAX_PROFILES = 10000;
-const NBR_OF_INTERESTS = 10;
 const NBR_OF_INTERESTS_CHANCE = 3;
 const NBR_OF_SEXUALITY = 3;
 const AGE_MIN = 18;
 const AGE_MAX = 65;
 const ACTIVATED_ACCOUNT = true;
 const EMAIL = '@matcha.fr';
-const SQL_INTERESTS = 'geek, bio, vegan, piercing, beard, tall, fat, skinny, sport, drink';
+/******************************************************************************/
+const NBR_OF_INTERESTS = config.interests.length;
+let SQL_INTERESTS = '';
+for (let i = 0; i < config.interests.length; i++) {
+    SQL_INTERESTS += '`' + config.interests[i] + '`';
+    if (i !== config.interests.length - 1)
+        SQL_INTERESTS += ', ';
+}
 /******************************************************************************/
 
 let getRandomInt = max => {
@@ -38,8 +43,8 @@ let Profile = function() {
     else
         Profile.count++;
 
-    this.firstname = names.firstNames[getRandomInt(names.firstNames.length)];
-    this.name = names.lastNames[getRandomInt(names.lastNames.length)];
+    this.firstname = config.firstNames[getRandomInt(config.firstNames.length)];
+    this.name = config.lastNames[getRandomInt(config.lastNames.length)];
     this.timestamp = Date.now();
     this.login = this.timestamp + '.' + Profile.count + '.' + getRandomInt(LOGIN_RANDOM_INT);
     this.email = this.login + EMAIL;
@@ -158,7 +163,6 @@ const start = async (nbr) => {
 }
 /******************************************************************************/
 
-let names = read.sync(path.join(__dirname, 'names.hjson'), 'utf8');
 let prfs = [];
 
 if (process.argv[2]) {
