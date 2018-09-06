@@ -41,7 +41,7 @@ export default {
     checkAuth () {
       Login.checkAuth(this.$cookie.get('authToken')).then(res => {
         this.isAuth = res.result
-        //this.$cookie.delete('authToken')
+        // this.$cookie.delete('authToken')
         console.log(this.isAuth)
       })
     }
