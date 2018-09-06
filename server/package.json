@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "fakeProfiles": "node src/config/setup.js && node src/config/fakeProfiles.js",
     "setup": "node src/config/setup.js",
     "reset": "node src/config/resetDb.js",
     "start": "nodemon src/app.js",
@@ -22,7 +23,8 @@
     "mysql": "2.16.0",
     "nodemailer": "4.6.8",
     "nodemon": "1.18.3",
-    "passport": "0.4.0"
+    "passport": "0.4.0",
+    "utils-fs-read-hjson": "^1.0.0"
   },
   "devDependencies": {},
   "description": ""

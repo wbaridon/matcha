@@ -1,6 +1,17 @@
 /************************
 ** USE `NPM RUN SETUP` **
 *************************/
+const config = require('./config');
+
+const NBR_OF_INTERESTS = config.interests.length;
+let SQL_INTERESTS = '';
+for (let i = 0; i < NBR_OF_INTERESTS; i++) {
+    SQL_INTERESTS += '`' + config.interests[i] + '`' + ' TINYINT DEFAULT 0';
+    if (i !== NBR_OF_INTERESTS - 1)
+        SQL_INTERESTS += ', ';
+}
+/******************************************************************************/
+
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
@@ -31,16 +42,8 @@ CREATE TABLE IF NOT EXISTS profiles ( \
 CREATE TABLE IF NOT EXISTS interests ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
     id_account INT NOT NULL, \
-    geek TINYINT DEFAULT 0, \
-    bio TINYINT DEFAULT 0, \
-    vegan TINYINT DEFAULT 0, \
-    piercing TINYINT DEFAULT 0, \
-    beard TINYINT DEFAULT 0, \
-    tall TINYINT DEFAULT 0, \
-    fat TINYINT DEFAULT 0, \
-    skinny TINYINT DEFAULT 0, \
-    sport TINYINT DEFAULT 0, \
-    drink TINYINT DEFAULT 0);'];
+    ' + SQL_INTERESTS + '\
+    );'];
 
 connection.connect(err => {
 if (err) throw err;
