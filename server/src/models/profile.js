@@ -25,7 +25,7 @@ selectValue = function (id_account, value, callback) {
     db.query('SELECT ? INTO profiles\
         WHERE id_account = ?',
         [value, id_account],
-        callback(err, result));
+        callback);
 }
 
 module.exports.selectName = (id_account, callback) => {
