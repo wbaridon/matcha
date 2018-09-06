@@ -8,7 +8,7 @@
       <title>Titre non gere</title>
     </head>
     <body>
-        <app-header></app-header>
+        <app-header v-bind:isAuth="isAuth" @log="log($event)"></app-header>
         <div class='cover'>
             <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
         </div>
@@ -23,10 +23,33 @@
 <script>
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
+import Login from '@/services/LoginService'
 export default {
+  data () {
+    return {
+      isAuth: false
+    }
+  },
   components: {
     'app-header': Header,
     'app-footer': Footer
+  },
+  mounted () {
+    this.checkAuth()
+  },
+  methods: {
+    checkAuth () {
+      Login.checkAuth(this.$cookie.get('authToken')).then(res => {
+        this.isAuth = res.result
+      })
+    },
+    log (status) {
+      if (status === 'logIn') {
+        this.isAuth = true
+      } else {
+        this.isAuth = false
+      }
+    }
   }
 }
 </script>

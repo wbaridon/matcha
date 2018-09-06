@@ -1,13 +1,12 @@
 <template>
-  <div id="profile">
-    <h1>Mon profil</h1>
-    <a href="#">Changer mes informations</a><br><br>
-    <h2> {{firstname}} {{name}} </h2>
-    {{email}}<br>
-    {{sexualOrientation}}<br>
-    {{type}}
-    <h3>QUI SUIS JE?</h3>
-    {{biography}}
+  <div id="profile" v-if="user.userExist">
+    <h1>{{user.firstname}} {{user.name}}</h1>
+    {{user.email}}<br>
+    Score de popularite: <br>
+    {{user.sexuality}}<br>
+    {{user.gender}}
+    <h3>QUI SUIS JE? </h3>
+    {{user.bio}}
     <h3>VOS PASSIONS</h3>
     <div id='interests'>
       <div v-for="interest in interests" v-bind:key="interest">
@@ -20,25 +19,45 @@
         </form>
       </div>
     </div>
-
+  </div>
+  <div id="profile" v-else>
+    Aucun profil
   </div>
 </template>
 
 <script>
+import Profile from '@/services/ProfileService'
 export default {
   name: 'profile',
   data () {
     return {
+      user: {
+        userExist: '',
+        id: '',
+        firstname: '',
+        name: '',
+        age: '',
+        sexuality: '',
+        bio: '',
+        gender: '',
+        email: ''
+      },
+      result: [ ],
       // Quand il y aura la sauvegarde enlever les valeurs par defaut
-      type: 'h',
-      sexualOrientation: 'hetero',
-      biography: 'Petit texte pour me presenter',
       interests: ['php', 'html'], // Liste possible sous forme de tags
-      pictures: '', // 5 images max dont une pour le profil
-      name: 'Dubois',
-      firstname: 'Nicolas',
-      email: 'wbaridon@gmail.com',
-      password: 'test'
+      pictures: '' // 5 images max dont une pour le profil
+
+    }
+  },
+  mounted () {
+    this.user.id = this.$route.params.userId
+    this.getProfile()
+  },
+  methods: {
+    getProfile () {
+      Profile.viewProfile(this.user, callback => {
+        this.user = callback
+      })
     }
   }
 }
