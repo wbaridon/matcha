@@ -11,8 +11,10 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(cookieParser())
 app.use(cors())
+
 app.use('/register', require('./routes/register'))
 app.use('/login', require('./routes/login'))
+app.use('/activate', require('./routes/activate'))
 app.use('/suggestion', require('./routes/suggestion'))
 app.use('/profile', require('./routes/profile'))
 

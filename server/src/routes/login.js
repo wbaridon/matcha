@@ -20,6 +20,7 @@ router.post('/checkAuth', function (req, res) {
 });
 router.post('/', function (req, res) {
 	appData = {} /* Test jwt */
+	console.log(req.body)
 	login = req.body.login
 	password = req.body.password
 
