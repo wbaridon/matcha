@@ -41,12 +41,12 @@ export default {
       sexualOrientation: 'hetero',
       biography: 'Petit texte pour me presenter',
       interests: ['php', 'html'], // Liste possible sous forme de tags
-      pictures: '', // 5 images max dont une pour le profil
+      pictures: '' // 5 images max dont une pour le profil
 
     }
   },
   mounted () {
-    this.user.id = this.$route.params.userId,
+    this.user.id = this.$route.params.userId
     this.getProfile()
   },
   methods: {

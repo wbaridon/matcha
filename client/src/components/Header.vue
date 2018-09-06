@@ -36,9 +36,9 @@ export default {
     userLogin () {
       Login.logIn(this.user).then(res => {
         this.error = res
-        if (res.error == 0) {
+        if (res.error === 0) {
           this.error = 'Ok'
-          this.$cookie.set('authToken', res.token, 1);
+          this.$cookie.set('authToken', res.token, 1)
         }
       })
     }
