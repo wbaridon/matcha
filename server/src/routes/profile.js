@@ -10,16 +10,15 @@ router.post('/view', function(req, res) {
     // Faire une verif si user exist avec promise
     // Si oui
     userId = req.body.id
-    profile.selectName(userId, userFirstname => {
-        profile.selectFirstname(userId, userName => {
+    profile.select(userId, (err, result) => {
           user = {
             id: userId,
-            firstname: userFirstname,
-            name: userName,
+            firstname: result[0].firstname,
+            name: result[0].name,
             email: ''
           }
+          console.log(user)
             res.send(user)
-        })
     })
 })
 

@@ -21,25 +21,9 @@ module.exports.updateUser = function (id_account, column, value, callback) {
         callback(err, result));
 }
 
-selectValue = function (id_account, value, callback) {
-    db.query('SELECT ? INTO profiles\
+module.exports.select = function (id_account, callback) {
+    db.query('SELECT * FROM profiles\
         WHERE id_account = ?',
-        [value, id_account],
+        [id_account],
         callback);
 }
-
-module.exports.selectName = (id_account, callback) => {
-    selectValue(id_account, 'name', callback);
-};
-module.exports.selectFirstname = (id_account, callback) => {
-    selectValue(id_account, 'firstname', callback);
-};
-module.exports.selectGender = (id_account, callback) => {
-    selectValue(id_account, 'gender', callback);
-};
-module.exports.selectSexuality = (id_account, callback) => {
-    selectValue(id_account, 'sexuality', callback);
-};
-module.exports.selectBio = (id_account, callback) => {
-    selectValue(id_account, 'bio', callback);
-};
