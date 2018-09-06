@@ -1,3 +1,6 @@
+/************************
+** USE `NPM RUN SETUP` **
+*************************/
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
@@ -39,27 +42,23 @@ CREATE TABLE IF NOT EXISTS interests ( \
     sport TINYINT DEFAULT 0, \
     drink TINYINT DEFAULT 0);'];
 
-let fun = callback => {
-      connection.connect(err => {
+connection.connect(err => {
+if (err) throw err;
+  console.log('Connected !');
+  connection.query('CREATE DATABASE IF NOT EXISTS matcha', (err, result) => {
+    if (err) throw err;
+    console.log('Database matcha created');
+    connection.query('USE matcha', (err, result) => {
       if (err) throw err;
-        console.log('Connected !');
-        connection.query('CREATE DATABASE IF NOT EXISTS matcha', (err, result) => {
-          if (err) throw err;
-          console.log('Database matcha created');
-          connection.query('USE matcha', (err, result) => {
-            if (err) throw err;
-            console.log('Database matcha selected');
-            sql.forEach((elem, index) => {
-              connection.query(elem);
-              if (sql.length - 1 == index)
-              {
-                console.log('All tables created');
-                callback();
-              }
-            });     
-          });
-        });
-      });
-    };
-
-module.exports = fun;
+      console.log('Database matcha selected');
+      sql.forEach((elem, index) => {
+        connection.query(elem);
+        if (sql.length - 1 == index)
+        {
+          console.log('All tables created');
+          connection.end();
+        }
+      });     
+    });
+  });
+});
