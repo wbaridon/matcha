@@ -57,7 +57,6 @@ export default {
     getProfile () {
       Profile.viewProfile(this.user, callback => {
         this.user = callback
-        console.log(this.user)
       })
     }
   }

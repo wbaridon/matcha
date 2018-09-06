@@ -8,7 +8,7 @@
       <title>Titre non gere</title>
     </head>
     <body>
-        <app-header></app-header>
+        <app-header v-bind:isAuth="isAuth" @log="log($event)"></app-header>
         <div class='cover'>
             <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
         </div>
@@ -41,9 +41,14 @@ export default {
     checkAuth () {
       Login.checkAuth(this.$cookie.get('authToken')).then(res => {
         this.isAuth = res.result
-        //this.$cookie.delete('authToken')
-        console.log(this.isAuth)
       })
+    },
+    log (status) {
+      if (status === 'logIn') {
+        this.isAuth = true
+      } else {
+        this.isAuth = false
+      }
     }
   }
 }
