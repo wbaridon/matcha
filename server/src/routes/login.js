@@ -5,13 +5,14 @@ var model = require('../models/account.js');
 var jwt = require('jsonwebtoken');
 var token;
 
-router.post('/testpourunlogin', function (req, res) {
-token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoid2Jhcmlkb24iLCJpYXQiOjE1MzYyMjUxOTksImV4cCI6MTUzNjIyODc5OX0.cmPF6bQez1Paqsciom-iUnvUjt0TIKIlnYaJGuPXmqA'
-	decoded = jwt.verify(token, 'MatchaSecretKey', function(err, decoded) {
-		if (err)
-		console.log('erreur')
+router.post('/checkAuth', function (req, res) {
+
+	jwt.verify(req.body.key, 'MatchaSecretKey', function(err, decoded) {
+		if (err) {
+		 res.send({'result': false})
+	 }
 		else {
-			console.log(decoded)
+			res.send({'result': true})
 		}
 	})
 
