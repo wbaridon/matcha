@@ -38,6 +38,7 @@ export default {
         this.error = res
         if (res.error === 0) {
           this.error = 'Ok'
+          this.isAuth = true
           this.$cookie.set('authToken', res.token, 1)
         }
       })
