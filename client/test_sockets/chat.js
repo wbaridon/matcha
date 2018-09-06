@@ -20,7 +20,9 @@ submit.addEventListener('click', function() {
     socket.emit('usernames', users);
   }
   else {
-    console.log("This username is already taken, please choose another one.");
+    if (users[username.value] != socket.id) {
+      console.log("This username is already taken, please choose another one.");
+    }
     return;
   }
   socket.emit('chat', {
