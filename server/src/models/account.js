@@ -37,8 +37,14 @@ module.exports.userIsActivate = function (login, callback) {
 	});
 }
 
-module.exports.userIdFromEmail = function (email, callback) {
-	db.query('SELECT id FROM accounts WHERE email = ?', [email], function(err, result) {
+module.exports.userTimestampFromEmail = function (email, callback) {
+	db.query('SELECT timestamp, activation FROM accounts WHERE email = ?', [email], function(err, result) {
+		callback(err, result);
+	});
+}
+
+module.exports.activateAccount = function (email, callback) {
+	db.query('UPDATE accounts SET activation = 1 WHERE email = ?', [email], function(err, result) {
 		callback(null, result);
 	});
 }
