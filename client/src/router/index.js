@@ -7,6 +7,7 @@ import Posts from '@/components/Posts'
 import Profile from '@/components/Profile'
 import Myprofile from '@/components/Myprofile'
 import Suggestion from '@/components/Suggestion'
+import Activate from '@/components/Activate'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/activate',
+      name: 'activate',
+      component: Activate
     },
     {
       path: '/login/reset',

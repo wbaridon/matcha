@@ -3,26 +3,32 @@ var router = express.Router();
 var argon2 = require('argon2');
 var model = require('../models/account.js');
 
-router.get('/', function (req, res) {
-    let email = req.query.email; 
-    let key = req.query.key.replace(' ', '+');
-    model.userTimestampFromEmail(email, (err, res) => { //Mail existing in DB with associated timestamp
+router.post('/', function (req, res) {
+  console.log(req.body)
+    let email = req.body.email;
+    let key = req.body.key.replace(' ', '+');
+    console.log(email + ' et ' + key)
+
+    model.userTimestampFromEmail(email, (err, callback) => { //Mail existing in DB with associated timestamp
+  console.log('enter2')
         if (err) throw err;
-        else if (res[0].activation === 0) {
-            argon2.verify(key, email + res[0].timestamp).then(match => {
+        else if (callback[0].activation === 0) {
+            console.log('enter3333')
+            argon2.verify(key, email + callback[0].timestamp).then(match => {
                 if (match) { //Hash correspondant
-                    model.activateAccount(email, (err, res) => {
+                    console.log('enter222222')
+                    model.activateAccount(email, (err, result) => {
                         if (err) throw err;
                         else
-                            console.log('Account with email ' + email + ' has been activated.');
+                          res.send('Account with email ' + email + ' has been activated.');
                     });
                 }
                 else
-                    console.log('Key not corresponding to the hash.');
+                    res.send('Key not corresponding to the hash.');
             });
         }
         else { //Account activated in DB
-            console.log('This account: ' + email + ' has already been activated.');
+          res.send('This account: ' + email + ' has already been activated.');
         }
     });
 });
