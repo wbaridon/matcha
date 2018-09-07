@@ -39,11 +39,11 @@ export default {
         bio: '',
         gender: '',
         email: '',
-        password: '',
+        password: ''
       },
       // Quand il y aura la sauvegarde enlever les valeurs par defaut
       interests: ['php', 'html'], // Liste possible sous forme de tags
-      pictures: '', // 5 images max dont une pour le profil
+      pictures: '' // 5 images max dont une pour le profil
     }
   },
   mounted () {

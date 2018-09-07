@@ -33,7 +33,7 @@ router.post('/', function (req, res) {
 					model.userIsActivate(login, function (err, data) {
 						if (data[0].activation == 1) {
 
-							token = jwt.sign(user, 'MatchaSecretKey', { expiresIn: '1h'});
+							token = jwt.sign(user, 'MatchaSecretKey', { expiresIn: '1d'});
 							appData.error = 0;
 							appData["token"] = token;
 							console.log(appData)
