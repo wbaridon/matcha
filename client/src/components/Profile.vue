@@ -28,6 +28,7 @@
 <script>
 import Profile from '@/services/ProfileService'
 export default {
+  props: ['isAuth'],
   name: 'profile',
   data () {
     return {

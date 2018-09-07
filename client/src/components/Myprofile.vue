@@ -1,5 +1,5 @@
 <template>
-  <div id="myprofile">
+  <div v-if="isAuth" id="myprofile">
     <h1>Mon profil</h1>
     <router-link :to="'/profile/' + user.id">Voir mon profil public</router-link><br><br>
     <button v-if="!update" @click="modify()">Modifier mon profil</button>
@@ -31,11 +31,13 @@
     </div>
 
   </div>
+  <div v-else>Merci de vous connecter</div>
 </template>
 
 <script>
 import Profile from '@/services/ProfileService'
 export default {
+  props: ['isAuth'],
   name: 'myprofile',
   data () {
     return {

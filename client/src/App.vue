@@ -13,7 +13,7 @@
             <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
         </div>
         <div class="content">
-          <router-view/>
+        <router-view v-bind:isAuth="isAuth"/>
         </div>
         <app-footer></app-footer>
     </body>
