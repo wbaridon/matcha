@@ -2,12 +2,12 @@
   <div id="myprofile">
     <h1>Mon profil</h1>
     <a href="#">Changer mes informations</a><br><br>
-    <h2> {{firstname}} {{name}} </h2>
-    {{email}}<br>
-    {{sexualOrientation}}<br>
-    {{type}}
+    <h2> {{user.firstname}} {{user.name}} </h2>
+    {{user.email}}<br>
+    {{user.sexuality}}<br>
+    {{user.gender}}
     <h3>QUI SUIS JE?</h3>
-    {{biography}}
+    {{user.bio}}
     <h3>VOS PASSIONS</h3>
     <div id='interests'>
       <div v-for="interest in interests" v-bind:key="interest">
@@ -25,20 +25,36 @@
 </template>
 
 <script>
+import Profile from '@/services/ProfileService'
 export default {
   name: 'myprofile',
   data () {
     return {
+      user: {
+        id: '',
+        firstname: '',
+        name: '',
+        age: '',
+        sexuality: '',
+        bio: '',
+        gender: '',
+        email: '',
+        password: '',
+      },
       // Quand il y aura la sauvegarde enlever les valeurs par defaut
-      type: 'h',
-      sexualOrientation: 'hetero',
-      biography: 'Petit texte pour me presenter',
       interests: ['php', 'html'], // Liste possible sous forme de tags
       pictures: '', // 5 images max dont une pour le profil
-      name: 'Dubois',
-      firstname: 'Nicolas',
-      email: 'wbaridon@gmail.com',
-      password: 'test'
+    }
+  },
+  mounted () {
+    this.editProfile()
+  },
+  methods: {
+    editProfile () {
+      var token = this.$cookie.get('authToken')
+      Profile.edit(this.user, token, callback => {
+        this.user = callback
+      })
     }
   }
 }
