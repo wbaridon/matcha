@@ -41,10 +41,7 @@ export default new Router({
     {
       path: '/profile',
       name: 'myprofile',
-      component: Myprofile,
-      /*meta: {
-        isAuth: true
-      }*/
+      component: Myprofile
     },
     {
       path: '/profile/:userId',

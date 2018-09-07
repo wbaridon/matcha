@@ -6,7 +6,6 @@ var jwt = require('jsonwebtoken');
 var token;
 
 router.post('/checkAuth', function (req, res) {
-
 	jwt.verify(req.body.key, 'MatchaSecretKey', function(err, decoded) {
 		if (err) {
 		 res.send({'result': false})
@@ -20,23 +19,24 @@ router.post('/checkAuth', function (req, res) {
 });
 router.post('/', function (req, res) {
 	appData = {} /* Test jwt */
-	console.log(req.body)
 	login = req.body.login
 	password = req.body.password
 
 	model.userLogin(login, function (err,data) {
 		if (data.length > 0) {
+			user = {
+				id: data[0].id,
+				login: login
+			}
 			argon2.verify(data[0].password, password).then(match => {
 				if (match) {
 					model.userIsActivate(login, function (err, data) {
 						if (data[0].activation == 1) {
-							/* Recuperer plutot toutes les informations account pour faire un data[0] pour le jsonwebtoken */
-							token = jwt.sign({data: login}, 'MatchaSecretKey', { expiresIn: '1h'});
+
+							token = jwt.sign(user, 'MatchaSecretKey', { expiresIn: '1h'});
 							appData.error = 0;
 							appData["token"] = token;
-							console.log(appData);
-								console.log('oui');
-
+							console.log(appData)
 							res.status(200).json(appData);
 
 							// Faire la gestion des messages en dehors de la console
