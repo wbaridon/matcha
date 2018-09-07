@@ -10,6 +10,9 @@ import Myprofile from '@/components/Myprofile'
 import Suggestion from '@/components/Suggestion'
 import Activate from '@/components/Activate'
 
+var VueCookie = require('vue-cookie')
+
+Vue.use(VueCookie)
 Vue.use(Router)
 
 export default new Router({
