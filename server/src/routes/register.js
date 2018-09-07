@@ -28,7 +28,7 @@ function sendMail(user) {
 			from: 'matchawb@gmail.com',
 			to: user.email,
 			subject: 'Confirmation compte matcha',
-			text: 'Bonjour ' + user.firstname + ', et bienvenue sur matcha! Cliquez sur ce lien pour activer votre compte : http://localhost:8081/activate?email=' + user.email + '&key=' + hash
+			text: 'Bonjour ' + user.firstname + ', et bienvenue sur matcha! Cliquez sur ce lien pour activer votre compte : http://localhost:8080/activate?email=' + user.email + '&key=' + hash
 		};
 		tunnel.sendMail(mailOptions, function(err, info){
 			if (err) {
@@ -60,7 +60,7 @@ router.post('/', urlencodedParser, function (req, res) {
 			argon2.hash(user.password).then(hash => {
 				user.password = hash;
 				account.createUser(user);
-				account.userId(user.login, function(login, res) { 
+				account.userId(user.login, function(login, res) {
 					profile.createUser(user, res[0].id);
 					interests.createUser(res[0].id);
 				});
