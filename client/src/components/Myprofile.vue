@@ -37,7 +37,6 @@
 <script>
 import Profile from '@/services/ProfileService'
 export default {
-  props: ['isAuth'],
   name: 'myprofile',
   data () {
     return {
@@ -61,6 +60,11 @@ export default {
   },
   mounted () {
     this.editProfile()
+  },
+  computed: {
+    isAuth () {
+      return this.$store.state.isAuth
+    }
   },
   methods: {
     editProfile () {

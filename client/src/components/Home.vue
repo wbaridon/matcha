@@ -7,7 +7,6 @@
 
 <script>
 export default {
-  props: ['isAuth'],
   name: 'home',
   data () {
     return {

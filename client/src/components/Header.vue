@@ -29,7 +29,6 @@
 <script>
 import Login from '@/services/LoginService'
 export default {
-  props: ['isAuth'],
   data () {
     return {
       error: '',
@@ -39,19 +38,24 @@ export default {
       }
     }
   },
+  computed: {
+    isAuth () {
+      return this.$store.state.isAuth
+    }
+  },
   methods: {
     userLogin () {
       Login.logIn(this.user).then(res => {
         this.error = res
         if (res.error === 0) {
-          this.error = 'Ok'
-          this.$emit('log', 'logIn')
+          this.error = ''
+          this.$store.commit('logIn')
           this.$cookie.set('authToken', res.token, 1)
         }
       })
     },
     logOut () {
-      this.$emit('log', 'logOut')
+      this.$store.commit('logOut')
       this.$cookie.delete('authToken')
     }
   }

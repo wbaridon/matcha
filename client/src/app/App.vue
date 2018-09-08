@@ -8,12 +8,12 @@
       <title>Titre non gere</title>
     </head>
     <body>
-        <app-header v-bind:isAuth="isAuth" @log="log($event)"></app-header>
+        <app-header></app-header>
         <div class='cover'>
             <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
         </div>
         <div class="content">
-        <router-view v-bind:isAuth="isAuth"/>
+        <router-view></router-view>
         </div>
         <app-footer></app-footer>
     </body>
@@ -27,7 +27,6 @@ import Login from '@/services/LoginService'
 export default {
   data () {
     return {
-      isAuth: false
     }
   },
   components: {
@@ -36,6 +35,8 @@ export default {
   },
   mounted () {
     this.checkAuth()
+  },
+  computed: {
   },
   methods: {
     checkAuth () {
