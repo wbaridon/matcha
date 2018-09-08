@@ -69,9 +69,11 @@ export default {
   methods: {
     editProfile () {
       var token = this.$cookie.get('authToken')
-      Profile.edit(this.user, token, callback => {
-        this.user = callback
-      })
+      if (token) {
+        Profile.edit(this.user, token, callback => {
+          this.user = callback
+        })
+      }
     },
     modify () {
       this.update = true

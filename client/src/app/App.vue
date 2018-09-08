@@ -41,15 +41,10 @@ export default {
   methods: {
     checkAuth () {
       Login.checkAuth(this.$cookie.get('authToken')).then(res => {
-        this.isAuth = res.result
+        if (res.result === true) {
+          this.$store.commit('logIn')
+        }
       })
-    },
-    log (status) {
-      if (status === 'logIn') {
-        this.isAuth = true
-      } else {
-        this.isAuth = false
-      }
     }
   }
 }

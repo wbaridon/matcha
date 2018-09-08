@@ -6,6 +6,11 @@ var jwt = require('jsonwebtoken');
 var token;
 
 router.post('/checkAuth', function (req, res) {
+	console.log(req.body.key)
+	if (!req.body.key) {
+		console.log('enter')
+
+	}
 	jwt.verify(req.body.key, 'MatchaSecretKey', function(err, decoded) {
 		if (err) {
 		 res.send({'result': false})
@@ -14,8 +19,6 @@ router.post('/checkAuth', function (req, res) {
 			res.send({'result': true})
 		}
 	})
-
-
 });
 router.post('/', function (req, res) {
 	appData = {} /* Test jwt */
