@@ -26,7 +26,6 @@
 <script>
 import Suggestion from '@/services/SuggestionService'
 export default {
-  props: ['isAuth'],
   name: 'suggestion',
   data () {
     return {
@@ -35,6 +34,11 @@ export default {
   },
   mounted () {
     this.getAll()
+  },
+  computed: {
+    isAuth () {
+      return this.$store.state.isAuth
+    }
   },
   methods: {
     getAll () {
