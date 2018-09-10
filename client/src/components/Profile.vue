@@ -3,10 +3,8 @@
     <button> J'aime </button>
     <button> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
-
-    Score de popularite: <br>
-    {{user.sexuality}}<br>
-    {{user.gender}}
+    {{user.gender}}, {{user.age}} ans,     {{user.sexuality}}<br>
+      Score de popularite: <br>
     <h3>QUI SUIS JE? </h3>
     {{user.bio}}
     <h3>VOS PASSIONS</h3>

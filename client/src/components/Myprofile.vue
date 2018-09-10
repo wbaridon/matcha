@@ -35,7 +35,7 @@
             <label for="oldpwd">Ancien mot de passe:</label>
             <input type="password" name="oldpwd" v-model="password.oldpwd"><br>
             <label for="name">Nouveau mot de passe:</label>
-            <input type="text" name="newpwd" v-model="password.newpwd"><br>
+            <input type="password" name="newpwd" v-model="password.newpwd"><br>
             <input type="submit" name="submit" value="Valider">
           </form>
         </div>
