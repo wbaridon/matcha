@@ -14,11 +14,11 @@ module.exports.createUser = function (user, id_account) {
 }
 
 module.exports.updateUser = function (id_account, column, value, callback) {
-    db.query('UPDATE profiles\
-        SET ? = ?\
-        WHERE id_account = ?',
-        [column, value, id_account],
-        callback(err, result));
+		db.query("UPDATE profiles\
+        SET " + column + "=?\
+        WHERE id_account = ?",
+        [value, id_account],
+        callback);
 }
 
 module.exports.select = function (id_account, callback) {
