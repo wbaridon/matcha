@@ -32,6 +32,18 @@ router.post('/edit', function(req, res) {
   });
 })
 
+router.post('/updateBio', function(req, res) {
+  bio = req.body.bio
+  id = req.body.id
+  console.log(bio)
+  profile.updateUser(id, 'bio', bio, (err, result) => {
+    if (err)
+      throw err
+    else
+    res.send(bio)
+  })
+})
+
 module.exports = router;
 
 function view (userId, callback) {
@@ -78,6 +90,17 @@ function convertUserData(user, callback) {
       break;
     case 1:
       user.gender = "Femme";
+      break;
+  }
+  switch (user.sexuality) {
+    case 0:
+      user.sexuality = 'Hetero';
+      break;
+    case 1:
+      user.sexuality = 'Homo';
+      break;
+    case 3:
+      user.sexuality = 'Bisexuel';
       break;
   }
   callback(user)

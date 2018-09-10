@@ -1,7 +1,9 @@
 <template>
   <div id="profile" v-if="user.userExist">
+    <button> J'aime </button>
+    <button> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
-    {{user.email}}<br>
+
     Score de popularite: <br>
     {{user.sexuality}}<br>
     {{user.gender}}
@@ -19,6 +21,8 @@
         </form>
       </div>
     </div>
+    <button @click="blockUser()"> Bloquer l'utilisateur </button>
+    <button @click="fakeProfile()"> Signaler ce profil comme un fake </button>
   </div>
   <div id="profile" v-else>
     Aucun profil
@@ -43,6 +47,10 @@ export default {
         gender: '',
         email: ''
       },
+      like: {
+        status: '', // Si oui ou non on a liker l'user
+        other: '' // Si l'autre nous a liker mettre yes
+      },
       result: [ ],
       // Quand il y aura la sauvegarde enlever les valeurs par defaut
       interests: ['php', 'html'], // Liste possible sous forme de tags
@@ -59,6 +67,12 @@ export default {
       Profile.viewProfile(this.user, callback => {
         this.user = callback
       })
+    },
+    fakeProfile () {
+      console.log('test')
+    },
+    blockUser () {
+      console.log('a faire')
     }
   }
 }

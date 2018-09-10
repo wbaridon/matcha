@@ -2,8 +2,8 @@
   <div v-if="isAuth" id="myprofile">
     <h1>Mon profil</h1>
     <router-link :to="'/profile/' + user.id">Voir mon profil public</router-link><br><br>
-    <button v-if="!update" @click="modify()">Modifier mon profil</button>
-    <div v-if="update">
+    <button v-if="!update.perso" @click="update.perso = true">Modifier mon profil</button>
+    <div v-if="update.perso">
       <form class="updateProfile" method='post' v-on:submit.prevent="validateForm">
       Prenom: <input type="text" name="firstname"  v-model="user.firstname">
       Nom: <input type="text" name="name" v-model="user.name">
@@ -11,19 +11,34 @@
       <input type="submit" name="submit" value="Valider">
     </form>
     </div>
-    <h2> {{user.firstname}} {{user.name}} </h2>
-    {{user.email}}<br>
-    {{user.sexuality}}<br>
-    {{user.gender}}
-    <h3>QUI SUIS JE?</h3>
-    {{user.bio}}
-    <h3>VOS PASSIONS</h3>
+    <button>Ajouter des photos</button>
+          <h2> {{user.firstname}} {{user.name}} </h2>
+    <div id="topProfile">
+        <div class="element">
+            <img src="/static/images/noPicture.jpg" alt="Pas de photos" class="profilePic"/>
+        </div>
+        <div class="element">
+          <h3> Vos informations perso </h3>
+          <p><strong>Email:</strong> {{user.email}}</p>
+          <strong>Sexe:</strong>  {{user.gender}}
+        </div>
+    </div>
+    <h3> Vos preferences </h3>
+    <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
+    <h3>Votre biographie</h3>
+    <button v-if="!update.bio" @click="update.bio = !update.bio">Modifier ma bio</button>
+    <p v-if="user.bio && !update.bio">"{{user.bio}}"</p>
+    <form v-if="update.bio" class="" method="post" v-on:submit.prevent="changeBio()">
+      <textarea name="bio" rows="8" cols="80" v-model="user.bio"></textarea>
+      <input type="submit" name="submit" value="Valider">
+    </form>
+    <h3>Vos passions</h3>
     <div id='interests'>
       <div v-for="interest in interests" v-bind:key="interest">
         <span class='sticker'>#{{interest}} &times;</span>
       </div>
       <div>
-        <form class="" action="index.html" method="post">
+        <form class="" method="post">
           <input type="text" name="interest" value="">
           <input type="submit" name="submit" value="Ajouter">
         </form>
@@ -40,7 +55,10 @@ export default {
   name: 'myprofile',
   data () {
     return {
-      update: false,
+      update: {
+        perso: false,
+        bio: false
+      },
       user: {
         id: '',
         firstname: '',
@@ -75,14 +93,17 @@ export default {
         })
       }
     },
-    modify () {
-      this.update = true
-    },
     validateForm () {
       var token = this.$cookie.get('authToken')
       // Faire un controle des nouvelles valeur avant envoi comme pour register
       Profile.edit(this.user, token, callback => {
         this.user = callback
+      })
+    },
+    changeBio () {
+      Profile.updateBio(this.user.bio, this.user.id, callback => {
+        this.user.bio = callback
+        this.update.bio = false
       })
     }
   }
@@ -100,5 +121,12 @@ export default {
     padding: 5px;
     color: white;
     margin: 3px;
+  }
+  #topProfile {
+    background-color: lightgrey;
+    display: flex;
+  }
+  .profilePic {
+    width: 200px;
   }
 </style>
