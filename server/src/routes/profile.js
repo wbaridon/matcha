@@ -58,6 +58,9 @@ router.post('/updatePerso', function(req, res) {
   })
 })
 
+router.post('/updatePwd', function(req, res) {
+    res.send('non operationnel')
+})
 
 module.exports = router;
 
@@ -99,6 +102,7 @@ function fillProfile(userId, callback) {
 }
 
 function convertUserData(user, callback) {
+  // synchrone ou asynchrone ?
   switch (user.gender) {
     case 0:
       user.gender = 'Homme';

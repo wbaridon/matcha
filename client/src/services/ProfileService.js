@@ -20,5 +20,10 @@ export default {
     return Api().post('profile/updatePerso', {user, id}, callback).then(function (response) {
       callback(response.data)
     })
+  },
+  updatePwd (password, id, callback) {
+    return Api().post('profile/updatePwd', {password, id}, callback).then(function (response) {
+      callback(response.data)
+    })
   }
 }
