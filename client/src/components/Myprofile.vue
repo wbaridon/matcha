@@ -3,26 +3,36 @@
     <h1>Mon profil</h1>
     <router-link :to="'/profile/' + user.id">Voir mon profil public</router-link><br><br>
     <button v-if="!update.perso" @click="update.perso = true">Modifier mon profil</button>
-    <div v-if="update.perso">
-      <form class="updateProfile" method='post' v-on:submit.prevent="validateForm">
-      Prenom: <input type="text" name="firstname"  v-model="user.firstname">
-      Nom: <input type="text" name="name" v-model="user.name">
-      Email: <input type="text" name="email" v-model="user.email">
-      <input type="submit" name="submit" value="Valider">
-    </form>
-    </div>
     <button>Ajouter des photos</button>
           <h2> {{user.firstname}} {{user.name}} </h2>
     <div id="topProfile">
         <div class="element">
             <img src="/static/images/noPicture.jpg" alt="Pas de photos" class="profilePic"/>
         </div>
-        <div class="element">
+        <div class="element" v-if="!update.perso">
           <h3> Vos informations perso </h3>
           <p><strong>Email:</strong> {{user.email}}</p>
-          <strong>Sexe:</strong>  {{user.gender}}
+          <p><strong>Sexe:</strong>  {{user.gender}}</p>
+          <p><strong>Age:</strong> {{user.age}}</p>
+        </div>
+        <div class="element" v-if="update.perso">
+          <form class="updateProfile" method='post' v-on:submit.prevent="changePerso()">
+            <label for="firstname">Prenom:</label>
+            <input type="text" name="firstname"  v-model="user.firstname"><br>
+            <label for="name">Nom:</label>
+            <input type="text" name="name" v-model="user.name"><br>
+            <label for="email">Email:</label>
+            <input type="text" name="email" v-model="user.email"><br>
+            <label for="age">Age:</label>
+            <input type="text" name="age" v-model="user.age"><br>
+            <input type="submit" name="submit" value="Valider">
+          </form>
+        </div>
+        <div class="element">
+            <button v-if="!update.perso" @click="update.perso = true">Modifier mes infos</button>
         </div>
     </div>
+
     <h3> Vos preferences </h3>
     <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
     <h3>Votre biographie</h3>
@@ -93,11 +103,11 @@ export default {
         })
       }
     },
-    validateForm () {
-      var token = this.$cookie.get('authToken')
+    changePerso () {
       // Faire un controle des nouvelles valeur avant envoi comme pour register
-      Profile.edit(this.user, token, callback => {
+      Profile.updatePerso(this.user, this.user.id, callback => {
         this.user = callback
+        this.update.perso = false
       })
     },
     changeBio () {
@@ -125,6 +135,7 @@ export default {
   #topProfile {
     background-color: lightgrey;
     display: flex;
+    justify-content: space-between;
   }
   .profilePic {
     width: 200px;

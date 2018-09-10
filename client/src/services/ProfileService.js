@@ -15,5 +15,10 @@ export default {
     return Api().post('profile/updateBio', {bio, id}, callback).then(function (response) {
       callback(response.data)
     })
+  },
+  updatePerso (user, id, callback) {
+    return Api().post('profile/updatePerso', {user, id}, callback).then(function (response) {
+      callback(response.data)
+    })
   }
 }

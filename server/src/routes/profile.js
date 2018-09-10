@@ -43,6 +43,21 @@ router.post('/updateBio', function(req, res) {
     res.send(bio)
   })
 })
+router.post('/updatePerso', function(req, res) {
+  id = req.body.id
+  profile.updateUser(id, 'name', req.body.user.name, (err, result) => {
+    profile.updateUser(id, 'firstname', req.body.user.firstname, (err, result) => {
+      account.updateUser(id, 'email', req.body.user.email, (err, result) => {
+        profile.updateUser(id, 'age', req.body.user.age, (err, result) => {
+          view(id, user => {
+            res.send(user)
+          })
+        })
+      })
+    })
+  })
+})
+
 
 module.exports = router;
 
