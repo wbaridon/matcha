@@ -2,8 +2,8 @@
   <div v-if="isAuth" id="myprofile">
     <h1>Mon profil</h1>
     <router-link :to="'/profile/' + user.id">Voir mon profil public</router-link><br><br>
-    <button v-if="!update" @click="modify()">Modifier mon profil</button>
-    <div v-if="update">
+    <button v-if="!update.perso" @click="update.perso = true">Modifier mon profil</button>
+    <div v-if="update.perso">
       <form class="updateProfile" method='post' v-on:submit.prevent="validateForm">
       Prenom: <input type="text" name="firstname"  v-model="user.firstname">
       Nom: <input type="text" name="name" v-model="user.name">
@@ -26,7 +26,7 @@
     <h3> Vos preferences </h3>
     <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
     <h3>Votre biographie</h3>
-    <button v-if="!update.bio" @click="modify('bio')">Modifier ma bio</button>
+    <button v-if="!update.bio" @click="update.bio = !update.bio">Modifier ma bio</button>
     <p v-if="user.bio && !update.bio">"{{user.bio}}"</p>
     <form v-if="update.bio" class="" method="post" v-on:submit.prevent="changeBio()">
       <textarea name="bio" rows="8" cols="80" v-model="user.bio"></textarea>
@@ -91,14 +91,6 @@ export default {
         Profile.edit(this.user, token, callback => {
           this.user = callback
         })
-      }
-    },
-    modify (data) {
-    //   this.update.{{data}} = true, voir pour un chemin plus court
-    if (data === 'bio') {
-      this.update.bio = true }
-      else {
-        this.update.perso = true
       }
     },
     validateForm () {
