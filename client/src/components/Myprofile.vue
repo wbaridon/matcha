@@ -27,6 +27,11 @@
             <input type="text" name="email" v-model="user.email"><br>
             <label for="age">Age:</label>
             <input type="text" name="age" v-model="user.age"><br>
+            <label for="age">Genre:</label>
+            <select v-model="user.gender" name='gender'>
+               <option  value="0">Homme</option>
+                <option value="1">Femme</option>
+            </select><br>
             <input type="submit" name="submit" value="Valider">
           </form>
         </div>
@@ -45,7 +50,18 @@
     </div>
 
     <h3> Vos preferences </h3>
-    <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
+    <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
+    <p v-if="!update.pref">
+      <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
+    </p>
+    <form v-if="update.pref" v-on:submit.prevent="changePref()">
+      <select v-model="user.sexuality" name='sexuality'>
+         <option  value="0">Hetero</option>
+         <option value="1">Homo</option>
+         <option value="2">Bisexuel</option>
+      </select><br>
+      <input type="submit" name="submit" value="Valider">
+    </form>
     <h3>Votre biographie</h3>
     <button v-if="!update.bio" @click="update.bio = !update.bio">Modifier ma bio</button>
     <p v-if="user.bio && !update.bio">"{{user.bio}}"</p>
@@ -79,7 +95,8 @@ export default {
       update: {
         perso: false,
         bio: false,
-        pwd: false
+        pwd: false,
+        pref: false
       },
       user: {
         id: '',
@@ -129,6 +146,12 @@ export default {
       Profile.updateBio(this.user.bio, this.user.id, callback => {
         this.user.bio = callback
         this.update.bio = false
+      })
+    },
+    changePref () {
+      Profile.updatePref(this.user, this.user.id, callback => {
+        this.user = callback
+        this.update.pref = false
       })
     },
     changePwd () {

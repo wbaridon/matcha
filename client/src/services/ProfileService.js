@@ -21,6 +21,11 @@ export default {
       callback(response.data)
     })
   },
+  updatePref (user, id, callback) {
+    return Api().post('profile/updatePref', {user, id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   updatePwd (password, id, callback) {
     return Api().post('profile/updatePwd', {password, id}, callback).then(function (response) {
       callback(response.data)
