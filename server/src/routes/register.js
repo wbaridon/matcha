@@ -8,6 +8,7 @@ var account = require('../models/account.js');
 var profile = require('../models/profile.js');
 var interests = require('../models/interests.js');
 var mail = require('nodemailer');
+var myhash = require('../utils/hash');
 
 router.get('/', function(req, res) {
 
@@ -23,7 +24,7 @@ function sendMail(user) {
 				pass: '42camagru'
 		}
 	});
-	argon2.hash(user.email + user.timestamp).then(hash => {
+	myhash.hash(user.email + user.timestamp, hash => {
 		var mailOptions = {
 			from: 'matchawb@gmail.com',
 			to: user.email,
