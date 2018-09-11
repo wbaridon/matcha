@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h1>Home</h1>
-    Contenu a mettre
+    Mettre la partie recherche ici
   </div>
 </template>
 

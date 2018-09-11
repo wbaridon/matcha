@@ -3,7 +3,7 @@
     <div id="branding">
       <h1><a href="/">Matcha</a></h1>
     </div>
-    <nav>
+    <nav v-if="!isAuth">
       <div class="element">
         <form class="form-inline" method='post' v-on:submit.prevent="userLogin">
           <input type="text" name="login" value="" v-model="user.login" placeholder="Login">
@@ -17,9 +17,15 @@
         {{error}}
       </div>
     </nav>
+    <nav v-else>
+        <div class="element">
+      <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
+      <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
+    </div>
+      <button @click="logOut()">Se deconnecter</button>
+    </nav>
   </header>
 </template>
-
 <script>
 import Login from '@/services/LoginService'
 export default {
@@ -32,11 +38,25 @@ export default {
       }
     }
   },
+  computed: {
+    isAuth () {
+      return this.$store.state.isAuth
+    }
+  },
   methods: {
     userLogin () {
       Login.logIn(this.user).then(res => {
-        this.error = res.data
+        this.error = res
+        if (res.error === 0) {
+          this.error = ''
+          this.$store.commit('logIn')
+          this.$cookie.set('authToken', res.token, 1)
+        }
       })
+    },
+    logOut () {
+      this.$store.commit('logOut')
+      this.$cookie.delete('authToken')
     }
   }
 }
