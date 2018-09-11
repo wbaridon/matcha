@@ -1,10 +1,10 @@
 <template>
   <div id="profile" v-if="user.userExist">
+    <button> J'aime </button>
+    <button> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
-    {{user.email}}<br>
-    Score de popularite: <br>
-    {{user.sexuality}}<br>
-    {{user.gender}}
+    {{user.gender}}, {{user.age}} ans,     {{user.sexuality}}<br>
+      Score de popularite: <br>
     <h3>QUI SUIS JE? </h3>
     {{user.bio}}
     <h3>VOS PASSIONS</h3>
@@ -19,6 +19,8 @@
         </form>
       </div>
     </div>
+    <button @click="blockUser()"> Bloquer l'utilisateur </button>
+    <button @click="fakeProfile()"> Signaler ce profil comme un fake </button>
   </div>
   <div id="profile" v-else>
     Aucun profil
@@ -28,6 +30,7 @@
 <script>
 import Profile from '@/services/ProfileService'
 export default {
+
   name: 'profile',
   data () {
     return {
@@ -41,6 +44,10 @@ export default {
         bio: '',
         gender: '',
         email: ''
+      },
+      like: {
+        status: '', // Si oui ou non on a liker l'user
+        other: '' // Si l'autre nous a liker mettre yes
       },
       result: [ ],
       // Quand il y aura la sauvegarde enlever les valeurs par defaut
@@ -58,6 +65,12 @@ export default {
       Profile.viewProfile(this.user, callback => {
         this.user = callback
       })
+    },
+    fakeProfile () {
+      console.log('test')
+    },
+    blockUser () {
+      console.log('a faire')
     }
   }
 }

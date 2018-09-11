@@ -25,8 +25,20 @@ module.exports.userId = function (login, callback) {
 	});
 }
 
+module.exports.isUser = function (id, callback) {
+	db.query('SELECT id FROM accounts WHERE id = ?', [id], function(err, result) {
+		callback(result.length);
+	});
+}
+
+module.exports.userEmail = function (id, callback) {
+	db.query('SELECT email FROM accounts WHERE id = ?', [id], function(err, result) {
+		callback(result[0].email);
+	});
+}
+
 module.exports.userLogin = function (login, callback) {
-	db.query('SELECT password FROM accounts WHERE login = ?', [login], function(err, result) {
+	db.query('SELECT * FROM accounts WHERE login = ?', [login], function(err, result) {
 		callback(null, result);
 	});
 }
@@ -47,4 +59,12 @@ module.exports.activateAccount = function (email, callback) {
 	db.query('UPDATE accounts SET activation = 1 WHERE email = ?', [email], function(err, result) {
 		callback(null, result);
 	});
+}
+
+module.exports.updateUser = function (id, column, value, callback) {
+		db.query("UPDATE accounts\
+        SET " + column + "=?\
+        WHERE id = ?",
+        [value, id],
+        callback);
 }

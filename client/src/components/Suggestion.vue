@@ -1,5 +1,5 @@
 <template>
-  <div id="suggestion">
+  <div v-if="isAuth" id="suggestion">
     <h1>Liste suggestion</h1>
       Trier les profils par:
       <select id="sortProfile">
@@ -20,6 +20,7 @@
       <router-link :to="'/profile/' + list.id">Voir son profil >></router-link>
     </div>
   </div>
+  <div v-else>Merci de vous connecter</div>
 </template>
 
 <script>
@@ -33,6 +34,11 @@ export default {
   },
   mounted () {
     this.getAll()
+  },
+  computed: {
+    isAuth () {
+      return this.$store.state.isAuth
+    }
   },
   methods: {
     getAll () {

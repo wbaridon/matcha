@@ -19,8 +19,8 @@
     </nav>
     <nav v-else>
         <div class="element">
-      <a href="/profile">Mon profil</a>
-      <a href="/suggestion">Suggestion</a>
+      <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
+      <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
     </div>
       <button @click="logOut()">Se deconnecter</button>
     </nav>
@@ -29,7 +29,6 @@
 <script>
 import Login from '@/services/LoginService'
 export default {
-  props: ['isAuth'],
   data () {
     return {
       error: '',
@@ -39,19 +38,24 @@ export default {
       }
     }
   },
+  computed: {
+    isAuth () {
+      return this.$store.state.isAuth
+    }
+  },
   methods: {
     userLogin () {
       Login.logIn(this.user).then(res => {
         this.error = res
         if (res.error === 0) {
-          this.error = 'Ok'
-          this.$emit('log', 'logIn')
+          this.error = ''
+          this.$store.commit('logIn')
           this.$cookie.set('authToken', res.token, 1)
         }
       })
     },
     logOut () {
-      this.$emit('log', 'logOut')
+      this.$store.commit('logOut')
       this.$cookie.delete('authToken')
     }
   }
