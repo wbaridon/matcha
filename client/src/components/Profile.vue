@@ -67,7 +67,7 @@ export default {
       })
     },
     fakeProfile () {
-      console.log('test')
+      console.log(this.user.id)
     },
     blockUser () {
       console.log('a faire')
