@@ -19,8 +19,8 @@
     </nav>
     <nav v-else>
         <div class="element">
-      <a href="/profile">Mon profil</a>
-      <a href="/suggestion">Suggestion</a>
+      <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
+      <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
     </div>
       <button @click="logOut()">Se deconnecter</button>
     </nav>

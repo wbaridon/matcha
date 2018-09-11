@@ -60,3 +60,11 @@ module.exports.activateAccount = function (email, callback) {
 		callback(null, result);
 	});
 }
+
+module.exports.updateUser = function (id, column, value, callback) {
+		db.query("UPDATE accounts\
+        SET " + column + "=?\
+        WHERE id = ?",
+        [value, id],
+        callback);
+}

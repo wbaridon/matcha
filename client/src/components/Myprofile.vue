@@ -2,29 +2,66 @@
   <div v-if="isAuth" id="myprofile">
     <h1>Mon profil</h1>
     <router-link :to="'/profile/' + user.id">Voir mon profil public</router-link><br><br>
-    <button v-if="!update.perso" @click="update.perso = true">Modifier mon profil</button>
-    <div v-if="update.perso">
-      <form class="updateProfile" method='post' v-on:submit.prevent="validateForm">
-      Prenom: <input type="text" name="firstname"  v-model="user.firstname">
-      Nom: <input type="text" name="name" v-model="user.name">
-      Email: <input type="text" name="email" v-model="user.email">
-      <input type="submit" name="submit" value="Valider">
-    </form>
-    </div>
     <button>Ajouter des photos</button>
           <h2> {{user.firstname}} {{user.name}} </h2>
     <div id="topProfile">
         <div class="element">
             <img src="/static/images/noPicture.jpg" alt="Pas de photos" class="profilePic"/>
         </div>
-        <div class="element">
+        <div class="element" v-if="!update.perso && !update.pwd">
           <h3> Vos informations perso </h3>
           <p><strong>Email:</strong> {{user.email}}</p>
-          <strong>Sexe:</strong>  {{user.gender}}
+          <p><strong>Sexe:</strong>  {{user.gender}}</p>
+          <p><strong>Age:</strong> {{user.age}}</p>
+          <button v-if="!update.perso && !update.pwd" @click="update.pwd = true">
+            Modifier mon mot de passe
+          </button> {{password.pwdString}}
+        </div>
+        <div class="element" v-if="update.perso">
+          <form class="updateProfile" method='post' v-on:submit.prevent="changePerso()">
+            <label for="firstname">Prenom:</label>
+            <input type="text" name="firstname"  v-model="user.firstname"><br>
+            <label for="name">Nom:</label>
+            <input type="text" name="name" v-model="user.name"><br>
+            <label for="email">Email:</label>
+            <input type="text" name="email" v-model="user.email"><br>
+            <label for="age">Age:</label>
+            <input type="text" name="age" v-model="user.age"><br>
+            <label for="age">Genre:</label>
+            <select v-model="user.gender" name='gender'>
+               <option  value="0">Homme</option>
+                <option value="1">Femme</option>
+            </select><br>
+            <input type="submit" name="submit" value="Valider">
+          </form>
+        </div>
+        <div class="element" v-if="update.pwd">
+          <form class="updateProfile" method='post' v-on:submit.prevent="changePwd()">
+            <label for="oldpwd">Ancien mot de passe:</label>
+            <input type="password" name="oldpwd" v-model="password.oldpwd"><br>
+            <label for="name">Nouveau mot de passe:</label>
+            <input type="password" name="newpwd" v-model="password.newpwd"><br>
+            <input type="submit" name="submit" value="Valider">
+          </form>
+        </div>
+        <div class="element">
+            <button v-if="!update.perso && !update.pwd" @click="update.perso = true">Modifier mes infos</button>
         </div>
     </div>
+
     <h3> Vos preferences </h3>
-    <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
+    <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
+    <p v-if="!update.pref">
+      <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
+    </p>
+    <form v-if="update.pref" v-on:submit.prevent="changePref()">
+      <select v-model="user.sexuality" name='sexuality'>
+         <option  value="0">Hetero</option>
+         <option value="1">Homo</option>
+         <option value="2">Bisexuel</option>
+      </select><br>
+      <input type="submit" name="submit" value="Valider">
+    </form>
     <h3>Votre biographie</h3>
     <button v-if="!update.bio" @click="update.bio = !update.bio">Modifier ma bio</button>
     <p v-if="user.bio && !update.bio">"{{user.bio}}"</p>
@@ -57,7 +94,9 @@ export default {
     return {
       update: {
         perso: false,
-        bio: false
+        bio: false,
+        pwd: false,
+        pref: false
       },
       user: {
         id: '',
@@ -67,10 +106,13 @@ export default {
         sexuality: '',
         bio: '',
         gender: '',
-        email: '',
-        password: ''
+        email: ''
       },
-
+      password: {
+        oldpwd: '',
+        newpwd: '',
+        pwdString: ''
+      },
       // Quand il y aura la sauvegarde enlever les valeurs par defaut
       interests: ['php', 'html'], // Liste possible sous forme de tags
       pictures: '' // 5 images max dont une pour le profil
@@ -93,17 +135,30 @@ export default {
         })
       }
     },
-    validateForm () {
-      var token = this.$cookie.get('authToken')
+    changePerso () {
       // Faire un controle des nouvelles valeur avant envoi comme pour register
-      Profile.edit(this.user, token, callback => {
+      Profile.updatePerso(this.user, this.user.id, callback => {
         this.user = callback
+        this.update.perso = false
       })
     },
     changeBio () {
       Profile.updateBio(this.user.bio, this.user.id, callback => {
         this.user.bio = callback
         this.update.bio = false
+      })
+    },
+    changePref () {
+      Profile.updatePref(this.user, this.user.id, callback => {
+        this.user = callback
+        this.update.pref = false
+      })
+    },
+    changePwd () {
+      Profile.updatePwd(this.password, this.user.id, callback => {
+        this.pwdString = callback
+        this.update.perso = false
+        this.update.pwd = false
       })
     }
   }
@@ -125,6 +180,7 @@ export default {
   #topProfile {
     background-color: lightgrey;
     display: flex;
+    justify-content: space-between;
   }
   .profilePic {
     width: 200px;

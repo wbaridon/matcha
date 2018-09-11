@@ -44,6 +44,39 @@ router.post('/updateBio', function(req, res) {
   })
 })
 
+router.post('/updatePref', function(req, res) {
+  id = req.body.id
+  profile.updateUser(id, 'sexuality', req.body.user.sexuality, (err, result) => {
+    if (err)
+      throw err
+    else
+      view(id, user => {
+        res.send(user)
+      })
+  })
+})
+
+router.post('/updatePerso', function(req, res) {
+  id = req.body.id
+  profile.updateUser(id, 'name', req.body.user.name, (err, result) => {
+    profile.updateUser(id, 'firstname', req.body.user.firstname, (err, result) => {
+      account.updateUser(id, 'email', req.body.user.email, (err, result) => {
+        profile.updateUser(id, 'age', req.body.user.age, (err, result) => {
+          profile.updateUser(id, 'gender', req.body.user.gender, (err, result) => {
+            view(id, user => {
+              res.send(user)
+            })
+          })
+        })
+      })
+    })
+  })
+})
+
+router.post('/updatePwd', function(req, res) {
+    res.send('non operationnel')
+})
+
 module.exports = router;
 
 function view (userId, callback) {
@@ -84,6 +117,7 @@ function fillProfile(userId, callback) {
 }
 
 function convertUserData(user, callback) {
+  // synchrone ou asynchrone ?
   switch (user.gender) {
     case 0:
       user.gender = 'Homme';
@@ -99,7 +133,7 @@ function convertUserData(user, callback) {
     case 1:
       user.sexuality = 'Homo';
       break;
-    case 3:
+    case 2:
       user.sexuality = 'Bisexuel';
       break;
   }

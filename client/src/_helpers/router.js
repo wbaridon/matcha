@@ -23,8 +23,32 @@ export default new Router({
     { path: '/activate', name: 'activate', component: Activate },
     { path: '/login/reset', name: 'Reset', component: Reset },
     { path: '/posts', name: 'Posts', component: Posts },
-    { path: '/suggestion', name: 'suggestion', component: Suggestion },
-    { path: '/profile', name: 'myprofile', component: Myprofile },
+    {
+      path: '/suggestion',
+      name: 'suggestion',
+      component: Suggestion,
+      beforeEnter: (to, from, next) => {
+        console.log(to.params.isAuth)
+        if (to.params.isAuth) {
+          next()
+        } else {
+          next('/')
+        }
+      }
+    },
+    {
+      path: '/profile',
+      name: 'myprofile',
+      component: Myprofile,
+      beforeEnter: (to, from, next) => {
+        console.log(to.params.isAuth)
+        if (to.params.isAuth) {
+          next()
+        } else {
+          next('/')
+        }
+      }
+    },
     { path: '/profile/:userId', name: 'profile', component: Profile },
     { path: '*', redirect: '/' }
   ]
