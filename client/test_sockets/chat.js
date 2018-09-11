@@ -7,18 +7,29 @@ var message = document.getElementById('message'),
     submit = document.getElementById('submit'),
     output = document.getElementById('chat_output'),
     typing = document.getElementById('chat_typing'),
+    connected_users = document.getElementById('connected_users'),
     users = {};
 
 // Emit events
 
 // On click, sends array via event 'chat'
 submit.addEventListener('click', function() {
+  if (!(username.value in users)) {
+    users[username.value] = socket.id;
+    username.remove();
+    socket.emit('usernames', users);
+  }
+  else {
+    if (users[username.value] != socket.id) {
+      console.log("This username is already taken, please choose another one.");
+    }
+    return;
+  }
   socket.emit('chat', {
     message: message.value,
     username: username.value,
     id: socket.id
   });
-  socket.emit('connected', Object.keys(users));
 });
 
 // On keypress, broadcasts that user is writting
@@ -51,4 +62,9 @@ socket.on('typing', function(data) {
 
 socket.on('not_typing', function() {
   typing.innerHTML = "";
+});
+
+socket.on('usernames', function(data) {
+  users = data;
+  console.log(users);
 });
