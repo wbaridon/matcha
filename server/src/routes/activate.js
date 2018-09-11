@@ -1,13 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var argon2 = require('argon2');
 var model = require('../models/account.js');
 var myhash = require('../utils/hash');
 
 router.post('/', function (req, res) {
     if (req.body.email && req.body.key) {
         let email = req.body.email;
-        let key = req.body.key.replace(' ', '+');
+        let key = req.body.key;
 
         model.userTimestampFromEmail(email, (err, callback) => { //Mail existing in DB with associated timestamp
             if (err) throw err; 
