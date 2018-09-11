@@ -7,7 +7,7 @@ const ALLOWED_CHAR = "qwertyuiopasdfghjklzxcvbnm"
 const ROT_PASSES = 10
 /******************************************************************************/
 
-hash = (str, callback) => {
+var haash = (str, callback) => {
     hash = ""
     size = str.length
     k = 0
@@ -33,13 +33,13 @@ hash = (str, callback) => {
     //console.log("Hash: " + hash)
     hash = hash.slice(hash.length - MAX_SIZE)
     callback(hash);
-}
+};
 
-verify = (str, hash, callback) => {
-    hash(str, (hash2) => {
-        callback(hash === hash2);
+var verify = (str, hsh, callback) => {
+    haash(str, (hash2) => {
+        callback(hsh === hash2);
     })
-}
+};
 
-module.exports.hash = hash;
+module.exports.hash = haash;
 module.exports.verify = verify;
