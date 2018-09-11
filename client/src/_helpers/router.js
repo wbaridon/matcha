@@ -28,7 +28,6 @@ export default new Router({
       name: 'suggestion',
       component: Suggestion,
       beforeEnter: (to, from, next) => {
-        console.log(to.params.isAuth)
         if (to.params.isAuth) {
           next()
         } else {
@@ -41,7 +40,6 @@ export default new Router({
       name: 'myprofile',
       component: Myprofile,
       beforeEnter: (to, from, next) => {
-        console.log(to.params.isAuth)
         if (to.params.isAuth) {
           next()
         } else {
