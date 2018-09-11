@@ -11,7 +11,8 @@
       // Rajouter un filtre par intervale age, localisation, popularite et tags<br>
       // Bloquer la vue de la page si profil etendue non remplis
       <div v-for="list in result" :key="list.id" class="card">
-      <h2>{{list.login}}</h2><br>
+      <h2>{{list.firstname}} {{list.name}}</h2><br>
+      {{list.age}} ans, {{list.gender}} {{list.sexuality}}<br>
       Pourcentage de compatibilite (A confirmer)
       Orientation Sexuel
       Proximite geographique
