@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const db = require('./db');
-const config = require('./config');
+const config = require('../config/config');
 const account = require('../models/account');
 
 /******************************************************************************/

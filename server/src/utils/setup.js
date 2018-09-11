@@ -1,7 +1,7 @@
 /************************
 ** USE `NPM RUN SETUP` **
 *************************/
-const config = require('./config');
+const config = require('../config/config');
 
 const NBR_OF_INTERESTS = config.interests.length;
 let SQL_INTERESTS = '';
