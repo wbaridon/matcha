@@ -9,9 +9,9 @@ var profile = require('../models/profile.js');
 var interests = require('../models/interests.js');
 var mail = require('nodemailer');
 
-router.get('/', function(req, res) {
-
-	res.render('error.ejs', {error: 'Aucun message'});
+router.get('/', (req, res) => {
+	res.send('The server is working...'
+)
 })
 
 

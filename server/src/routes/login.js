@@ -5,6 +5,11 @@ var model = require('../models/account.js');
 var jwt = require('jsonwebtoken');
 var token;
 
+router.get('/', (req, res) => {
+	res.send('The server is working...'
+)
+})
+
 router.post('/checkAuth', function (req, res) {
 	console.log(req.body.key)
 	if (!req.body.key) {

@@ -3,12 +3,17 @@ var router = express.Router();
 var argon2 = require('argon2');
 var model = require('../models/account.js');
 
+router.get('/', (req, res) => {
+	res.send('The server is working...'
+)
+})
+
 router.post('/', function (req, res) {
     let email = req.body.email;
     let key = req.body.key.replace(' ', '+');
 
     model.userTimestampFromEmail(email, (err, callback) => { //Mail existing in DB with associated timestamp
-        if (err) throw err; 
+        if (err) throw err;
         else if (callback[0].activation === 0) {
             argon2.verify(key, email + callback[0].timestamp).then(match => {
                 if (match) { //Hash correspondant
