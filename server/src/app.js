@@ -14,7 +14,6 @@ app.use('/register', require('./routes/register'))
 app.use('/login', require('./routes/login'))
 app.use('/suggestion', require('./routes/suggestion'))
 app.use('/profile', require('./routes/profile'))
-app.use('/chat', require('./routes/chat'))
 app.use('/activate', require('./routes/activate'))
 /* app.get('/posts', (req, res) => {
    res.send(
@@ -24,4 +23,11 @@ app.use('/activate', require('./routes/activate'))
     }]
   )
 })*/
-app.listen(process.env.PORT || 8081)
+
+const server = app.listen(process.env.PORT || 8081)
+
+const io = require('socket.io')(server)
+
+io.on('connection', function(socket) {
+  console.log('socketid is :' + socket.id)
+});
