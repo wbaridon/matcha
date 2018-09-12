@@ -4,7 +4,9 @@
     {{feedback}}
     <form class="" @submit.prevent="reset()" method="post">
       Login: <input type="text" name="login" v-model="user.login" required><br>
-      Email: <input type="email" name="email" v-model="user.email" required><br>
+      Email: <input type="email" name="email" v-model="user.pass1" required><br>
+      New password: <input type="text" name="login" v-model="user.pass1" required><br>
+      Confirm New password: <input type="email" name="email" v-model="user.pass2" required><br>
       <input type="submit" name="submit" value="Confirmer">
     </form>
   </div>
@@ -13,15 +15,21 @@
 <script>
 import Login from '@/services/LoginService'
 export default {
-  name: 'reset',
+  name: 'ConfirmReset',
   data () {
     return {
       user: {
         login: '',
-        email: ''
+        email: '',
+        pass1: '',
+        pass2: '',
+        key: ''
       },
       feedback: ''
     }
+  },
+  mounted () {
+    this.user.key = this.$router.currentRoute.query
   },
   methods: {
     reset () {

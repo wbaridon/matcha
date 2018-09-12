@@ -38,7 +38,7 @@ sendMail = user => {
 
 afterMail = (email, key, newPW) => {
     model.userTimestampPasswordFromEmail(email, (err, res) => { //Mail existing in DB with associated timestampPassword
-        if (err) throw err; 
+        if (err) throw err;
         else if (res[0].timestampPassword !== 0) {
             console.log("Let's reset the password !")
             passwordHash(user.timestampPassword + user.password + user.email, hash => {
@@ -61,7 +61,7 @@ afterMail = (email, key, newPW) => {
 
 beforeMail = (email, login) => {
     model.userTimestampPasswordFromEmailLogin(email, login, (err, res) => { //Mail + login existing in DB with associated timestampPassword
-        if (err) throw err; 
+        if (err) throw err;
         else if (res[0].timestampPassword) {
             console.log("Need to send mail and to reset the timestamp.")
 
