@@ -10,9 +10,9 @@ var interests = require('../models/interests.js');
 var mail = require('nodemailer');
 var myhash = require('../utils/hash');
 
-router.get('/', function(req, res) {
-
-	res.render('error.ejs', {error: 'Aucun message'});
+router.get('/', (req, res) => {
+	res.send('The server is working...'
+)
 })
 
 

@@ -8,6 +8,11 @@ var profile = require('../models/profile.js');
 var account = require('../models/account.js');
 var jwt = require('jsonwebtoken');
 
+router.get('/', (req, res) => {
+	res.send('The server is working...'
+)
+})
+
 router.post('/view', function(req, res) {
     userId = req.body.id
     view(userId, user => {

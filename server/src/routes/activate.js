@@ -3,6 +3,11 @@ var router = express.Router();
 var model = require('../models/account.js');
 var myhash = require('../utils/hash');
 
+router.get('/', (req, res) => {
+	res.send('The server is working...'
+)
+})
+
 router.post('/', function (req, res) {
     if (req.body.email && req.body.key) {
         let email = req.body.email;
