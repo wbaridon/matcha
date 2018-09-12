@@ -7,6 +7,12 @@ var argon2 = require('argon2');
 var profile = require('../models/profile.js');
 var account = require('../models/account.js');
 var jwt = require('jsonwebtoken');
+var NodeGeocoder = require('node-geocoder')
+var geocoder = NodeGeocoder({
+		provider: 'locationiq',
+		httpAdapter: 'https',
+		apiKey: '2c29b16aa6aabf'
+});
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -40,7 +46,6 @@ router.post('/edit', function(req, res) {
 router.post('/updateBio', function(req, res) {
   bio = req.body.bio
   id = req.body.id
-  console.log(bio)
   profile.updateUser(id, 'bio', bio, (err, result) => {
     if (err)
       throw err
@@ -76,6 +81,19 @@ router.post('/updatePerso', function(req, res) {
       })
     })
   })
+})
+
+router.post('/localisation', function(req, res) {
+
+	lon = req.body.long
+	lat = req.body.lat
+	geocoder.reverse({lat, lon})
+	.then(call => {
+		res.send(call[0]);
+	})
+	.catch(function(err) {
+		throw err;
+	})
 })
 
 router.post('/updatePwd', function(req, res) {
