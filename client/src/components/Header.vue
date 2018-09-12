@@ -14,7 +14,15 @@
       <div class="element">
         <a href="/login/reset">Mot de passe oublié?</a>
         <a href="/register">Inscription</a>
-        {{error}}
+        <modal v-if="showError" @close="showError = false">
+          <div slot="title">
+            <h1>Erreur</h1>
+          </div>
+          <div slot="content">
+            {{error}}
+          </div>
+      </modal>
+
       </div>
     </nav>
     <nav v-else>
@@ -28,6 +36,7 @@
 </template>
 <script>
 import Login from '@/services/LoginService'
+import Modal from '@/components/Modal'
 export default {
   data () {
     return {
@@ -35,8 +44,12 @@ export default {
       user: {
         login: '',
         password: ''
-      }
+      },
+      showError: false
     }
+  },
+  components: {
+    'modal': Modal
   },
   computed: {
     isAuth () {
@@ -46,11 +59,12 @@ export default {
   methods: {
     userLogin () {
       Login.logIn(this.user).then(res => {
-        this.error = res
         if (res.error === 0) {
-          this.error = ''
           this.$store.commit('logIn')
           this.$cookie.set('authToken', res.token, 1)
+        } else {
+          this.error = res
+          this.showError = true
         }
       })
     },
