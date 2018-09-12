@@ -15,7 +15,9 @@ app.use('/login', require('./routes/login'))
 app.use('/suggestion', require('./routes/suggestion'))
 app.use('/profile', require('./routes/profile'))
 app.use('/activate', require('./routes/activate'))
+app.use('/reset', require('./routes/resetPassword'))
  app.get('/', (req, res) => {
-   res.send('The server is working...')
+   res.send('The server is working...'
+ )
 })
 app.listen(process.env.PORT || 8081)
