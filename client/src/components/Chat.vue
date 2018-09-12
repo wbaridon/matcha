@@ -1,10 +1,8 @@
 <template>
   <div id="chat">
-    <div id="chat_feed">
-      <!-- Sent messages output -->
-      <div id="chat_output"></div>
-      <!-- Says if someone is writting -->
-      <div id="chat_typing"></div>
+    <!-- Sent messages output -->
+    <div class="messages" v-for="(msg, index) in messages" :key="index">
+      <p><span>{{ msg.user }}: </span>{{ msg.message }}</p>
     </div>
     <form @submit.prevent="sendMessage">
       <input id="username" v-model="user" type="text" placeholder="username">
@@ -31,18 +29,18 @@ export default {
     }
   },
   methods: {
-    sendMessage (e) {
-      // Chat.sendMessage(this.user, callback => {
-      //   this.socket.emit('SEND_MESSAGE')
-      // })
-      e.preventDefault()
-      /* this.socket.emit('SEND_MESSAGE', {
-        user: this.username,
+    sendMessage () {
+      this.socket.emit('SEND_MESSAGE', {
+        user: this.user,
         message: this.message
       })
       this.message = ''
-    } */
     }
+  },
+  mounted () {
+    this.socket.on('MESSAGE', (data) => {
+      this.messages.push(data)
+    })
   }
 }
 </script>

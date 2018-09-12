@@ -49,9 +49,4 @@ export default {
     }
   }
 }
-
-// var socket = io('http://localhost:8081')
-// socket.on('connection', function () {
-// })
-
 </script>
