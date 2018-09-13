@@ -53,7 +53,7 @@
     <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
     <p v-if="!update.pref">
       <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
-      <strong>Ma localisation: </strong> {{user.city}} {{user.zipcode}}<button @click="locate">Mettre a jour</button>
+      <strong>Ma localisation: </strong> {{user.city}} {{user.zipcode}} <button @click="locate">Mettre a jour</button>
     </p>
     <form v-if="update.pref" v-on:submit.prevent="changePref()">
       <select v-model="user.sexuality" name='sexuality'>
@@ -166,11 +166,14 @@ export default {
     },
     locate () {
       /* Fonctionne que si geolocalisation active voir pour avec ip */
-      navigator.geolocation.getCurrentPosition(position => {
-        Profile.updateLocalisation(position.coords.latitude, position.coords.longitude, callback => {
-          this.user.zipcode = callback.zipcode
-          this.user.city = callback.city
-        })
+      navigator.geolocation.getCurrentPosition((position, error) => {
+        if (error) {
+          console.log('test')
+        } else {
+          Profile.updateLocalisation(position.coords.latitude, position.coords.longitude, this.user, callback => {
+            this.user = callback
+          })
+        }
       })
     }
   }
