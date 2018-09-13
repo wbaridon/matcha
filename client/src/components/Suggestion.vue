@@ -9,7 +9,6 @@
       <h2>{{list.firstname}} {{list.name}}</h2><br>
       {{list.age}} ans, {{list.gender}} {{list.sexuality}} à {{list.distance}} m<br>
       Pourcentage de compatibilite (A confirmer)
-      Proximite geographique
       Interet commun
       Score de popularite<br>
       <router-link :to="'/profile/' + list.id">Voir son profil >></router-link>
