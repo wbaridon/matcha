@@ -4,6 +4,8 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var suggestionList = require('../models/suggestionList.js');
+var profile = require('../models/profile.js');
+var geolib = require('geolib');
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -49,10 +51,22 @@ function convertUserData(user, callback) {
 	})
 
 }
-
-function distance(user1, user2)
-{
-
+/*
+function getDistance(user, callback) {
+	var counter = user.length;
+	user.forEach(function (item, index, array) {
+		 geolib.getDistance(
+			{latitude: item.latitude, longitude: item.longitude},
+			{latitude: item.latitude, longitude: item.longitude})
+		);
+		counter--
+		if (counter === 0) {
+			callback(array)
+		}
+	})
 }
+*/
+
+
 
 module.exports = router;
