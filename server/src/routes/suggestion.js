@@ -6,6 +6,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var suggestionList = require('../models/suggestionList.js');
 var profile = require('../models/profile.js');
 var geolib = require('geolib');
+var jwt = require('jsonwebtoken');
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -13,9 +14,15 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', function(req, res) {
+	console.log(req.body)
+	token = req.body.token
 	suggestionList.showList(result => {
 		convertUserData(result, user => {
-			res.send(user)
+			getDistance(user, token, finalUser => {
+				console.log(finalUser)
+				res.send(finalUser)
+			})
+
 		})
 	})
 })
@@ -51,21 +58,32 @@ function convertUserData(user, callback) {
 	})
 
 }
-/*
-function getDistance(user, callback) {
-	var counter = user.length;
-	user.forEach(function (item, index, array) {
-		 geolib.getDistance(
-			{latitude: item.latitude, longitude: item.longitude},
-			{latitude: item.latitude, longitude: item.longitude})
-		);
-		counter--
-		if (counter === 0) {
-			callback(array)
-		}
+
+function getDistance(user, token, callback) {
+	jwt.verify(token, 'MatchaSecretKey', function(err, decoded) {
+		id = decoded.id
+		profile.select(id, (err, result) => {
+			lat = result[0].latitude
+			long = result[0].longitude
+			var counter = user.length;
+			user.forEach(function (item, index, array) {
+				if (item.latitude && item.longitude && lat && long) {
+				 item.distance = geolib.getDistance(
+					{latitude: lat, longitude: long},
+					{latitude: item.latitude, longitude: item.longitude}
+				);
+			} else {
+				item.distance = 'Non disponible'
+			}
+				counter--
+				if (counter === 0) {
+					callback(array)
+				}
+			})
+		})
 	})
 }
-*/
+
 
 
 

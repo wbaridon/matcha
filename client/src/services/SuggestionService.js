@@ -1,8 +1,8 @@
 import Api from '@/services/Api'
 
 export default {
-  getAll (callback) {
-    return Api().post('suggestion/', callback).then(function (response) {
+  getAll (token, callback) {
+    return Api().post('suggestion/', {token: token}, callback).then(function (response) {
       callback(response)
     })
   }

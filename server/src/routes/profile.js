@@ -88,7 +88,6 @@ router.post('/localisation', function(req, res) {
 	lon = req.body.long
 	lat = req.body.lat
 	id = req.body.user.id
-	console.log(lon +' - '+ lat)
 	geocoder.reverse({lat, lon})
 	.then(call => {
 		profile.updateUser(id, 'zipcode', call[0].zipcode, (err, result) => {
