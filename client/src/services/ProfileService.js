@@ -26,6 +26,12 @@ export default {
       callback(response.data)
     })
   },
+  updateLocalisation (lat, long, user, callback) {
+    return Api().post('profile/localisation', {lat, long, user}, callback).then(function (response) {
+      console.log(response.data)
+      callback(response.data)
+    })
+  },
   updatePwd (password, id, callback) {
     return Api().post('profile/updatePwd', {password, id}, callback).then(function (response) {
       callback(response.data)

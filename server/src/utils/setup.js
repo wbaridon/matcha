@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS profiles ( \
     gender TINYINT DEFAULT 0, \
     age INT NOT NULL DEFAULT 0, \
     sexuality TINYINT DEFAULT 0, \
-    bio TEXT);',' \
+    bio TEXT, zipcode INT, city VARCHAR(50), latitude DECIMAL(12,9), longitude DECIMAL(12,9));',' \
 \
 CREATE TABLE IF NOT EXISTS interests ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
@@ -62,7 +62,7 @@ if (err) throw err;
           console.log('All tables created');
           connection.end();
         }
-      });     
+      });
     });
   });
 });

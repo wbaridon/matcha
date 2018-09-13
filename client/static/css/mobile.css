@@ -17,6 +17,7 @@ input {
   margin: 5px;
   height: 25px;
   text-align: center;
+  border: solid black 1px;
 }
 input[type=submit] {
   background-color: white;
