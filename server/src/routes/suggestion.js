@@ -14,15 +14,16 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', function(req, res) {
-	console.log(req.body)
 	token = req.body.token
-	suggestionList.showList(result => {
-		convertUserData(result, user => {
-			getDistance(user, token, finalUser => {
-				console.log(finalUser)
-				res.send(finalUser)
-			})
+	jwt.verify(token, 'MatchaSecretKey', function(err, decoded) {
+		id = decoded.id
+		suggestionList.showList(id, result => {
+			convertUserData(result, user => {
+				getDistance(user, id, finalUser => {
+					res.send(finalUser)
+				})
 
+			})
 		})
 	})
 })
@@ -59,32 +60,26 @@ function convertUserData(user, callback) {
 
 }
 
-function getDistance(user, token, callback) {
-	jwt.verify(token, 'MatchaSecretKey', function(err, decoded) {
-		id = decoded.id
-		profile.select(id, (err, result) => {
-			lat = result[0].latitude
-			long = result[0].longitude
-			var counter = user.length;
-			user.forEach(function (item, index, array) {
-				if (item.latitude && item.longitude && lat && long) {
-				 item.distance = geolib.getDistance(
-					{latitude: lat, longitude: long},
-					{latitude: item.latitude, longitude: item.longitude}
+function getDistance(user, id, callback) {
+	profile.select(id, (err, result) => {
+		lat = result[0].latitude
+		long = result[0].longitude
+		var counter = user.length;
+		user.forEach(function (item, index, array) {
+			if (item.latitude && item.longitude && lat && long) {
+			 item.distance = geolib.getDistance(
+				{latitude: lat, longitude: long},
+				{latitude: item.latitude, longitude: item.longitude}
 				);
-			} else {
-				item.distance = 'Non disponible'
+		} else {
+			item.distance = 'Non disponible'
+		}
+			counter--
+			if (counter === 0) {
+				callback(array)
 			}
-				counter--
-				if (counter === 0) {
-					callback(array)
-				}
-			})
 		})
 	})
 }
-
-
-
 
 module.exports = router;
