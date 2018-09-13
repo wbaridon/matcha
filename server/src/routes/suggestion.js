@@ -14,12 +14,10 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', function(req, res) {
-	console.log(req.body)
 	token = req.body.token
 	suggestionList.showList(result => {
 		convertUserData(result, user => {
 			getDistance(user, token, finalUser => {
-				console.log(finalUser)
 				res.send(finalUser)
 			})
 

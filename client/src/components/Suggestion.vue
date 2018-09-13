@@ -1,7 +1,8 @@
 <template>
   <div v-if="isAuth" id="suggestion">
     <h1>Liste suggestion</h1>
-      <button @click="ageSort()">Trier par age</button> | Localisation, popularitem tags en commun
+      <button @click="ageSort()">Trier par age</button> |
+      <button @click="distanceSort()">Trier par Localisation</button> | popularitem tags en commun
       // Rajouter un filtre par intervale age, localisation, popularite et tags<br>
       // Bloquer la vue de la page si profil etendue non remplis
       <div v-for="list in result" :key="list.id" class="card">
@@ -43,6 +44,9 @@ export default {
     },
     ageSort () {
       return this.result.sort((a, b) => a.age - b.age)
+    },
+    distanceSort () {
+      return this.result.sort((a, b) => a.distance - b.distance)
     }
   }
 }
