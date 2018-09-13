@@ -166,15 +166,34 @@ export default {
     },
     locate () {
       /* Fonctionne que si geolocalisation active voir pour avec ip */
-      navigator.geolocation.getCurrentPosition((position, error) => {
-        if (error) {
-          console.log('test')
-        } else {
-          Profile.updateLocalisation(position.coords.latitude, position.coords.longitude, this.user, callback => {
-            this.user = callback
+      if ('geolocation' in navigator) {
+        var getPosition = (result) => {
+          return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject)
           })
         }
-      })
+        getPosition()
+          .then((position) => {
+            Profile.updateLocalisation(position.coords.latitude, position.coords.longitude, this.user, callback => {
+              this.user = callback
+            })
+          })
+          .catch((err) => {
+            if (err) {
+              Profile.getIp(callback => {
+                Profile.updateLocalisation(callback.data.latitude, callback.data.longitude, this.user, callback => {
+                  this.user = callback
+                })
+              })
+            }
+          })
+      } else {
+        Profile.getIp(callback => {
+          Profile.updateLocalisation(callback.data.latitude, callback.data.longitude, this.user, callback => {
+            this.user = callback
+          })
+        })
+      }
     }
   }
 }
