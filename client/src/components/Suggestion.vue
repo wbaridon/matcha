@@ -6,7 +6,7 @@
       // Bloquer la vue de la page si profil etendue non remplis
       <div v-for="list in result" :key="list.id" class="card">
       <h2>{{list.firstname}} {{list.name}}</h2><br>
-      {{list.age}} ans, {{list.gender}} {{list.sexuality}}<br>
+      {{list.age}} ans, {{list.gender}} {{list.sexuality}} à {{list.distance}} m<br>
       Pourcentage de compatibilite (A confirmer)
       Proximite geographique
       Interet commun
@@ -36,7 +36,8 @@ export default {
   },
   methods: {
     getAll () {
-      Suggestion.getAll(callback => {
+      var token = this.$cookie.get('authToken')
+      Suggestion.getAll(token, callback => {
         this.result = callback.data
       })
     },
