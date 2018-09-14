@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var argon2 = require('argon2');
 var search = require('../models/search.js');
+var profile = require('../models/profile.js');
 var jwt = require('jsonwebtoken')
 
 router.get('/', (req, res) => {
@@ -16,14 +17,20 @@ router.post('/ask', function (req, res) {
 	 } else {
 		 id = decoded.id
 	 }
-	 launchSearch(id, req.body.ask, result => {
-		 res.send(result)
+	 profile.select(id, (err, user) => {
+		 sexualPref = user[0].sexuality
+		 console.log(sexualPref)
+		 gender = user[0].gender
+		 console.log(req.body.ask)
+		 launchSearch(id, gender, sexualPref, req.body.ask, result => {
+			 res.send(result)
+		 })
 	 })
 	})
 });
 
-function launchSearch (id, ask, callback) {
-	search.result(id, ask, data => {
+function launchSearch (id, gender, sexualPref, ask, callback) {
+	search.result(id, gender, sexualPref, ask, data => {
 		callback(data)
 	})
 }
