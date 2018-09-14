@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 var token;
 
 router.post('/checkAuth', function (req, res) {
-	console.log(req.body.key)
+	// console.log(req.body.key)
 	if (!req.body.key) {
 		console.log('enter')
 

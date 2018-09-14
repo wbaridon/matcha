@@ -39,6 +39,12 @@ CREATE TABLE IF NOT EXISTS profiles ( \
     sexuality TINYINT DEFAULT 0, \
     bio TEXT);',' \
 \
+CREATE TABLE IF NOT EXISTS chat ( \
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    login VARCHAR(50), \
+    recipient VARCHAR(50), \
+    message VARCHAR(200));',' \
+\
 CREATE TABLE IF NOT EXISTS interests ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
     id_account INT NOT NULL, \
@@ -61,7 +67,7 @@ if (err) throw err;
           console.log('All tables created');
           connection.end();
         }
-      });     
+      });
     });
   });
 });
