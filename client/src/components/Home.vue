@@ -3,11 +3,14 @@
     <h1>Recherche</h1>
     // Selection de 1 ou plusieurs criteres tel que:
     Intervalle Age / Intervalle score popularite / Localisation / un ou plusieurs tags interet
-    Liste triable et filtrable par age, localisation, popularite et par tags<br>
+    ,localisation, popularite et par tags<br>
+    <h2> Vos filtres </h2>
     <strong>Age</strong><br>
     De: <input type="number" name="minAge" v-model="ask.minAge">
     à: <input type="number" name="maxAge" v-model="ask.maxAge"> ans<br>
-    <button @click="search">Rechercher</button>
+    <button @click="search">Rechercher</button><br>
+    <h2> Trier les resultats par </h2>
+    <button @click="ageSort">Age</button>
     <div v-for="element in array" :key="element.id">
       <h2>{{element.firstname}} {{element.name}}</h2>
       {{element.age}} ans
@@ -41,6 +44,9 @@ export default {
       Search.ask(this.$cookie.get('authToken'), this.ask, callback => {
         this.array = callback
       })
+    },
+    ageSort () {
+      return this.array.sort((a, b) => a.age - b.age)
     }
   }
 }
