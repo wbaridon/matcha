@@ -3,6 +3,7 @@
     <h1>Mon profil</h1>
     <router-link :to="'/profile/' + user.id">Voir mon profil public</router-link><br><br>
     <button>Ajouter des photos</button>
+
           <h2> {{user.firstname}} {{user.name}} </h2>
     <div id="topProfile">
         <div class="element">

@@ -16,6 +16,7 @@ app.use('/suggestion', require('./routes/suggestion'))
 app.use('/profile', require('./routes/profile'))
 app.use('/activate', require('./routes/activate'))
 app.use('/reset', require('./routes/resetPassword'))
+app.use('/search', require('./routes/search'))
  app.get('/', (req, res) => {
    res.send('The server is working...'
  )
