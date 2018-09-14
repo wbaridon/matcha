@@ -17,12 +17,15 @@ router.post('/', function(req, res) {
 	token = req.body.token
 	jwt.verify(token, 'MatchaSecretKey', function(err, decoded) {
 		id = decoded.id
-		suggestionList.showList(id, result => {
-			convertUserData(result, user => {
-				getDistance(user, id, finalUser => {
-					res.send(finalUser)
+		profile.select(id, (err, user) => {
+			sexualPref = user[0].sexuality
+			gender = user[0].gender
+			suggestionList.showList(id, gender, sexualPref, result => {
+				convertUserData(result, user => {
+					getDistance(user, id, finalUser => {
+						res.send(finalUser)
+					})
 				})
-
 			})
 		})
 	})

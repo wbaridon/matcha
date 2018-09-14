@@ -18,7 +18,8 @@
     <button @click="ageSort">Age</button>
     <div v-for="element in array" :key="element.id">
       <h2>{{element.firstname}} {{element.name}}</h2>
-      {{element.age}} ans
+      {{element.age}} ans / Popularite: {{element.popularite}}<br>
+      <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
     </div>
   </div>
   <div v-else>
