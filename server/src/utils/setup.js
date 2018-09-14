@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS profiles ( \
     firstname VARCHAR(50), \
     gender TINYINT DEFAULT 0, \
     age INT NOT NULL DEFAULT 0, \
-    sexuality TINYINT DEFAULT 0, \
+    sexuality TINYINT DEFAULT 2, \
     bio TEXT, zipcode INT, city VARCHAR(50), latitude DECIMAL(12,9), longitude DECIMAL(12,9), \
     popularite INT NOT NULL DEFAULT 0);',' \
 \

@@ -4,7 +4,7 @@
     // Selection de 1 ou plusieurs criteres tel que:
     Intervalle Age / Intervalle score popularite / Localisation / un ou plusieurs tags interet
     ,localisation, popularite et par tags<br>
-    <h2> Vos filtres (not working) </h2>
+    <h2> Vos filtres </h2>
     <strong>Age</strong><br>
     De: <input type="number" name="minAge" v-model="ask.minAge">
     à: <input type="number" name="maxAge" v-model="ask.maxAge"> ans<br>
