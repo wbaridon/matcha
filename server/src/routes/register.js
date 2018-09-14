@@ -25,6 +25,7 @@ function sendMail(user) {
 		}
 	});
 	myhash.hash(user.email + user.timestamp, hash => {
+		console.log("Hash: "+hash);
 		var mailOptions = {
 			from: 'matchawb@gmail.com',
 			to: user.email,

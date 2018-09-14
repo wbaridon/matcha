@@ -6,6 +6,7 @@ var myhash = require('../utils/hash')
 var mail = require('nodemailer')
 
 passwordHash = (pass, callback) => {
+    console.log(pass);
     myhash.hash(pass, res => {
         callback(res);
     })
@@ -25,7 +26,7 @@ sendMail = user => {
 			to: user.email,
 			subject: 'Reset de votre mot de passe',
             text: 'Bonjour , vous avez demande une reinitialisation de votre mot de passe. Veuillez cliquer sur ce lien pour acceder au formulaire de reinitialisation: http://localhost:8080/resetPassword?email=' + user.email + '&key=' + hash
-		}
+        }
 		tunnel.sendMail(mailOptions, function(err, info){
 			if (err) {
 				console.log(err)
@@ -36,7 +37,7 @@ sendMail = user => {
 	})
 }
 
-afterMail = (email, key, newPW) => {
+afterMail = (client, email, key, newPW) => {
     model.userTimestampPasswordFromEmail(email, (err, res) => { //Mail existing in DB with associated timestampPassword
         if (err) throw err;
         else if (res[0].timestampPassword !== 0) {
@@ -59,10 +60,12 @@ afterMail = (email, key, newPW) => {
     })
 }
 
-beforeMail = (email, login) => {
+beforeMail = (client, email, login) => {
     model.userTimestampPasswordFromEmailLogin(email, login, (err, res) => { //Mail + login existing in DB with associated timestampPassword
         if (err) throw err;
-        else if (res[0].timestampPassword) {
+        else if (!res[0])
+            client.send("This user doesn't exists");
+        else {
             console.log("Need to send mail and to reset the timestamp.")
 
             let timestamp = Date.now()
@@ -70,7 +73,7 @@ beforeMail = (email, login) => {
             sendMail({
                 timestampPassword: timestamp,
                 password: res[0].password,
-                email: res[0].email
+                email: email
             });
         }
     })
@@ -80,13 +83,13 @@ router.post('/', function (req, res) {
     if (req.body.email && req.body.key && req.body.pass1 && req.body.pass2) { // AFTER MAIL
         console.log("Need to reset password if all infos especially key are correct.")
         if (req.body.pass1 === req.body.pass2)
-            afterMail(req.body.email, req.body.key, req.body.pass1)
+            afterMail(res, req.body.email, req.body.key, req.body.pass1)
         else
             console.log("Passwords not corresponding.");
     }
     else if (req.body.email && req.body.login) { // BEFORE MAIL
         console.log("Need to send email if all infos are correct.")
-        beforeMail(req.body.email, req.body.login)
+        beforeMail(res, req.body.email, req.body.login)
     }
 });
 
