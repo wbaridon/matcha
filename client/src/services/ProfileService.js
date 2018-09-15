@@ -37,6 +37,11 @@ export default {
       callback(response.data)
     })
   },
+  uploadPic (image, callback) {
+    return Api().post('profile/uploadPic', image, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   getIp (callback) {
     return axios({method: 'GET', 'url': 'https://geoip-db.com/json/'}, callback).then(result => {
       callback(result)

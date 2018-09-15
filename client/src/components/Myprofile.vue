@@ -2,7 +2,6 @@
   <div v-if="isAuth" id="myprofile">
     <h1>Mon profil</h1>
     <router-link :to="'/profile/' + user.id">Voir mon profil public</router-link><br><br>
-    <button>Ajouter des photos</button>
 
           <h2> {{user.firstname}} {{user.name}} </h2>
     <div id="topProfile">
@@ -48,6 +47,13 @@
         <div class="element">
             <button v-if="!update.perso && !update.pwd" @click="update.perso = true">Modifier mes infos</button>
         </div>
+    </div>
+    <h3>Ma gallerie</h3>
+
+      <input type="file" @change="fileChanged">
+      <button @click="upload()">Ajouter une photo</button>
+    <div class="photos" v-for="image in images.gallery">
+      {{image}}
     </div>
 
     <h3> Vos preferences </h3>
@@ -117,6 +123,11 @@ export default {
         newpwd: '',
         pwdString: ''
       },
+      images: {
+        count: '',
+        gallery: [],
+        addFile: ''
+      },
       // Quand il y aura la sauvegarde enlever les valeurs par defaut
       interests: ['php', 'html'], // Liste possible sous forme de tags
       pictures: '' // 5 images max dont une pour le profil
@@ -131,6 +142,16 @@ export default {
     }
   },
   methods: {
+    fileChanged (event) {
+      this.images.addFile = event.target.files[0]
+    },
+    upload () {
+      const formData = new FormData()
+      formData.append('userPic', this.images.addFile, this.images.addFile.name)
+      Profile.uploadPic(formData, callback => {
+        console.log(callback)
+      })
+    },
     editProfile () {
       var token = this.$cookie.get('authToken')
       if (token) {

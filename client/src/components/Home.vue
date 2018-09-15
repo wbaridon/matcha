@@ -2,7 +2,7 @@
   <div class="home" v-if='isAuth'>
     <h1>Recherche</h1>
     // Selection de 1 ou plusieurs criteres tel que:
-    Intervalle Age / Intervalle score popularite / Localisation / un ou plusieurs tags interet
+    Localisation / un ou plusieurs tags interet
     ,localisation, popularite et par tags<br>
     <h2> Vos filtres </h2>
     <strong>Age</strong><br>
