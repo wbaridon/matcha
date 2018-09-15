@@ -1,5 +1,14 @@
 <template>
-  <div class="home">
+  <div class="reset" v-if="user.email && user.key ">
+    <h1>Reinitialisation mot de passe</h1>
+    {{feedback}}
+    <form class="" @submit.prevent="reset()" method="post">
+      Password: <input type="password" name="pass1" v-model="user.pass1" required><br>
+      Confirmation Password: <input type="password" name="pass2" v-model="user.pass2" required><br>
+      <input type="submit" name="submit" value="Confirmer">
+    </form>
+  </div>
+  <div v-else>
     <h1>Reinitialisation mot de passe</h1>
     {{feedback}}
     <form class="" @submit.prevent="reset()" method="post">
@@ -18,16 +27,27 @@ export default {
     return {
       user: {
         login: '',
-        email: ''
+        email: '',
+        key: '',
+        pass1: '',
+        pass2: '',
       },
       feedback: ''
     }
   },
+  mounted () {
+    this.getParams()
+  },
   methods: {
     reset () {
+      this.feedback = ''
       Login.reset(this.user).then(res => {
         this.feedback = res
       })
+    },
+    getParams () {
+      this.user.email = this.$route.query.email
+      this.user.key = this.$route.query.key
     }
   }
 }
