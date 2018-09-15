@@ -51,12 +51,18 @@
             <button v-if="!update.perso && !update.pwd" @click="update.perso = true">Modifier mes infos</button>
         </div>
     </div>
+
     <h3>Ma gallerie</h3>
       <input type="file" @change="fileChanged">
       <button @click="upload()">Ajouter une photo</button>
+
     <div class="photos">
-      <div v-for="image in images.gallery" :key="image.id">
-        <img v-if="!image.isProfile" :src="'/static/images/uploads/'+image.filename" class="pic"/>
+      <div v-for="image in images.gallery" v-if="!image.isProfile" :key="image.id" class='pic'>
+        <div class="picBandeau">
+            <a @click="newProfilePic">Mettre a la une</a>
+            <a @click="deletePic">Supprimer</a>
+        </div>
+        <img :src="'/static/images/uploads/'+image.filename"/>
       </div>
     </div>
     <h3> Vos preferences </h3>
@@ -147,6 +153,12 @@ export default {
   methods: {
     fileChanged (event) {
       this.images.addFile = event.target.files[0]
+    },
+    deletePic () {
+      console.log('a faire')
+    },
+    newProfilePic () {
+      console.log('a faire')
     },
     upload () {
       const formData = new FormData()
@@ -257,13 +269,19 @@ export default {
     width: 200px;
   }
   .pic {
+    font-size: 0.8em;
+    text-align: center;
+  }
+  .pic img {
     width: 150px;
-    margin: 15px;
+    height: 150px;
+    margin: 8px;
+    border: solid 1px black;
   }
   .photos {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 15px;
   }
+
 </style>
