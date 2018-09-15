@@ -25,7 +25,7 @@ sendMail = user => {
 			from: 'matchawb@gmail.com',
 			to: user.email,
 			subject: 'Reset de votre mot de passe',
-            text: 'Bonjour , vous avez demande une reinitialisation de votre mot de passe. Veuillez cliquer sur ce lien pour acceder au formulaire de reinitialisation: http://localhost:8080/resetPassword?email=' + user.email + '&key=' + hash
+            text: 'Bonjour , vous avez demande une reinitialisation de votre mot de passe. Veuillez cliquer sur ce lien pour acceder au formulaire de reinitialisation: http://localhost:8080/login/reset?email=' + user.email + '&key=' + hash
         }
 		tunnel.sendMail(mailOptions, function(err, info){
 			if (err) {
@@ -75,11 +75,13 @@ beforeMail = (client, email, login) => {
                 password: res[0].password,
                 email: email
             });
+            client.send('Un email vient de vous etre envoye')
         }
     })
 }
 
 router.post('/', function (req, res) {
+  console.log(req.body)
     if (req.body.email && req.body.key && req.body.pass1 && req.body.pass2) { // AFTER MAIL
         console.log("Need to reset password if all infos especially key are correct.")
         if (req.body.pass1 === req.body.pass2)
