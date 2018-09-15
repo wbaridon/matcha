@@ -41,6 +41,11 @@ CREATE TABLE IF NOT EXISTS profiles ( \
     bio TEXT, zipcode INT, city VARCHAR(50), latitude DECIMAL(12,9), longitude DECIMAL(12,9), \
     popularite INT NOT NULL DEFAULT 0);',' \
 \
+CREATE TABLE IF NOT EXISTS images ( \
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    id_account INT NOT NULL, \
+    filename VARCHAR(50), isProfile INT DEFAULT 0);',' \
+\
 CREATE TABLE IF NOT EXISTS interests ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
     id_account INT NOT NULL, \

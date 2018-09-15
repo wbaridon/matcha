@@ -37,8 +37,13 @@ export default {
       callback(response.data)
     })
   },
-  uploadPic (image, callback) {
-    return Api().post('profile/uploadPic', image, callback).then(function (response) {
+  uploadPic (formData, callback) {
+    return Api().post('profile/uploadPic', formData, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  getPic (id, callback) {
+    return Api().post('profile/getPic', {'id': id}, callback).then(function (response) {
       callback(response.data)
     })
   },

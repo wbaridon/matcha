@@ -6,7 +6,10 @@
           <h2> {{user.firstname}} {{user.name}} </h2>
     <div id="topProfile">
         <div class="element">
-            <img src="/static/images/noPicture.jpg" alt="Pas de photos" class="profilePic"/>
+          <div v-for="image in images.gallery" :key="image.id">
+            <img v-if="image.isProfile" :src="'/static/images/uploads/'+image.filename" class="profilePic"/>
+          </div>
+          <img v-if="!images.count" src="/static/images/noPicture.jpg" alt="Pas de photos" class="profilePic"/>
         </div>
         <div class="element" v-if="!update.perso && !update.pwd">
           <h3> Vos informations perso </h3>
@@ -49,13 +52,13 @@
         </div>
     </div>
     <h3>Ma gallerie</h3>
-
       <input type="file" @change="fileChanged">
       <button @click="upload()">Ajouter une photo</button>
-    <div class="photos" v-for="image in images.gallery">
-      {{image}}
+    <div class="photos">
+      <div v-for="image in images.gallery" :key="image.id">
+        <img v-if="!image.isProfile" :src="'/static/images/uploads/'+image.filename" class="pic"/>
+      </div>
     </div>
-
     <h3> Vos preferences </h3>
     <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
     <p v-if="!update.pref">
@@ -148,8 +151,13 @@ export default {
     upload () {
       const formData = new FormData()
       formData.append('userPic', this.images.addFile, this.images.addFile.name)
+      formData.append('id', this.user.id)
+      if (!this.images.count) {
+        formData.append('isProfile', 1)
+      }
       Profile.uploadPic(formData, callback => {
-        console.log(callback)
+        console.log('Faire une fonction pour attendre le retour')
+        this.getPic(this.user.id)
       })
     },
     editProfile () {
@@ -157,8 +165,15 @@ export default {
       if (token) {
         Profile.edit(this.user, token, callback => {
           this.user = callback
+          this.getPic(this.user.id)
         })
       }
+    },
+    getPic (id) {
+      Profile.getPic(id, callback => {
+        this.images.count = callback.count
+        this.images.gallery = callback.gallery
+      })
     },
     changePerso () {
       // Faire un controle des nouvelles valeur avant envoi comme pour register
@@ -240,5 +255,15 @@ export default {
   }
   .profilePic {
     width: 200px;
+  }
+  .pic {
+    width: 150px;
+    margin: 15px;
+  }
+  .photos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 15px;
   }
 </style>

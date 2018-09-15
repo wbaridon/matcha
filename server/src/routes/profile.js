@@ -59,10 +59,24 @@ router.post('/uploadPic', upload.single('userPic'), function(req, res) {
 		console.log('No file received');
 		return res.send({success: false})
 	} else {
-		console.log(req.file.filename)
-		console.log('file received');
-		return res.send({success:true})
+		if (!req.body.isProfile) {
+			req.body.isProfile = 0;
+		}
+		profile.addPic(req.body.id, req.body.isProfile, req.file.filename, callback => {
+				return res.send({success:true})
+		})
 	}
+})
+
+router.post('/getPic', function(req, res) {
+		profile.getPic(req.body.id, callback => {
+				images= {
+					gallery: callback,
+					count: callback.length
+				}
+				console.log(images)
+				return res.send(images)
+		})
 })
 
 router.post('/updateBio', function(req, res) {
