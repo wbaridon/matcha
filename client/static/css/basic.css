@@ -6,6 +6,16 @@
   color: #2c3e50;
   margin-top: 60px;
 }
+#siteTitle {
+  background-color: #24292e;
+  color: white;
+  font-size: 2em;
+}
+h1 {
+  background-color: #24292e;
+  color: white;
+  padding: 5px 10px 5px 10px;
+}
 h2 {
   margin: 0;
 }
@@ -32,7 +42,7 @@ h2 {
   opacity: 0.4;
 }
 
-body, h1 {
+body {
   margin: 0;
 }
 header {
