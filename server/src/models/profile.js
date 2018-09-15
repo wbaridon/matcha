@@ -27,3 +27,25 @@ module.exports.select = function (id_account, callback) {
         [id_account],
         callback);
 }
+
+module.exports.addPic = function (id_account, isProfile, filename, callback) {
+	db.query('INSERT INTO images\
+		(id_account, isProfile, filename)\
+		VALUES (?,?,?)',
+		[id_account, isProfile, filename], function (err, result) {
+			if (err) throw err;
+			else {
+				console.log('Image ajoute');
+			}
+		});
+}
+
+module.exports.getPic = function (id, callback) {
+	db.query('SELECT * FROM images WHERE id_account=?',
+		[id], function (err, result) {
+			if (err) throw err;
+			else {
+				callback(result)
+			}
+		});
+}

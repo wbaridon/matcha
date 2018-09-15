@@ -19,9 +19,7 @@ router.post('/ask', function (req, res) {
 	 }
 	 profile.select(id, (err, user) => {
 		 sexualPref = user[0].sexuality
-		 console.log(sexualPref)
 		 gender = user[0].gender
-		 console.log(req.body.ask)
 		 launchSearch(id, gender, sexualPref, req.body.ask, result => {
 			 res.send(result)
 		 })

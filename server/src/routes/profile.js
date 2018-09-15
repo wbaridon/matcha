@@ -1,8 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser');
-var json = bodyParser.json();
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var argon2 = require('argon2');
 var profile = require('../models/profile.js');
 var account = require('../models/account.js');
@@ -13,10 +10,23 @@ var geocoder = NodeGeocoder({
 		httpAdapter: 'https',
 		apiKey: '2c29b16aa6aabf'
 });
+var crypto = require('crypto')
+var path = require('path')
+const multer = require('multer')
+const storage = multer.diskStorage({
+		destination: '../client/static/images/uploads',
+		filename: function (req, file, callback) {
+			crypto.pseudoRandomBytes(16, function(err, raw) {
+				if (err) return callback(err);
+				callback(null, raw.toString('hex')+path.extname(file.originalname))
+			});
+		}
+})
+const upload = multer({storage:storage})
 
 router.get('/', (req, res) => {
-	res.send('The server is working...'
-)
+	res.send('The server is working...')
+
 })
 
 router.post('/view', function(req, res) {
@@ -41,6 +51,32 @@ router.post('/edit', function(req, res) {
       });
 		}
   });
+})
+
+router.post('/uploadPic', upload.single('userPic'), function(req, res) {
+	// On doit faire une verification du fichier avant de le sauvegarder format, taille et si on en a pas deja 5 pour user
+	if (!req.file) {
+		console.log('No file received');
+		return res.send({success: false})
+	} else {
+		if (!req.body.isProfile) {
+			req.body.isProfile = 0;
+		}
+		profile.addPic(req.body.id, req.body.isProfile, req.file.filename, callback => {
+				return res.send({success:true})
+		})
+	}
+})
+
+router.post('/getPic', function(req, res) {
+		profile.getPic(req.body.id, callback => {
+				images= {
+					gallery: callback,
+					count: callback.length
+				}
+				console.log(images)
+				return res.send(images)
+		})
 })
 
 router.post('/updateBio', function(req, res) {
