@@ -63,7 +63,7 @@ router.post('/uploadPic', upload.single('userPic'), function(req, res) {
 			req.body.isProfile = 0;
 		}
 		profile.addPic(req.body.id, req.body.isProfile, req.file.filename, callback => {
-				return res.send({success:true})
+				return res.send({success: true})
 		})
 	}
 })
@@ -77,6 +77,18 @@ router.post('/getPic', function(req, res) {
 				console.log(images)
 				return res.send(images)
 		})
+})
+
+router.post('/deletePic', function(req, res) {
+		profile.deletePic(req.body.idAccount, req.body.id, callback => {
+				return res.send('done')
+		})
+})
+
+router.post('/newProfilePic', function(req, res) {
+	profile.updateProfilePic(req.body.idAccount, req.body.id, callback => {
+			return res.send('done')
+	})
 })
 
 router.post('/updateBio', function(req, res) {
