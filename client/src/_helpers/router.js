@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from '@/components/Home'
+import Home from '@/components/Home/_Home'
 import Register from '@/components/Register'
 import Reset from '@/components/Reset'
 import ConfirmReset from '@/components/ConfirmReset'

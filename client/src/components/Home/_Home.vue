@@ -4,6 +4,12 @@
   <!-- Selection de 1 ou plusieurs criteres tel que:
     Localisation / un ou plusieurs tags interet
     ,localisation, popularite et par tags<br> -->
+    <strong> Trier les resultats par: </strong>
+    <select v-model="sort" @change="Sort">
+      <option disabled value="">Choisir un filtre</option>
+      <option> Age </option>
+      <option> Popularite</option>
+    </select>
     <div class="search">
       <h2> Vos filtres </h2>
       <div class="searchItem">
@@ -42,13 +48,7 @@
       </div>
       <button @click="search">Rechercher</button><br>
     </div>
-    <h2> Trier les resultats par </h2>
-    <button @click="ageSort">Age</button>
-    <div v-for="element in array" :key="element.id">
-      <h2>{{element.firstname}} {{element.name}}</h2>
-      {{element.age}} ans / Popularite: {{element.popularite}}<br>
-      <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
-    </div>
+    <SearchList :listData="array"></SearchList>
   </div>
   <div v-else>
     <p>Merci de vous connecter ou vous inscrire</p>
@@ -57,10 +57,15 @@
 
 <script>
 import Search from '@/services/SearchService'
+import SearchList from '@/components/Home/SearchList'
 export default {
   name: 'home',
+  components: {
+    'SearchList': SearchList
+  },
   data () {
     return {
+      sort: '',
       ask: {
         minAge: '',
         maxAge: '',
@@ -79,10 +84,18 @@ export default {
     search () {
       Search.ask(this.$cookie.get('authToken'), this.ask, callback => {
         this.array = callback
+        this.Sort()
       })
     },
-    ageSort () {
-      return this.array.sort((a, b) => a.age - b.age)
+    Sort () {
+      switch (this.sort) {
+        case 'Age':
+          this.array.sort((a, b) => a.age - b.age)
+          break
+        case 'Popularite':
+          this.array.sort((a, b) => a.popularite - b.popularite)
+          break
+      }
     }
   }
 }
@@ -90,6 +103,7 @@ export default {
 
 <style>
 .search {
+  margin-top: 15px;
   background-color: lightgrey;
   padding: 15px;
   text-align: center;
@@ -111,5 +125,13 @@ export default {
   background-color: white;
   padding: 10px;
   flex-grow: 1;
+}
+.searchElement {
+  border: solid 1px lightgrey;
+  margin: 2px;
+  padding: 5px;
+}
+.searchElement:hover {
+  background-color: rgba(227, 242, 253, 0.5);
 }
 </style>

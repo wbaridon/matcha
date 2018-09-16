@@ -79,6 +79,12 @@ router.post('/getPic', function(req, res) {
 		})
 })
 
+router.post('/getInterests', function(req, res) {
+		profile.getInterests(req.body.id, callback => {
+				return res.send(callback[0])
+		})
+})
+
 router.post('/deletePic', function(req, res) {
 		profile.deletePic(req.body.idAccount, req.body.id, callback => {
 				return res.send('done')

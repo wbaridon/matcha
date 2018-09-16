@@ -61,5 +61,10 @@ export default {
     return axios({method: 'GET', 'url': 'https://geoip-db.com/json/'}, callback).then(result => {
       callback(result)
     })
+  },
+  getInterests (id, callback) {
+    return Api().post('profile/getInterests', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
   }
 }

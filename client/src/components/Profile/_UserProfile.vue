@@ -70,19 +70,7 @@
       <textarea name="bio" rows="8" cols="80" v-model="user.bio"></textarea>
       <input type="submit" name="submit" value="Valider">
     </form>
-    <h3>Vos passions</h3>
-    <div id='interests'>
-      <div v-for="interest in interests" v-bind:key="interest">
-        <span class='sticker'>#{{interest}} &times;</span>
-      </div>
-      <div>
-        <form class="" method="post">
-          <input type="text" name="interest" value="">
-          <input type="submit" name="submit" value="Ajouter">
-        </form>
-      </div>
-    </div>
-
+    <UserInterests @updateInterest="updateInterest" :userId="user.id" :interests="interests"></UserInterests>
   </div>
   <div v-else>Merci de vous connecter</div>
 </template>
@@ -91,11 +79,13 @@
 import Profile from '@/services/ProfileService'
 import UserPictures from '@/components/Profile/UserPictures'
 import UserProfilePic from '@/components/Profile/UserProfilePic'
+import UserInterests from '@/components/Profile/UserInterests'
 export default {
   name: 'myprofile',
   components: {
     'UserPictures': UserPictures,
-    'UserProfilePic': UserProfilePic
+    'UserProfilePic': UserProfilePic,
+    'UserInterests': UserInterests
   },
   data () {
     return {
@@ -110,26 +100,13 @@ export default {
         pwd: false,
         pref: false
       },
-      user: {
-        id: '',
-        firstname: '',
-        name: '',
-        age: '',
-        sexuality: '',
-        bio: '',
-        gender: '',
-        email: '',
-        city: '',
-        zipcode: ''
-      },
+      user: [],
       password: {
         oldpwd: '',
         newpwd: '',
         pwdString: ''
       },
-      // Quand il y aura la sauvegarde enlever les valeurs par defaut
-      interests: ['php', 'html'], // Liste possible sous forme de tags
-      pictures: '' // 5 images max dont une pour le profil
+      interests: []
     }
   },
   created () {
@@ -145,6 +122,11 @@ export default {
       Profile.getPic(id, callback => {
         this.images.count = callback.count
         this.images.gallery = callback.gallery
+      })
+    },
+    getInterests (id) {
+      Profile.getInterests(id, callback => {
+        this.interests = callback
       })
     },
     updateGallery (name, data) {
@@ -166,12 +148,16 @@ export default {
           break
       }
     },
+    updateInterest () {
+
+    },
     editProfile () {
       var token = this.$cookie.get('authToken')
       if (token) {
         Profile.edit(this.user, token, callback => {
           this.user = callback
           this.getPic(this.user.id)
+          this.getInterests(this.user.id)
         })
       }
     },
