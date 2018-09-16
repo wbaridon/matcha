@@ -1,9 +1,9 @@
 <template>
   <div class="maGallerie">
     <h3>Ma gallerie</h3>
-      <input type="file" @change="fileChanged">
+      <input type="file" @change="fileChanged" accept="image/*">
       <button @click="upload()">Ajouter une photo</button>
-
+          {{feedback}}
     <div class="photos">
       <div v-for="image in images.gallery" v-if="!image.isProfile" :key="image.id" class='pic'>
         <div class="picBandeau">
@@ -20,6 +20,11 @@
 export default {
   name: 'UserPictures',
   props: ['userId', 'images'],
+  data () {
+    return {
+      feedback: ''
+    }
+  },
   methods: {
     fileChanged (event) {
       this.images.addFile = event.target.files[0]
@@ -31,11 +36,34 @@ export default {
       this.$emit('updatePic', 'setProfilePic', id)
     },
     upload () {
-      const formData = new FormData()
-      formData.append('userPic', this.images.addFile, this.images.addFile.name)
-      formData.append('id', this.userId)
-      if (!this.images.count) { formData.append('isProfile', 1) }
-      this.$emit('updatePic', 'upload', formData)
+      this.feedback = ''
+      var format = this.images.addFile.type
+
+      function checkFormat (format) {
+        switch (format) {
+          case 'image/png': return true
+          case 'image/jpeg': return true
+          case 'image/jpg': return true
+          default: return false
+        }
+      }
+      function addFile (images, id, count, callback) {
+        const formData = new FormData()
+        formData.append('userPic', images, images.name)
+        formData.append('id', id)
+        if (!count) { formData.append('isProfile', 1) }
+        callback(formData)
+      }
+
+      if (!checkFormat(format)) {
+        this.feedback = 'Format de fichier invalide'
+      } else if (this.images.count === 5) {
+        this.feedback = 'Vous ne pouvez pas avoir plus de 5 photos'
+      } else {
+        addFile(this.images.addFile, this.userId, this.images.count, callback => {
+          callback = this.$emit('updatePic', 'upload', callback)
+        })
+      }
     }
   }
 }
