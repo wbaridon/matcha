@@ -30,7 +30,7 @@ export default {
         email: '',
         key: '',
         pass1: '',
-        pass2: '',
+        pass2: ''
       },
       feedback: ''
     }

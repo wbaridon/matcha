@@ -1,7 +1,7 @@
 <template>
   <header>
     <div id="branding">
-      <h1><a href="/">Matcha</a></h1>
+      <div id="siteTitle"><a href="/">Matcha</a></div>
     </div>
     <nav v-if="!isAuth">
       <div class="element">

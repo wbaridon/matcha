@@ -47,6 +47,16 @@ export default {
       callback(response.data)
     })
   },
+  deletePic (idAccount, id, callback) {
+    return Api().post('profile/deletePic', {'idAccount': idAccount, 'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  newProfilePic (idAccount, id, callback) {
+    return Api().post('profile/newProfilePic', {'idAccount': idAccount, 'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   getIp (callback) {
     return axios({method: 'GET', 'url': 'https://geoip-db.com/json/'}, callback).then(result => {
       callback(result)

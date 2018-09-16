@@ -6,10 +6,7 @@
           <h2> {{user.firstname}} {{user.name}} </h2>
     <div id="topProfile">
         <div class="element">
-          <div v-for="image in images.gallery" :key="image.id">
-            <img v-if="image.isProfile" :src="'/static/images/uploads/'+image.filename" class="profilePic"/>
-          </div>
-          <img v-if="!images.count" src="/static/images/noPicture.jpg" alt="Pas de photos" class="profilePic"/>
+        <UserProfilePic :images="images"></UserProfilePic>
         </div>
         <div class="element" v-if="!update.perso && !update.pwd">
           <h3> Vos informations perso </h3>
@@ -51,14 +48,7 @@
             <button v-if="!update.perso && !update.pwd" @click="update.perso = true">Modifier mes infos</button>
         </div>
     </div>
-    <h3>Ma gallerie</h3>
-      <input type="file" @change="fileChanged">
-      <button @click="upload()">Ajouter une photo</button>
-    <div class="photos">
-      <div v-for="image in images.gallery" :key="image.id">
-        <img v-if="!image.isProfile" :src="'/static/images/uploads/'+image.filename" class="pic"/>
-      </div>
-    </div>
+    <UserPictures @updatePic="updateGallery" :images="images" :userId="user.id"></UserPictures>
     <h3> Vos preferences </h3>
     <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
     <p v-if="!update.pref">
@@ -99,10 +89,21 @@
 
 <script>
 import Profile from '@/services/ProfileService'
+import UserPictures from '@/components/Profile/UserPictures'
+import UserProfilePic from '@/components/Profile/UserProfilePic'
 export default {
   name: 'myprofile',
+  components: {
+    'UserPictures': UserPictures,
+    'UserProfilePic': UserProfilePic
+  },
   data () {
     return {
+      images: {
+        count: '',
+        gallery: [],
+        addFile: ''
+      },
       update: {
         perso: false,
         bio: false,
@@ -126,17 +127,12 @@ export default {
         newpwd: '',
         pwdString: ''
       },
-      images: {
-        count: '',
-        gallery: [],
-        addFile: ''
-      },
       // Quand il y aura la sauvegarde enlever les valeurs par defaut
       interests: ['php', 'html'], // Liste possible sous forme de tags
       pictures: '' // 5 images max dont une pour le profil
     }
   },
-  mounted () {
+  created () {
     this.editProfile()
   },
   computed: {
@@ -145,20 +141,30 @@ export default {
     }
   },
   methods: {
-    fileChanged (event) {
-      this.images.addFile = event.target.files[0]
-    },
-    upload () {
-      const formData = new FormData()
-      formData.append('userPic', this.images.addFile, this.images.addFile.name)
-      formData.append('id', this.user.id)
-      if (!this.images.count) {
-        formData.append('isProfile', 1)
-      }
-      Profile.uploadPic(formData, callback => {
-        console.log('Faire une fonction pour attendre le retour')
-        this.getPic(this.user.id)
+    getPic (id) {
+      Profile.getPic(id, callback => {
+        this.images.count = callback.count
+        this.images.gallery = callback.gallery
       })
+    },
+    updateGallery (name, data) {
+      switch (name) {
+        case 'delete':
+          Profile.deletePic(this.user.id, data, callback => {
+            callback = this.getPic(this.user.id)
+          })
+          break
+        case 'upload':
+          Profile.uploadPic(data, callback => {
+            callback = this.getPic(this.user.id)
+          })
+          break
+        case 'setProfilePic':
+          Profile.newProfilePic(this.user.id, data, callback => {
+            callback = this.getPic(this.user.id)
+          })
+          break
+      }
     },
     editProfile () {
       var token = this.$cookie.get('authToken')
@@ -169,12 +175,7 @@ export default {
         })
       }
     },
-    getPic (id) {
-      Profile.getPic(id, callback => {
-        this.images.count = callback.count
-        this.images.gallery = callback.gallery
-      })
-    },
+
     changePerso () {
       // Faire un controle des nouvelles valeur avant envoi comme pour register
       Profile.updatePerso(this.user, this.user.id, callback => {
@@ -257,13 +258,19 @@ export default {
     width: 200px;
   }
   .pic {
+    font-size: 0.8em;
+    text-align: center;
+  }
+  .pic img {
     width: 150px;
-    margin: 15px;
+    height: 150px;
+    margin: 8px;
+    border: solid 1px black;
   }
   .photos {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 15px;
   }
+
 </style>
