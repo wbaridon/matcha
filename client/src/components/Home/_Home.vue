@@ -4,6 +4,12 @@
   <!-- Selection de 1 ou plusieurs criteres tel que:
     Localisation / un ou plusieurs tags interet
     ,localisation, popularite et par tags<br> -->
+    <strong> Trier les resultats par: </strong>
+    <select v-model="sort" @change="Sort">
+      <option disabled value="">Choisir un filtre</option>
+      <option> Age </option>
+      <option> Popularite</option>
+    </select>
     <div class="search">
       <h2> Vos filtres </h2>
       <div class="searchItem">
@@ -42,12 +48,6 @@
       </div>
       <button @click="search">Rechercher</button><br>
     </div>
-    <strong> Trier les resultats par: </strong>
-    <select v-model="sort" @change="Sort">
-      <option disabled value="">Choisir un filtre</option>
-      <option> Age </option>
-      <option> Popularite</option>
-    </select>
     <SearchList :listData="array"></SearchList>
   </div>
   <div v-else>
@@ -103,6 +103,7 @@ export default {
 
 <style>
 .search {
+  margin-top: 15px;
   background-color: lightgrey;
   padding: 15px;
   text-align: center;

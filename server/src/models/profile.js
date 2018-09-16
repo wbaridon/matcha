@@ -63,6 +63,16 @@ module.exports.getPic = function (id, callback) {
 		});
 }
 
+module.exports.getInterests = function (id, callback) {
+	db.query('SELECT * FROM interests WHERE id_account=?',
+		[id], function (err, result) {
+			if (err) throw err;
+			else {
+				callback(result)
+			}
+		});
+}
+
 module.exports.deletePic = function (idAccount, id, callback) {
 	db.query('DELETE FROM images WHERE id_account=? AND id =?',
 		[idAccount, id], function (err, result) {
