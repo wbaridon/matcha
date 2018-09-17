@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Suggestion from '@/services/SuggestionService'
+import Suggestion from '@/services/Suggestion/SuggestionService'
 import SuggestionList from '@/components/Suggestion/SuggestionList'
 export default {
   name: 'suggestion',
