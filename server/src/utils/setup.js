@@ -46,6 +46,12 @@ CREATE TABLE IF NOT EXISTS images ( \
     id_account INT NOT NULL, \
     filename VARCHAR(50), isProfile INT DEFAULT 0);',' \
 \
+CREATE TABLE IF NOT EXISTS chat ( \
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    login VARCHAR(50), \
+    recipient VARCHAR(50), \
+    message VARCHAR(200));',' \
+\
 CREATE TABLE IF NOT EXISTS interests ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
     id_account INT NOT NULL, \

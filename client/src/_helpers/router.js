@@ -9,6 +9,7 @@ import Profile from '@/components/Profile'
 import Myprofile from '@/components/Profile/_UserProfile'
 import Suggestion from '@/components/Suggestion'
 import Activate from '@/components/Activate'
+import Chat from '@/components/Chat'
 import { store } from '../_store/store'
 import Login from '@/services/LoginService'
 
@@ -38,6 +39,14 @@ const router = new Router({
       path: '/profile',
       name: 'myprofile',
       component: Myprofile,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: Chat,
       meta: {
         requiresAuth: true
       }
