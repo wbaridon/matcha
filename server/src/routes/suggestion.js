@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var suggestionList = require('../models/suggestionList.js');
 var profile = require('../models/profile.js');
+var interests = require('../models/interests.js');
 var geolib = require('geolib');
 var jwt = require('jsonwebtoken');
 
@@ -23,7 +24,10 @@ router.post('/', function(req, res) {
 			suggestionList.showList(id, gender, sexualPref, result => {
 				convertUserData(result, user => {
 					getDistance(user, id, finalUser => {
-						res.send(finalUser)
+						/*getInterests(finalUser, id, sendUser => {
+							console.log(sendUser)*/
+							res.send(finalUser)
+
 					})
 				})
 			})
@@ -31,6 +35,21 @@ router.post('/', function(req, res) {
 	})
 })
 
+/*
+let getInterests = (user, id) => {
+	return new Promise((resolve, reject) => {
+		var output = []
+		for (i in user) {
+			interests.getUser(user[i].id, ret => {
+			//	console.log(ret)
+				output[i] = ret
+				//console.log(output[i])
+			})
+		}
+						resolve()
+	})
+}
+*/
 function convertUserData(user, callback) {
   // synchrone ou asynchrone ?
 	var counter = user.length;

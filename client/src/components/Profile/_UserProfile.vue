@@ -77,6 +77,7 @@
 
 <script>
 import Profile from '@/services/ProfileService'
+import Pictures from '@/services/Profile/PicturesService'
 import UserPictures from '@/components/Profile/UserPictures'
 import UserProfilePic from '@/components/Profile/UserProfilePic'
 import UserInterests from '@/components/Profile/UserInterests'
@@ -119,7 +120,7 @@ export default {
   },
   methods: {
     getPic (id) {
-      Profile.getPic(id, callback => {
+      Pictures.getPic(id, callback => {
         this.images.count = callback.count
         this.images.gallery = callback.gallery
       })
@@ -132,17 +133,17 @@ export default {
     updateGallery (name, data) {
       switch (name) {
         case 'delete':
-          Profile.deletePic(this.user.id, data, callback => {
+          Pictures.deletePic(this.user.id, data, callback => {
             callback = this.getPic(this.user.id)
           })
           break
         case 'upload':
-          Profile.uploadPic(data, callback => {
+          Pictures.uploadPic(data, callback => {
             callback = this.getPic(this.user.id)
           })
           break
         case 'setProfilePic':
-          Profile.newProfilePic(this.user.id, data, callback => {
+          Pictures.newProfilePic(this.user.id, data, callback => {
             callback = this.getPic(this.user.id)
           })
           break
