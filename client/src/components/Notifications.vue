@@ -1,5 +1,5 @@
 <template>
-  <div id="chat">
+  <div id="notifications">
     <!-- Sent messages output -->
     <div class="messages" v-for="msg in messages" :key="msg.id">
       <p><span>{{ msg.login }}: </span>{{ msg.message }}</p>
