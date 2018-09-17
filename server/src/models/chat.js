@@ -13,6 +13,7 @@ module.exports.storeMessage = function (newMessage) {
 		});
 }
 
+// Gets all messages from history between 2 specific users
 module.exports.getMessages = function (login, recipient, callback) {
   db.query('SELECT * FROM chat WHERE login = ? OR login = ? \
     AND recipient = ? OR recipient = ?',

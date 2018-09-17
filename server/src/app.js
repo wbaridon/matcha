@@ -57,6 +57,7 @@ io.on('connection', function(socket) {
   console.log('connected sockets: ' + userSockets)
 
   socket.on('GET_MESSAGES', function(data){
+    // Show history with 'anyone fo nao' from database
     getUsername(data.token, login => {
       fillHistory(login, 'anyone fo nao', res => {
         var history = res
