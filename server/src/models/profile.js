@@ -83,6 +83,16 @@ module.exports.addInterest = function (interest, id, callback) {
 		});
 }
 
+module.exports.deleteInterest = function (interest, id, callback) {
+	db.query('UPDATE interests SET '+interest+' =0 WHERE id_account=?',
+		[id], function (err, result) {
+			if (err) throw err;
+			else {
+				callback(result)
+			}
+		});
+}
+
 
 module.exports.addNewInterest = function (interest, id, callback) {
 	console.log('arrive')

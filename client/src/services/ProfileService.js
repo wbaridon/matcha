@@ -72,6 +72,11 @@ export default {
       callback(response.data)
     })
   },
+  deleteInterest (id, data, callback) {
+    return Api().post('profile/deleteInterest', {'id': id, 'data': data}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   getInterestsList (callback) {
     return Api().post('profile/getInterestsList', callback).then(function (response) {
       callback(response.data)

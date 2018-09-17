@@ -3,13 +3,13 @@
     <h3>Vos passions</h3>
     <div id='interests'>
       <div v-for="(data, index) in interests" v-bind:key="index">
-        <div v-if="data===1 && index!='id_account' && index!='id'" class='sticker'>#{{index}} &times;</div>
+        <div v-if="data===1 && index!='id_account' && index!='id'" class='sticker' @click="del(index)">#{{index}} &times;</div>
       </div>
       <div>
       <input type="text" name="interest" v-model="search"><button @click="add(search)">Ajouter</button>
       <p v-if="search"> Nos suggestions: </p>
       <div v-if="search" v-for="index in filteredTags" v-bind:key="index">
-        <p @click="add(index)">#{{index}}</p>
+        <p @click="add(index)" class="sticker">#{{index}} +</p>
       </div>
       </div>
     </div>
@@ -44,7 +44,6 @@ export default {
   },
   methods: {
     getInterestsList () {
-      console.log('enter')
       Profile.getInterestsList(callback => {
         this.test = callback
       })
@@ -52,6 +51,9 @@ export default {
     add (id) {
       this.$emit('updateInterest', 'add', id)
       this.search = ''
+    },
+    del (id) {
+      this.$emit('updateInterest', 'delete', id)
     }
   }
 }

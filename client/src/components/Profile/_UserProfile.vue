@@ -154,6 +154,12 @@ export default {
           Profile.addInterest(this.user.id, data, callback => {
             callback = this.getInterests(this.user.id)
           })
+          break
+        case 'delete':
+          Profile.deleteInterest(this.user.id, data, callback => {
+            callback = this.getInterests(this.user.id)
+          })
+          break
       }
     },
     editProfile () {

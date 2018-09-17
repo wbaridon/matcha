@@ -114,6 +114,13 @@ router.post('/addInterest', function(req, res) {
 		})
 })
 
+router.post('/deleteInterest', function(req, res) {
+		interest = req.body.data
+		id = req.body.id
+		profile.deleteInterest(interest, id, callback => {
+			res.send(callback)
+		})
+})
 
 router.post('/deletePic', function(req, res) {
 		profile.deletePic(req.body.idAccount, req.body.id, callback => {
