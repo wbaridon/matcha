@@ -1,4 +1,5 @@
 import Api from '@/services/Api'
+import axios from 'axios'
 
 export default {
   viewProfile (user, callback) {
@@ -26,8 +27,58 @@ export default {
       callback(response.data)
     })
   },
+  updateLocalisation (lat, long, user, callback) {
+    return Api().post('profile/localisation', {lat, long, user}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   updatePwd (password, id, callback) {
     return Api().post('profile/updatePwd', {password, id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  uploadPic (formData, callback) {
+    return Api().post('profile/uploadPic', formData, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  getPic (id, callback) {
+    return Api().post('profile/getPic', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  deletePic (idAccount, id, callback) {
+    return Api().post('profile/deletePic', {'idAccount': idAccount, 'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  newProfilePic (idAccount, id, callback) {
+    return Api().post('profile/newProfilePic', {'idAccount': idAccount, 'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  getIp (callback) {
+    return axios({method: 'GET', 'url': 'https://geoip-db.com/json/'}, callback).then(result => {
+      callback(result)
+    })
+  },
+  getInterests (id, callback) {
+    return Api().post('profile/getInterests', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  addInterest (id, data, callback) {
+    return Api().post('profile/addInterest', {'id': id, 'data': data}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  deleteInterest (id, data, callback) {
+    return Api().post('profile/deleteInterest', {'id': id, 'data': data}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  getInterestsList (callback) {
+    return Api().post('profile/getInterestsList', callback).then(function (response) {
       callback(response.data)
     })
   }

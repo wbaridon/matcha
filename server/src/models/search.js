@@ -1,8 +1,12 @@
 var db = require('../config/db');
 var sexualCheck = require('../utils/sexualCheck');
 
-module.exports.showList = function (id, gender, sexualPref, callback) {
+module.exports.result = function (id, gender, sexualPref, ask, callback) {
 	filter = ''
+	if (ask.minAge) { filter+=' AND age>='+ask.minAge }
+	if (ask.maxAge) { filter+=' AND age<='+ask.maxAge }
+	if (ask.minPop) { filter+=' AND popularite>='+ask.minPop }
+	if (ask.maxPop) { filter+=' AND popularite<='+ask.maxPop }
 	sexualCheck.analysis(sexualPref, gender, preference => {
 		sexualCheck.sqlSentence(preference, ret => {
 			filter += ret

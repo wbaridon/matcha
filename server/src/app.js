@@ -15,14 +15,12 @@ app.use('/login', require('./routes/login'))
 app.use('/suggestion', require('./routes/suggestion'))
 app.use('/profile', require('./routes/profile'))
 app.use('/activate', require('./routes/activate'))
-/* app.get('/posts', (req, res) => {
-   res.send(
-    [{
-      title: "Hello World",
-      description: "Hi there!, How are you?"
-    }]
-  )
-})*/
+app.use('/reset', require('./routes/resetPassword'))
+app.use('/search', require('./routes/search'))
+ app.get('/', (req, res) => {
+   res.send('The server is working...'
+ )
+})
 
 const server = app.listen(process.env.PORT || 8081)
 

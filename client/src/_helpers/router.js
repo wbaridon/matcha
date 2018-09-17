@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Home'
+
+import Home from '@/components/Home/_Home'
 import Register from '@/components/Register'
 import Reset from '@/components/Reset'
-import Posts from '@/components/Posts'
+import ConfirmReset from '@/components/ConfirmReset'
 import Profile from '@/components/Profile'
-import Myprofile from '@/components/Myprofile'
+import Myprofile from '@/components/Profile/_UserProfile'
 import Suggestion from '@/components/Suggestion'
 import Activate from '@/components/Activate'
 import Chat from '@/components/Chat'
@@ -25,7 +26,7 @@ const router = new Router({
     { path: '/register', name: 'Register', component: Register },
     { path: '/activate', name: 'activate', component: Activate },
     { path: '/login/reset', name: 'Reset', component: Reset },
-    { path: '/posts', name: 'Posts', component: Posts },
+    { path: '/login/Confirmreset', name: 'ConfirmReset', component: ConfirmReset },
     {
       path: '/suggestion',
       name: 'suggestion',

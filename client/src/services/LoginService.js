@@ -10,5 +10,10 @@ export default {
     return Api().post('login/checkAuth', {key: token}).then(function (response) {
       return (response.data)
     })
+  },
+  reset (user) {
+    return Api().post('reset/', user).then(function (response) {
+      return (response.data)
+    })
   }
 }

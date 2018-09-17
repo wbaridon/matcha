@@ -1,12 +1,33 @@
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser');
-var json = bodyParser.json();
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var argon2 = require('argon2');
 var profile = require('../models/profile.js');
 var account = require('../models/account.js');
 var jwt = require('jsonwebtoken');
+var NodeGeocoder = require('node-geocoder')
+var geocoder = NodeGeocoder({
+		provider: 'locationiq',
+		httpAdapter: 'https',
+		apiKey: '2c29b16aa6aabf'
+});
+var crypto = require('crypto')
+var path = require('path')
+const multer = require('multer')
+const storage = multer.diskStorage({
+		destination: '../client/static/images/uploads',
+		filename: function (req, file, callback) {
+			crypto.pseudoRandomBytes(16, function(err, raw) {
+				if (err) return callback(err);
+				callback(null, raw.toString('hex')+path.extname(file.originalname))
+			});
+		}
+})
+const upload = multer({storage:storage})
+
+router.get('/', (req, res) => {
+	res.send('The server is working...')
+
+})
 
 router.post('/view', function(req, res) {
     userId = req.body.id
@@ -32,10 +53,90 @@ router.post('/edit', function(req, res) {
   });
 })
 
+router.post('/uploadPic', upload.single('userPic'), function(req, res) {
+	// On doit faire une verification du fichier avant de le sauvegarder format, taille et si on en a pas deja 5 pour user
+	if (!req.file) {
+		console.log('No file received');
+		return res.send({success: false})
+	} else {
+		if (!req.body.isProfile) {
+			req.body.isProfile = 0;
+		}
+		profile.addPic(req.body.id, req.body.isProfile, req.file.filename, callback => {
+				return res.send({success: true})
+		})
+	}
+})
+
+router.post('/getPic', function(req, res) {
+		profile.getPic(req.body.id, callback => {
+				images= {
+					gallery: callback,
+					count: callback.length
+				}
+				console.log(images)
+				return res.send(images)
+		})
+})
+
+router.post('/getInterests', function(req, res) {
+		profile.getInterests(req.body.id, callback => {
+				return res.send(callback[0])
+		})
+})
+
+router.post('/getInterestsList', function(req, res) {
+		profile.getInterestsList(callback => {
+			array = callback.map(v => v.COLUMN_NAME)
+				return res.send(array)
+		})
+})
+
+router.post('/addInterest', function(req, res) {
+		interest = req.body.data
+		id = req.body.id
+		console.log(req.body)
+		console.log(interest + ' et ' + id)
+		profile.getInterestsList(callback => {
+			array = callback.map(v => v.COLUMN_NAME)
+			if (array.indexOf(interest) > -1) {
+				profile.addInterest(interest, id, callback => {
+					res.send(callback)
+				})
+			}	else {
+				console.log('entre')
+				profile.addNewInterest(interest, id, callback => {
+					callback = profile.addInterest(interest, id, result => {
+						res.send(result)
+					})
+				})
+			}
+		})
+})
+
+router.post('/deleteInterest', function(req, res) {
+		interest = req.body.data
+		id = req.body.id
+		profile.deleteInterest(interest, id, callback => {
+			res.send(callback)
+		})
+})
+
+router.post('/deletePic', function(req, res) {
+		profile.deletePic(req.body.idAccount, req.body.id, callback => {
+				return res.send('done')
+		})
+})
+
+router.post('/newProfilePic', function(req, res) {
+	profile.updateProfilePic(req.body.idAccount, req.body.id, callback => {
+			return res.send('done')
+	})
+})
+
 router.post('/updateBio', function(req, res) {
   bio = req.body.bio
   id = req.body.id
-  console.log(bio)
   profile.updateUser(id, 'bio', bio, (err, result) => {
     if (err)
       throw err
@@ -71,6 +172,30 @@ router.post('/updatePerso', function(req, res) {
       })
     })
   })
+})
+
+router.post('/localisation', function(req, res) {
+
+	lon = req.body.long
+	lat = req.body.lat
+	id = req.body.user.id
+	geocoder.reverse({lat, lon})
+	.then(call => {
+		profile.updateUser(id, 'zipcode', call[0].zipcode, (err, result) => {
+			profile.updateUser(id, 'city', call[0].city, (err, result) => {
+				profile.updateUser(id, 'latitude', lat, (err, result) => {
+					profile.updateUser(id, 'longitude', lon, (err, result) => {
+						view(id, user => {
+							res.send(user)
+						})
+					})
+				})
+			})
+		})
+	})
+	.catch(function(err) {
+		throw err;
+	})
 })
 
 router.post('/updatePwd', function(req, res) {
@@ -109,7 +234,9 @@ function fillProfile(userId, callback) {
           age: result[0].age,
           gender: result[0].gender,
           bio: result[0].bio,
-          email: ''
+          email: '',
+					zipcode: result[0].zipcode,
+					city: result[0].city
         }
       callback(user)
     }

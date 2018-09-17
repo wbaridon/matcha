@@ -5,12 +5,12 @@ var model = require('../models/account.js');
 var jwt = require('jsonwebtoken');
 var token;
 
-router.post('/checkAuth', function (req, res) {
-	// console.log(req.body.key)
-	if (!req.body.key) {
-		console.log('enter')
+router.get('/', (req, res) => {
+	res.send('The server is working...'
+)
+})
 
-	}
+router.post('/checkAuth', function (req, res) {
 	jwt.verify(req.body.key, 'MatchaSecretKey', function(err, decoded) {
 		if (err) {
 		 res.send({'result': false})
@@ -39,7 +39,6 @@ router.post('/', function (req, res) {
 							token = jwt.sign(user, 'MatchaSecretKey', { expiresIn: '1d'});
 							appData.error = 0;
 							appData["token"] = token;
-							console.log(appData)
 							res.status(200).json(appData);
 
 							// Faire la gestion des messages en dehors de la console
@@ -48,18 +47,18 @@ router.post('/', function (req, res) {
 							//res.send('active')
 						}
 						else {
-							res.send('merci activer compte');
+							res.send("Merci d'activer votre compte");
 						}
 					})
 
 				}
 				else {
-					res.send('non');
+					res.send('Mot de passe ou utilisateur incorrect');
 				}
 			})
 		}
 		else {
-			res.send('Aucun utilisateur')
+			res.send('Mot de passe ou utilisateur incorrect')
 		}
 	});
 });

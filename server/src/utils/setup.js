@@ -1,7 +1,7 @@
 /************************
 ** USE `NPM RUN SETUP` **
 *************************/
-const config = require('./config');
+const config = require('../config/config');
 
 const NBR_OF_INTERESTS = config.interests.length;
 let SQL_INTERESTS = '';
@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS accounts ( \
     login VARCHAR(50), \
     password VARCHAR(128), \
     email VARCHAR(50), \
-    timestamp BIGINT NOT NULL);',' \
+    timestamp BIGINT NOT NULL, \
+    timestampPassword BIGINT DEFAULT 0);',' \
 \
 CREATE TABLE IF NOT EXISTS profiles ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
@@ -36,8 +37,14 @@ CREATE TABLE IF NOT EXISTS profiles ( \
     firstname VARCHAR(50), \
     gender TINYINT DEFAULT 0, \
     age INT NOT NULL DEFAULT 0, \
-    sexuality TINYINT DEFAULT 0, \
-    bio TEXT);',' \
+    sexuality TINYINT DEFAULT 2, \
+    bio TEXT, zipcode INT, city VARCHAR(50), latitude DECIMAL(12,9), longitude DECIMAL(12,9), \
+    popularite INT NOT NULL DEFAULT 0);',' \
+\
+CREATE TABLE IF NOT EXISTS images ( \
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    id_account INT NOT NULL, \
+    filename VARCHAR(50), isProfile INT DEFAULT 0);',' \
 \
 CREATE TABLE IF NOT EXISTS chat ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \

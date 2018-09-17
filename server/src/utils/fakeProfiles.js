@@ -1,11 +1,11 @@
 const mysql = require('mysql');
-const db = require('./db');
-const config = require('./config');
+const db = require('../config/db');
+const config = require('../config/config');
 const account = require('../models/account');
 
 /******************************************************************************/
 const LOGIN_RANDOM_INT = 10000;
-const MAX_PROFILES = 10000;
+const MAX_PROFILES = 1000;
 const NBR_OF_INTERESTS_CHANCE = 3;
 const NBR_OF_SEXUALITY = 3;
 const AGE_MIN = 18;
@@ -64,7 +64,7 @@ let Profile = function() {
                 this.idAccount = result[0].id;
                 resolve();
             });
-        }) 
+        })
     };
 
     this.getSQLProfiles = () => {
@@ -173,7 +173,7 @@ if (process.argv[2]) {
                 addInDbProfiles(nbr).then(() => {
                     addInDbInterests(nbr).then(() => {
                         db.end();
-                    }); 
+                    });
                 });
             });
         });
