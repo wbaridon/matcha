@@ -101,13 +101,12 @@ router.post('/addInterest', function(req, res) {
 		interests.getInterestsList(callback => {
 			array = callback.map(v => v.COLUMN_NAME)
 			if (array.indexOf(interest) > -1) {
-				interests.addInterest(interest, id, callback => {
+				interests.update(interest, id, 1, callback => {
 					res.send(callback)
 				})
 			}	else {
-				console.log('entre')
-				interests.addNewInterest(interest, id, callback => {
-					callback = interests.addInterest(interest, id, result => {
+				interests.addNew(interest, id, callback => {
+					callback = interests.update(interest, id, 1, result => {
 						res.send(result)
 					})
 				})
@@ -118,7 +117,7 @@ router.post('/addInterest', function(req, res) {
 router.post('/deleteInterest', function(req, res) {
 		interest = req.body.data
 		id = req.body.id
-		interests.deleteInterest(interest, id, callback => {
+		interests.update(interest, id, 0, callback => {
 			res.send(callback)
 		})
 })

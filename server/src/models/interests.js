@@ -23,9 +23,9 @@ module.exports.getUser = function (id, callback) {
 		});
 }
 
-module.exports.addInterest = function (interest, id, callback) {
-	db.query('UPDATE interests SET '+interest+' =1 WHERE id_account=?',
-		[id], function (err, result) {
+module.exports.update = function (interest, id, value, callback) {
+	db.query('UPDATE interests SET '+interest+' =? WHERE id_account=?',
+		[value, id], function (err, result) {
 			if (err) throw err;
 			else {
 				callback(result)
@@ -33,18 +33,7 @@ module.exports.addInterest = function (interest, id, callback) {
 		});
 }
 
-module.exports.deleteInterest = function (interest, id, callback) {
-	db.query('UPDATE interests SET '+interest+' =0 WHERE id_account=?',
-		[id], function (err, result) {
-			if (err) throw err;
-			else {
-				callback(result)
-			}
-		});
-}
-
-
-module.exports.addNewInterest = function (interest, id, callback) {
+module.exports.addNew = function (interest, id, callback) {
 	console.log('arrive')
 	db.query("ALTER TABLE interests ADD "+ interest + " TINYINT DEFAULT 0", callback, function (err, result) {
 		if (err) throw err;
