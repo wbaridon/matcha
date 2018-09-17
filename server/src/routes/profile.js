@@ -54,6 +54,17 @@ router.post('/edit', function(req, res) {
   });
 })
 
+
+router.post('/fakeReport', function(req, res) {
+	profile.select(req.body.id, (err, result) => {
+			var nbr = result[0].fakeReport + 1
+			profile.updateUser(req.body.id, 'fakeReport',nbr, callback => {
+				res.send(callback)
+			})
+	})
+})
+
+
 router.post('/uploadPic', upload.single('userPic'), function(req, res) {
 	// On doit faire une verification du fichier avant de le sauvegarder format, taille et si on en a pas deja 5 pour user
 	if (!req.file) {
