@@ -148,8 +148,19 @@ export default {
           break
       }
     },
-    updateInterest () {
-
+    updateInterest (name, data) {
+      switch (name) {
+        case 'add':
+          Profile.addInterest(this.user.id, data, callback => {
+            callback = this.getInterests(this.user.id)
+          })
+          break
+        case 'delete':
+          Profile.deleteInterest(this.user.id, data, callback => {
+            callback = this.getInterests(this.user.id)
+          })
+          break
+      }
     },
     editProfile () {
       var token = this.$cookie.get('authToken')

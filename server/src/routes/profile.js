@@ -85,6 +85,43 @@ router.post('/getInterests', function(req, res) {
 		})
 })
 
+router.post('/getInterestsList', function(req, res) {
+		profile.getInterestsList(callback => {
+			array = callback.map(v => v.COLUMN_NAME)
+				return res.send(array)
+		})
+})
+
+router.post('/addInterest', function(req, res) {
+		interest = req.body.data
+		id = req.body.id
+		console.log(req.body)
+		console.log(interest + ' et ' + id)
+		profile.getInterestsList(callback => {
+			array = callback.map(v => v.COLUMN_NAME)
+			if (array.indexOf(interest) > -1) {
+				profile.addInterest(interest, id, callback => {
+					res.send(callback)
+				})
+			}	else {
+				console.log('entre')
+				profile.addNewInterest(interest, id, callback => {
+					callback = profile.addInterest(interest, id, result => {
+						res.send(result)
+					})
+				})
+			}
+		})
+})
+
+router.post('/deleteInterest', function(req, res) {
+		interest = req.body.data
+		id = req.body.id
+		profile.deleteInterest(interest, id, callback => {
+			res.send(callback)
+		})
+})
+
 router.post('/deletePic', function(req, res) {
 		profile.deletePic(req.body.idAccount, req.body.id, callback => {
 				return res.send('done')
