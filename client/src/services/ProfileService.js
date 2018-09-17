@@ -66,5 +66,15 @@ export default {
     return Api().post('profile/getInterests', {'id': id}, callback).then(function (response) {
       callback(response.data)
     })
+  },
+  addInterest (id, data, callback) {
+    return Api().post('profile/addInterest', {'id': id, 'data': data}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  getInterestsList (callback) {
+    return Api().post('profile/getInterestsList', callback).then(function (response) {
+      callback(response.data)
+    })
   }
 }

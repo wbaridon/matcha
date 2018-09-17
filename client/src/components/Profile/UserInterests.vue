@@ -6,18 +6,53 @@
         <div v-if="data===1 && index!='id_account' && index!='id'" class='sticker'>#{{index}} &times;</div>
       </div>
       <div>
-        <form class="" method="post">
-          <input type="text" name="interest" value="">
-          <input type="submit" name="submit" value="Ajouter">
-        </form>
+      <input type="text" name="interest" v-model="search"><button @click="add(search)">Ajouter</button>
+      <p v-if="search"> Nos suggestions: </p>
+      <div v-if="search" v-for="index in filteredTags" v-bind:key="index">
+        <p @click="add(index)">#{{index}}</p>
+      </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Profile from '@/services/ProfileService'
 export default {
   name: 'UserInterests',
-  props: ['userId', 'interests']
+  props: ['userId', 'interests'],
+  data () {
+    return {
+      search: '',
+      test: []
+    }
+  },
+  computed: {
+    filteredTags: function () {
+      return this.test.filter((index) => {
+        return index.match(this.search)
+      })
+    }
+  },
+  mounted () {
+    this.getInterestsList()
+  },
+  watch: {
+    interests: function () {
+      this.getInterestsList()
+    }
+  },
+  methods: {
+    getInterestsList () {
+      console.log('enter')
+      Profile.getInterestsList(callback => {
+        this.test = callback
+      })
+    },
+    add (id) {
+      this.$emit('updateInterest', 'add', id)
+      this.search = ''
+    }
+  }
 }
 </script>
