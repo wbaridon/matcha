@@ -12,6 +12,11 @@ export default {
       callback(response.data)
     })
   },
+  fakeReport (id, callback) {
+    return Api().post('profile/fakeReport', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   updateBio (bio, id, callback) {
     return Api().post('profile/updateBio', {bio, id}, callback).then(function (response) {
       callback(response.data)

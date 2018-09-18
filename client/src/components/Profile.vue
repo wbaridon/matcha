@@ -20,7 +20,8 @@
       </div>
     </div>
     <button @click="blockUser()"> Bloquer l'utilisateur </button>
-    <button @click="fakeProfile()"> Signaler ce profil comme un fake </button>
+    {{feedback}}
+    <button @click.once="fakeProfile()"> Signaler ce profil comme un fake </button>
   </div>
   <div id="profile" v-else>
     Aucun profil
@@ -34,6 +35,7 @@ export default {
   name: 'profile',
   data () {
     return {
+      feedback: '',
       user: {
         userExist: '',
         id: '',
@@ -67,7 +69,9 @@ export default {
       })
     },
     fakeProfile () {
-      console.log('test')
+      Profile.fakeReport(this.$route.params.userId, callback => {
+        this.feedback = 'Merci pour votre signalement'
+      })
     },
     blockUser () {
       console.log('a faire')

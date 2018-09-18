@@ -24,7 +24,10 @@ app.use('/search', require('./routes/search'))
 
 const server = app.listen(process.env.PORT || 8081)
 
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {
+ pingInterval: 1000,
+ pingTimeout: 5000,
+})
 const chat = require('./models/chat.js')
 // Active user sessions will be stored here
 var userSockets = []
