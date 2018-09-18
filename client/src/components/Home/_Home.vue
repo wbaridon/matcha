@@ -35,7 +35,8 @@
             <strong>Localisation</strong>
           </div>
           <div class="searchContent">
-
+            De: <input type="number" name="minDistance" v-model="ask.minDistance">
+            à: <input type="number" name="maxDistance" v-model="ask.maxDistance"> mètres
           </div>
       </div>
       <div class="searchItem">
@@ -48,7 +49,7 @@
       </div>
       <button @click="search">Rechercher</button><br>
     </div>
-    <SearchList :listData="array"></SearchList>
+    <SearchList :listData="array" :filter="ask"></SearchList>
   </div>
   <div v-else>
     <p>Merci de vous connecter ou vous inscrire</p>
@@ -67,10 +68,12 @@ export default {
     return {
       sort: '',
       ask: {
-        minAge: '',
-        maxAge: '',
-        minPop: '',
-        maxPop: ''
+        minAge: '18',
+        maxAge: '99',
+        minPop: '0',
+        maxPop: '100',
+        minDistance: '0',
+        maxDistance: '5000'
       },
       array: []
     }

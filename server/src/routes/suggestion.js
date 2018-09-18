@@ -7,6 +7,7 @@ var suggestionList = require('../models/suggestionList.js');
 var profile = require('../models/profile.js');
 var interests = require('../models/interests.js');
 var geolib = require('geolib');
+var localisation = require('../utils/localisation');
 var jwt = require('jsonwebtoken');
 
 router.get('/', (req, res) => {
@@ -23,13 +24,10 @@ router.post('/', function(req, res) {
 			gender = user[0].gender
 			suggestionList.showList(id, gender, sexualPref, result => {
 				convertUserData(result, user => {
-					getDistance(user, id, finalUser => {
-						/*getInterests(finalUser, id, sendUser => {
-							console.log(sendUser)*/
-						/*	getInterests(finalUser, id, callback => {
-								console.log(callback)*/
-								res.send(finalUser)
-							/*})*/
+					localisation.getDistance(user, id, finalUser => {
+								getInterests(finalUser, id, callback => {
+										res.send(finalUser)
+								})
 					})
 				})
 			})
@@ -37,18 +35,33 @@ router.post('/', function(req, res) {
 	})
 })
 
-function getInterests(data, id, callback)
-{
+function getUserPromise(id, callback) {
+	return new Promise ((resolve, reject) => {
+		interests.getUser(id, ret => {
+			callback(ret, resolve);
+		});
+	});
+}
 
-	/*
-	for (var i = 0; i < user.length; i++) {
-				interests.getUser(user.id, ret => {
-				users = [ret[i]]
-				})
-	}
-		console.log(users)
-	console.log('Callback')
-	callback(user)*/
+var users = []
+
+function thisIsAPromise(user) {
+	return new Promise(async (resolve, reject) => {
+		for (var i = 0; i < user.length; i++) {
+					await getUserPromise(user[i].id, (ret, resolve) => {
+						users[i] = [user[i], ret]; // Comment faire pour joindre les deux tableaux ? 
+						resolve();
+					})
+		}
+		resolve(users);
+	})
+}
+
+async function getInterests(data, id, callback)
+{
+	await thisIsAPromise(data).then((users) => {
+		callback(users)
+	})
 }
 
 function convertUserData(user, callback) {
@@ -81,28 +94,6 @@ function convertUserData(user, callback) {
 		}
 	})
 
-}
-
-function getDistance(user, id, callback) {
-	profile.select(id, (err, result) => {
-		lat = result[0].latitude
-		long = result[0].longitude
-		var counter = user.length;
-		user.forEach(function (item, index, array) {
-			if (item.latitude && item.longitude && lat && long) {
-			 item.distance = geolib.getDistance(
-				{latitude: lat, longitude: long},
-				{latitude: item.latitude, longitude: item.longitude}
-				);
-		} else {
-			item.distance = 'Non disponible'
-		}
-			counter--
-			if (counter === 0) {
-				callback(array)
-			}
-		})
-	})
 }
 
 module.exports = router;

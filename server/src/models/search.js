@@ -6,7 +6,7 @@ module.exports.result = function (id, gender, sexualPref, ask, callback) {
 	if (ask.minAge) { filter+=' AND age>='+ask.minAge }
 	if (ask.maxAge) { filter+=' AND age<='+ask.maxAge }
 	if (ask.minPop) { filter+=' AND popularite>='+ask.minPop }
-	if (ask.maxPop) { filter+=' AND popularite<='+ask.maxPop }
+	if (ask.minDistance) { filter+=' AND popularite<='+ask.minDistance }
 	sexualCheck.analysis(sexualPref, gender, preference => {
 		sexualCheck.sqlSentence(preference, ret => {
 			filter += ret
