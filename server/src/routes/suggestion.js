@@ -26,8 +26,10 @@ router.post('/', function(req, res) {
 					getDistance(user, id, finalUser => {
 						/*getInterests(finalUser, id, sendUser => {
 							console.log(sendUser)*/
-							res.send(finalUser)
-
+						/*	getInterests(finalUser, id, callback => {
+								console.log(callback)*/
+								res.send(finalUser)
+							/*})*/
 					})
 				})
 			})
@@ -35,21 +37,20 @@ router.post('/', function(req, res) {
 	})
 })
 
-/*
-let getInterests = (user, id) => {
-	return new Promise((resolve, reject) => {
-		var output = []
-		for (i in user) {
-			interests.getUser(user[i].id, ret => {
-			//	console.log(ret)
-				output[i] = ret
-				//console.log(output[i])
-			})
-		}
-						resolve()
-	})
+function getInterests(data, id, callback)
+{
+
+	/*
+	for (var i = 0; i < user.length; i++) {
+				interests.getUser(user.id, ret => {
+				users = [ret[i]]
+				})
+	}
+		console.log(users)
+	console.log('Callback')
+	callback(user)*/
 }
-*/
+
 function convertUserData(user, callback) {
   // synchrone ou asynchrone ?
 	var counter = user.length;
