@@ -26,7 +26,7 @@ router.post('/', function(req, res) {
 				convertUserData(result, user => {
 					localisation.getDistance(user, id, finalUser => {
 								getInterests(finalUser, id, callback => {
-										res.send(finalUser)
+										res.send(callback)
 								})
 					})
 				})
@@ -49,7 +49,7 @@ function thisIsAPromise(user) {
 	return new Promise(async (resolve, reject) => {
 		for (var i = 0; i < user.length; i++) {
 					await getUserPromise(user[i].id, (ret, resolve) => {
-						users[i] = [user[i], ret]; // Comment faire pour joindre les deux tableaux ? 
+						users[i] = ret[0]// Comment faire pour joindre les deux tableaux ?
 						resolve();
 					})
 		}
@@ -60,6 +60,8 @@ function thisIsAPromise(user) {
 async function getInterests(data, id, callback)
 {
 	await thisIsAPromise(data).then((users) => {
+	
+		console.log(users.copyWithin(2))
 		callback(users)
 	})
 }

@@ -21,7 +21,7 @@ router.post('/ask', function (req, res) {
 	 profile.select(id, (err, user) => {
 		 sexualPref = user[0].sexuality
 		 gender = user[0].gender
-		 launchSearch(id, gender, sexualPref, req.body.ask, result => {
+		 launchSearch(id, gender, sexualPref, req.body.ask, req.body.interests, result => {
 				localisation.getDistance(result, id, distance => {
 				/*	filterDistance(distance, req.body.ask, finalTab => {
 						console.log(finalTab)*/
@@ -33,8 +33,8 @@ router.post('/ask', function (req, res) {
 	})
 });
 
-function launchSearch (id, gender, sexualPref, ask, callback) {
-	search.result(id, gender, sexualPref, ask, data => {
+function launchSearch (id, gender, sexualPref, ask, interests, callback) {
+	search.result(id, gender, sexualPref, ask, interests, data => {
 		callback(data)
 	})
 }

@@ -3,7 +3,7 @@
     <div v-for="element in paginatedData" :key="element.id" class="card">
       <h2>{{element.firstname}} {{element.name}}</h2><br>
       {{element.age}} ans, {{element.gender}} {{element.sexuality}} à {{element.distance}} m<br>
-      Pourcentage de compatibilite (A confirmer)
+      Pourcentage de compatibilite (A confirmer) {{element.interests}}
       Interet commun
       Score de popularite<br>
       <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>

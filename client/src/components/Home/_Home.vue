@@ -43,8 +43,10 @@
           <div class="searchTitle">
             <strong>Interets</strong>
           </div>
-          <div class="searchContent">
-
+          <div class="searchContent searchInterests">
+                <div v-for="index in interests" v-bind:key="index">
+                  <input type="checkbox" v-bind:value="index" v-model="checkedInterests">{{index}}
+                </div>
           </div>
       </div>
       <button @click="search">Rechercher</button><br>
@@ -58,6 +60,7 @@
 
 <script>
 import Search from '@/services/SearchService'
+import Profile from '@/services/ProfileService'
 import SearchList from '@/components/Home/SearchList'
 export default {
   name: 'home',
@@ -75,8 +78,13 @@ export default {
         minDistance: '0',
         maxDistance: '5000'
       },
-      array: []
+      array: [],
+      interests: [],
+      checkedInterests: []
     }
+  },
+  mounted () {
+    this.getInterestsList()
   },
   computed: {
     isAuth () {
@@ -85,9 +93,14 @@ export default {
   },
   methods: {
     search () {
-      Search.ask(this.$cookie.get('authToken'), this.ask, callback => {
+      Search.ask(this.$cookie.get('authToken'), this.ask, this.checkedInterests, callback => {
         this.array = callback
         this.Sort()
+      })
+    },
+    getInterestsList () {
+      Profile.getInterestsList(callback => {
+        this.interests = callback
       })
     },
     Sort () {
@@ -136,5 +149,12 @@ export default {
 }
 .searchElement:hover {
   background-color: rgba(227, 242, 253, 0.5);
+}
+.searchInterests {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
 }
 </style>
