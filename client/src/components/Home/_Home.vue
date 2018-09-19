@@ -9,6 +9,7 @@
       <option disabled value="">Choisir un filtre</option>
       <option> Age </option>
       <option> Popularite</option>
+      <option> Localisation</option>
     </select>
     <div class="search">
       <h2> Vos filtres </h2>
@@ -110,6 +111,9 @@ export default {
           break
         case 'Popularite':
           this.array.sort((a, b) => a.popularite - b.popularite)
+          break
+        case 'Localisation':
+          this.array.sort((a, b) => a.distance - b.distance)
           break
       }
     }
