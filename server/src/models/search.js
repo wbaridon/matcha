@@ -13,7 +13,6 @@ module.exports.result = function (id, gender, sexualPref, ask, askInterest, call
 			filter += ret
 			interestsCheck.checkInterests(askInterest, finalRet => {
 				finalFilter = filter + finalRet
-				console.log(finalFilter)
 				db.query('SElECT * FROM accounts INNER JOIN profiles \
 				ON accounts.id = profiles.id_account INNER JOIN interests ON accounts.id = interests.id_account WHERE accounts.id!=? \
 				'+finalFilter, [id], function (err, result, fields) {

@@ -24,7 +24,9 @@ router.post('/ask', function (req, res) {
 		 gender = user[0].gender
 		 launchSearch(id, gender, sexualPref, req.body.ask, req.body.interests, result => {
 				localisation.getDistance(result, id, distance => {
-						res.send(distance)
+					interestsCheck.commonTagCount(id, distance, array => {
+							res.send(array)
+					})
 				})
 		 })
 	 })
