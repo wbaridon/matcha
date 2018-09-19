@@ -1,6 +1,6 @@
 var db = require('../config/db');
 var sexualCheck = require('../utils/sexualCheck');
-var interest = require('../utils/interests');
+var interestsCheck = require('../utils/interestsCheck');
 
 module.exports.result = function (id, gender, sexualPref, ask, askInterest, callback) {
 	filter = ''
@@ -11,11 +11,12 @@ module.exports.result = function (id, gender, sexualPref, ask, askInterest, call
 	sexualCheck.analysis(sexualPref, gender, preference => {
 		sexualCheck.sqlSentence(preference, ret => {
 			filter += ret
-			interest.checkInterests(askInterest, finalRet => {
+			interestsCheck.checkInterests(askInterest, finalRet => {
 				finalFilter = filter + finalRet
+				console.log(finalFilter)
 				db.query('SElECT * FROM accounts INNER JOIN profiles \
 				ON accounts.id = profiles.id_account INNER JOIN interests ON accounts.id = interests.id_account WHERE accounts.id!=? \
-				'+filter, [id], function (err, result, fields) {
+				'+finalFilter, [id], function (err, result, fields) {
 						if (err) throw err
 						callback(result);
 				});

@@ -5,6 +5,7 @@ var search = require('../models/search.js');
 var profile = require('../models/profile.js');
 var jwt = require('jsonwebtoken')
 var localisation = require('../utils/localisation');
+var interestsCheck = require('../utils/interestsCheck');
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -23,10 +24,7 @@ router.post('/ask', function (req, res) {
 		 gender = user[0].gender
 		 launchSearch(id, gender, sexualPref, req.body.ask, req.body.interests, result => {
 				localisation.getDistance(result, id, distance => {
-				/*	filterDistance(distance, req.body.ask, finalTab => {
-						console.log(finalTab)*/
 						res.send(distance)
-
 				})
 		 })
 	 })
@@ -38,18 +36,5 @@ function launchSearch (id, gender, sexualPref, ask, interests, callback) {
 		callback(data)
 	})
 }
-/*
-var newArray = [];
 
-function filterDistance(array, conditions, callback) {
-	l = 0;
-	for (var i = 0; i < array.length; i++) {
-
-		if (array[i].distance >= conditions.minDistance && array[i].distance <= conditions.maxDistance) {
-			newArray[l] = array[i]
-			l++;
-		}
-	}
-	callback(newArray);
-}*/
 module.exports = router;

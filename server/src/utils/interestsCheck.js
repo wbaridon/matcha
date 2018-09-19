@@ -1,7 +1,7 @@
 
 function getFilter(filter, interest) {
 	return new Promise ((resolve, reject) => {
-		filter += ' AND `'+interest+'`=1'
+		filter += ' AND interests.`'+interest+'`=1'
 		resolve(filter)
 	})
 }
@@ -11,6 +11,10 @@ async function checkInterests(interests, callback) {
 			newfilter = await getFilter(newfilter, interests[i])
 	}
 	callback(newfilter)
+}
+
+function commonTagCount() {
+
 }
 
 module.exports.checkInterests = checkInterests;
