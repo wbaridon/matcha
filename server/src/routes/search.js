@@ -4,6 +4,7 @@ var argon2 = require('argon2');
 var search = require('../models/search.js');
 var profile = require('../models/profile.js');
 var jwt = require('jsonwebtoken')
+var localisation = require('../utils/localisation');
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -20,17 +21,35 @@ router.post('/ask', function (req, res) {
 	 profile.select(id, (err, user) => {
 		 sexualPref = user[0].sexuality
 		 gender = user[0].gender
-		 launchSearch(id, gender, sexualPref, req.body.ask, result => {
-			 res.send(result)
+		 launchSearch(id, gender, sexualPref, req.body.ask, req.body.interests, result => {
+				localisation.getDistance(result, id, distance => {
+				/*	filterDistance(distance, req.body.ask, finalTab => {
+						console.log(finalTab)*/
+						res.send(distance)
+
+				})
 		 })
 	 })
 	})
 });
 
-function launchSearch (id, gender, sexualPref, ask, callback) {
-	search.result(id, gender, sexualPref, ask, data => {
+function launchSearch (id, gender, sexualPref, ask, interests, callback) {
+	search.result(id, gender, sexualPref, ask, interests, data => {
 		callback(data)
 	})
 }
+/*
+var newArray = [];
 
+function filterDistance(array, conditions, callback) {
+	l = 0;
+	for (var i = 0; i < array.length; i++) {
+
+		if (array[i].distance >= conditions.minDistance && array[i].distance <= conditions.maxDistance) {
+			newArray[l] = array[i]
+			l++;
+		}
+	}
+	callback(newArray);
+}*/
 module.exports = router;

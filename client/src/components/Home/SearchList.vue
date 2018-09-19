@@ -1,8 +1,9 @@
 <template>
   <div v-if="listData.length > 0">
-    <div v-for="element in paginatedData" :key="element.id" class="searchElement">
+    <div v-if="element.distance >= filter.minDistance && element.distance <= filter.maxDistance"
+      v-for="element in paginatedData" :key="element.id" class="searchElement">
       <h2>{{element.firstname}} {{element.name}}</h2>
-      {{element.age}} ans / Popularite: {{element.popularite}}<br>
+      {{element.age}} ans / Popularite: {{element.popularite}}<br> {{element.distance}}m
       <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
     </div>
     <button @click="prevPage" :disabled="pageNumber===0">Precedent</button>
@@ -25,6 +26,9 @@ export default {
       type: Number,
       required: false,
       default: 10
+    },
+    filter: {
+      required: true
     }
   },
   data () {

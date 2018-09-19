@@ -9,6 +9,7 @@
       <option disabled value="">Choisir un filtre</option>
       <option> Age </option>
       <option> Popularite</option>
+      <option> Localisation</option>
     </select>
     <div class="search">
       <h2> Vos filtres </h2>
@@ -35,20 +36,23 @@
             <strong>Localisation</strong>
           </div>
           <div class="searchContent">
-
+            De: <input type="number" name="minDistance" v-model="ask.minDistance">
+            à: <input type="number" name="maxDistance" v-model="ask.maxDistance"> mètres
           </div>
       </div>
       <div class="searchItem">
           <div class="searchTitle">
             <strong>Interets</strong>
           </div>
-          <div class="searchContent">
-
+          <div class="searchContent searchInterests">
+                <div v-for="index in interests" v-bind:key="index">
+                  <input type="checkbox" v-bind:value="index" v-model="checkedInterests">{{index}}
+                </div>
           </div>
       </div>
       <button @click="search">Rechercher</button><br>
     </div>
-    <SearchList :listData="array"></SearchList>
+    <SearchList :listData="array" :filter="ask"></SearchList>
   </div>
   <div v-else>
     <p>Merci de vous connecter ou vous inscrire</p>
@@ -57,6 +61,7 @@
 
 <script>
 import Search from '@/services/SearchService'
+import Profile from '@/services/ProfileService'
 import SearchList from '@/components/Home/SearchList'
 export default {
   name: 'home',
@@ -67,13 +72,20 @@ export default {
     return {
       sort: '',
       ask: {
-        minAge: '',
-        maxAge: '',
-        minPop: '',
-        maxPop: ''
+        minAge: '18',
+        maxAge: '99',
+        minPop: '0',
+        maxPop: '100',
+        minDistance: '0',
+        maxDistance: '5000'
       },
-      array: []
+      array: [],
+      interests: [],
+      checkedInterests: []
     }
+  },
+  mounted () {
+    this.getInterestsList()
   },
   computed: {
     isAuth () {
@@ -82,9 +94,14 @@ export default {
   },
   methods: {
     search () {
-      Search.ask(this.$cookie.get('authToken'), this.ask, callback => {
+      Search.ask(this.$cookie.get('authToken'), this.ask, this.checkedInterests, callback => {
         this.array = callback
         this.Sort()
+      })
+    },
+    getInterestsList () {
+      Profile.getInterestsList(callback => {
+        this.interests = callback
       })
     },
     Sort () {
@@ -94,6 +111,9 @@ export default {
           break
         case 'Popularite':
           this.array.sort((a, b) => a.popularite - b.popularite)
+          break
+        case 'Localisation':
+          this.array.sort((a, b) => a.distance - b.distance)
           break
       }
     }
@@ -133,5 +153,12 @@ export default {
 }
 .searchElement:hover {
   background-color: rgba(227, 242, 253, 0.5);
+}
+.searchInterests {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
 }
 </style>
