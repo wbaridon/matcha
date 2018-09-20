@@ -15,51 +15,10 @@ async function checkInterests(interests, callback) {
 	callback(newfilter)
 }
 
-/* TAG COMPARE */
-/*
-function anUser (userResult) {
-	return Promise((resolve, reject) => {
-		userInterest.getUser(user.id, callback => {
-			resolve(callback)
-		})
-	})
-}
-async function tagCompare(userResult, user) {
-	return new Promise((resolve, reject) => {
-		count = 1
-	 	delete userResult[0]['id']
-		delete userResult[0]['id_account']
-		for (var i = 0; i < user.length; i++) {
-			//console.log(i+'='+userResult[0][i])
-			users = await anUser(user[i])
-			console.log(users)
-		}
-//		console.log(user)
-		resolve(count)
-	})
-}
-
-function getUserInterest(id) {
-	return new Promise((resolve, reject) => {
-		userInterest.getUser(id, userResult => {
-			resolve(userResult)
-		})
-	})
-}
-async function commonTagCount(id, user, callback) {
-	console.log('mon id:' +id)
-	userResult = await	getUserInterest(id)
-		for (var i = 0; i < user.length; i++) {
-			 test = await tagCompare(userResult, user[i])
-		}
-	//	console.log('Retour du await:' + test)
-		callback(user)
-
-}*/
-
 function getUserInterest(id) {
 	return new Promise((resolve, error) => {
 		userInterest.getUser(id, result => {
+			delete result[0]['id']
 			resolve(result)
 		})
 	})
@@ -76,22 +35,32 @@ function keepSelectedInterests(array) {
 	})
 }
 
-function getUsersInterest(user, myInterest) {
-	return new Promise((resolve, error) => {
-		newArray = [];
-	console.log('L:'+myInterest.length +' de '+ myInterest[0])
-//	console.log(user[1].myInterest[0])
-	/*result = Object.keys(user).map(function(key) {
-		return [key, user[key]];
+ function getCount(user, id, myInterest) {
+	 return new Promise((resolve, reject) => {
+		 count = 0;
+		for (var i = 0; i < myInterest.length; i++) {
+			if (user[myInterest[i]]) {
+				count++
+			}
+		}
+		user.tagCount = count;
+		resolve(user)
 	})
-	console.log(result[0])
-	console.log(result[0][id])*/
-	
-/*	myInterest.forEach(elem => {
+}
 
-	})
-	console.log(user[0].)*/
-		resolve(newArray)
+async function 	userLoop (user, myInterest, callback) {
+	newUser = []
+	for (var i = 0; i < user.length; i++) {
+		newUser[i] = await getCount(user[i], i, myInterest)
+	}
+	callback(newUser)
+}
+
+function getUsersInterest(user, myInterest) {
+	return new Promise((resolve, reject) => {
+		userLoop(user, myInterest, finalTab => {
+			resolve(finalTab)
+		})
 	})
 }
 
@@ -100,35 +69,24 @@ function commonTagCount(id, user, callback) {
 		 function(callback) {
 			getUserInterest(id)
 				.then(result => {
-					delete result[0]['id']
 					delete result[0]['id_account']
 					userResult = result[0];
 					callback(null, userResult)
 				})
 		},
-		async function (userResult, callback) {
-			myInterest = await keepSelectedInterests(userResult)
-			usersInterest = await getUsersInterest(user, myInterest)
-			console.log('Apres promesse ' + usersInterest)
-
-			callback(null, '1')
-		},
-		function(userResult, callback) {
-			console.log(userResult)
-				//await getUserInterest()
-			for (var i = 0; i < userResult.length; i++) {
-			//	if (Object.keys(userResult).find(key => userResult[key] === 1))
-			  console.log('enter')
-			}
-		/*	console.log(userResult)
-			console.log(sortArray)
-			getUsersInterest(user, test => {
-				console.log(test)*/
-					callback(null,userResult);
-		//	})
-		}
+		function (userResult, callback) {
+			keepSelectedInterests(userResult)
+				.then(newArray => getUsersInterest(user, newArray))
+				.then(finalTab => callback(null, finalTab))
+		//	myInterest = await keepSelectedInterests(userResult)
+		//	usersInterest = await getUsersInterest(user, myInterest)
+		//	callback(null, userInterest)
+	}/*,
+		function (userInterest, callback) {
+			callback(null, userInterest)
+		}*/
 	], function (err, result) {
-		console.log('Result:'+result)
+		callback(result)
 	})
 }
 

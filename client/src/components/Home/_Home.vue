@@ -10,6 +10,7 @@
       <option> Age </option>
       <option> Popularite</option>
       <option> Localisation</option>
+      <option> Tags en commun</option>
     </select>
     <div class="search">
       <h2> Vos filtres </h2>
@@ -114,6 +115,9 @@ export default {
           break
         case 'Localisation':
           this.array.sort((a, b) => a.distance - b.distance)
+          break
+        case 'Tags en commun':
+          this.array.sort((a, b) => a.tagCount - b.tagCount)
           break
       }
     }
