@@ -25,13 +25,17 @@ router.post('/ask', function (req, res) {
 		 sexualPref = user[0].sexuality
 		 gender = user[0].gender
 		 launchSearch(id, gender, sexualPref, req.body.ask, req.body.interests, result => {
+			 if (result.length > 0) {
 				localisation.getDistance(result, id, distance => {
 					interestsCheck.commonTagCount(id, distance, array => {
 							sexualCheck.convertUserData(array, convert => {
-							res.send(convert)
+								res.send(convert)
 						})
 					})
 				})
+			 } else {
+				res.send([])
+			}
 		 })
 	 })
 	})
