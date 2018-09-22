@@ -23,10 +23,13 @@ export default {
     return {
       message: '',
       messages: [],
+      recipient: '',
       socket: io('http://localhost:8081')
     }
   },
   mounted () {
+    // Gets recipient
+    this.recipient = this.$route.params.userId
     // Displays messages stored in database so far
     this.getMessages()
     this.socket.on('GET_MESSAGES', (history) => {
@@ -41,31 +44,16 @@ export default {
     getMessages () {
       this.socket.emit('GET_MESSAGES', {
         token: this.$cookie.get('authToken'),
+        recipient: this.recipient
       })
     },
     sendMessage () {
       this.socket.emit('SEND_MESSAGE', {
         token: this.$cookie.get('authToken'),
-        message: this.message
+        message: this.message,
+        recipient: this.recipient
       })
       this.message = ''
-    },
-    created()
-    {
-      let uri = window.location.href.split('?');
-      if (uri.length == 2)
-      {
-        let vars = uri[1].split('&');
-        let getVars = {};
-        let tmp = '';
-        vars.forEach(function(v){
-          tmp = v.split('=');
-          if(tmp.length == 2)
-          getVars[tmp[0]] = tmp[1];
-        });
-        console.log(getVars);
-        // do
-      }
     }
   }
 }
