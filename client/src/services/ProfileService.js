@@ -12,6 +12,11 @@ export default {
       callback(response.data)
     })
   },
+  fakeReport (id, callback) {
+    return Api().post('profile/fakeReport', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   updateBio (bio, id, callback) {
     return Api().post('profile/updateBio', {bio, id}, callback).then(function (response) {
       callback(response.data)
@@ -34,26 +39,6 @@ export default {
   },
   updatePwd (password, id, callback) {
     return Api().post('profile/updatePwd', {password, id}, callback).then(function (response) {
-      callback(response.data)
-    })
-  },
-  uploadPic (formData, callback) {
-    return Api().post('profile/uploadPic', formData, callback).then(function (response) {
-      callback(response.data)
-    })
-  },
-  getPic (id, callback) {
-    return Api().post('profile/getPic', {'id': id}, callback).then(function (response) {
-      callback(response.data)
-    })
-  },
-  deletePic (idAccount, id, callback) {
-    return Api().post('profile/deletePic', {'idAccount': idAccount, 'id': id}, callback).then(function (response) {
-      callback(response.data)
-    })
-  },
-  newProfilePic (idAccount, id, callback) {
-    return Api().post('profile/newProfilePic', {'idAccount': idAccount, 'id': id}, callback).then(function (response) {
       callback(response.data)
     })
   },

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var argon2 = require('argon2');
 var profile = require('../models/profile.js');
+var interests = require('../models/interests.js');
 var account = require('../models/account.js');
 var jwt = require('jsonwebtoken');
 var NodeGeocoder = require('node-geocoder')
@@ -53,6 +54,17 @@ router.post('/edit', function(req, res) {
   });
 })
 
+
+router.post('/fakeReport', function(req, res) {
+	profile.select(req.body.id, (err, result) => {
+			var nbr = result[0].fakeReport + 1
+			profile.updateUser(req.body.id, 'fakeReport',nbr, callback => {
+				res.send(callback)
+			})
+	})
+})
+
+
 router.post('/uploadPic', upload.single('userPic'), function(req, res) {
 	// On doit faire une verification du fichier avant de le sauvegarder format, taille et si on en a pas deja 5 pour user
 	if (!req.file) {
@@ -80,13 +92,13 @@ router.post('/getPic', function(req, res) {
 })
 
 router.post('/getInterests', function(req, res) {
-		profile.getInterests(req.body.id, callback => {
+		interests.getUser(req.body.id, callback => {
 				return res.send(callback[0])
 		})
 })
 
 router.post('/getInterestsList', function(req, res) {
-		profile.getInterestsList(callback => {
+		interests.getInterestsList(callback => {
 			array = callback.map(v => v.COLUMN_NAME)
 				return res.send(array)
 		})
@@ -97,16 +109,15 @@ router.post('/addInterest', function(req, res) {
 		id = req.body.id
 		console.log(req.body)
 		console.log(interest + ' et ' + id)
-		profile.getInterestsList(callback => {
+		interests.getInterestsList(callback => {
 			array = callback.map(v => v.COLUMN_NAME)
 			if (array.indexOf(interest) > -1) {
-				profile.addInterest(interest, id, callback => {
+				interests.update(interest, id, 1, callback => {
 					res.send(callback)
 				})
 			}	else {
-				console.log('entre')
-				profile.addNewInterest(interest, id, callback => {
-					callback = profile.addInterest(interest, id, result => {
+				interests.addNew(interest, id, callback => {
+					callback = interests.update(interest, id, 1, result => {
 						res.send(result)
 					})
 				})
@@ -117,7 +128,7 @@ router.post('/addInterest', function(req, res) {
 router.post('/deleteInterest', function(req, res) {
 		interest = req.body.data
 		id = req.body.id
-		profile.deleteInterest(interest, id, callback => {
+		interests.update(interest, id, 0, callback => {
 			res.send(callback)
 		})
 })
