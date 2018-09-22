@@ -35,7 +35,7 @@ const server = app.listen(process.env.PORT || 8081)
 const io = require('socket.io')(server)
 const chat = require('./models/chat.js')
 
-function getUsername(token, callback) {
+function getUsernameFromToken(token, callback) {
   const jwt = require('jsonwebtoken')
   jwt.verify(token, 'MatchaSecretKey', function(err, decoded) {
     if (err) {
@@ -83,7 +83,7 @@ io.on('connection', function(socket) {
 
   // CONNECTION EVENT
 
-  getUsername(getCookie('authToken', socket), function(r){
+  getUsernameFromToken(getCookie('authToken', socket), function(r){
     if (!userSockets[r]) {
       userSockets[r] = new Array(socket.id)
     }
@@ -97,8 +97,10 @@ io.on('connection', function(socket) {
   // LOADS MESSAGES FROM DATABASE
 
   socket.on('GET_MESSAGES', function(data){
+    if (data.recipient == null)
+      return
     // Shows history with 'anyone fo nao' from database
-    getUsername(data.token, login => {
+    getUsernameFromToken(data.token, login => {
       fillHistory(login, 'anyone fo nao', res => {
         var history = res
         io.emit('GET_MESSAGES', history)
@@ -109,12 +111,16 @@ io.on('connection', function(socket) {
   // ON SEND MESSAGE EVENT
 
   socket.on('SEND_MESSAGE', function(data) {
-    getUsername(data.token, login => {
+    if (data.recipient == null)
+      return
+    getUsernameFromToken(data.token, login => {
       data.login = login
+      chat.getUsernameFromId(data.recipient, login => {
+        data.recipient = login
+      })
+      chat.storeMessage(data)
     })
-    // TO DO: recipient depending on how the message is sent
-    data.recipient = 'anyone fo nao'
-    chat.storeMessage(data)
+
     // Pushes message to screen with sockets
     io.emit('MESSAGE', data)
   })
