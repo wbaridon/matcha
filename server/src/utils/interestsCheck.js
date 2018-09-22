@@ -1,5 +1,6 @@
 var userInterest = require('../models/interests.js');
 var waterfall = require('async-waterfall');
+var interests = require('../models/interests.js');
 
 function getFilter(filter, interest) {
 	return new Promise ((resolve, reject) => {
@@ -39,7 +40,7 @@ function keepSelectedInterests(array) {
 	 return new Promise((resolve, reject) => {
 		 count = 0;
 		for (var i = 0; i < myInterest.length; i++) {
-			if (user[myInterest[i]]) {
+			if (user.interest[myInterest[i]]) {
 				count++
 			}
 		}
@@ -48,6 +49,48 @@ function keepSelectedInterests(array) {
 	})
 }
 
+/* Lance la fonction pour recuperer liste des interets */
+
+function getInterestList(user) {
+	return new Promise(async (resolve, reject) => {
+		console.log('enter')
+	//	console.log(user)
+		for (var i = 0; i < user.length; i++) {
+					await getUserPromise(user[i].id, (ret, resolve) => {
+						user[i].interest = ret
+						resolve();
+					})
+		}
+		console.log('ici')
+		resolve(user);
+	})
+}
+
+/* Itere le call a la db pour chaque user */
+
+function getUserPromise(id, callback) {
+	return new Promise ((resolve, reject) => {
+		interests.getUser(id, ret => {
+			delete ret[0]['id_account']
+			delete ret[0]['id']
+			deleteInterest(ret[0], list => {
+				callback(list, resolve);
+			})
+		});
+	});
+}
+
+/* Delete les interets non pertinent */
+function deleteInterest(list, callback) {
+	return new Promise ((resolve, reject) => {
+		for (index in list) {
+			if (list[index] === 0)
+				delete list[index]
+		}
+		callback(list, resolve)
+	})
+}
+/* */
 async function 	userLoop (user, myInterest, callback) {
 	newUser = []
 	for (var i = 0; i < user.length; i++) {
@@ -58,6 +101,7 @@ async function 	userLoop (user, myInterest, callback) {
 
 function getUsersInterest(user, myInterest) {
 	return new Promise((resolve, reject) => {
+		console.log('arrive' + myInterest)
 		userLoop(user, myInterest, finalTab => {
 			resolve(finalTab)
 		})
@@ -76,20 +120,14 @@ function commonTagCount(id, user, callback) {
 		},
 		function (userResult, callback) {
 			keepSelectedInterests(userResult)
-				.then(newArray => getUsersInterest(user, newArray))
+				.then(newArray => getInterestList(user, newArray))
+				.then(user => getUsersInterest(user, newArray))
 				.then(finalTab => callback(null, finalTab))
-		//	myInterest = await keepSelectedInterests(userResult)
-		//	usersInterest = await getUsersInterest(user, myInterest)
-		//	callback(null, userInterest)
-	}/*,
-		function (userInterest, callback) {
-			callback(null, userInterest)
-		}*/
+		}
 	], function (err, result) {
 		callback(result)
 	})
 }
-
 
 module.exports.checkInterests = checkInterests;
 module.exports.commonTagCount = commonTagCount;

@@ -4,6 +4,7 @@
       v-for="element in paginatedData" :key="element.id" class="searchElement">
       <h2>{{element.firstname}} {{element.name}}</h2>
       {{element.age}} ans / Popularite: {{element.popularite}}<br> {{element.distance}}m
+      <span v-for="(data, index) in element.interest" :key="index">#{{index}} </span>
       <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
     </div>
     <button @click="prevPage" :disabled="pageNumber===0">Precedent</button>

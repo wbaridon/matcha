@@ -117,7 +117,7 @@ export default {
           this.array.sort((a, b) => a.distance - b.distance)
           break
         case 'Tags en commun':
-          this.array.sort((a, b) => a.tagCount - b.tagCount)
+          this.array.sort((a, b) => b.tagCount - a.tagCount)
           break
       }
     }
