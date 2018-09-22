@@ -4,7 +4,7 @@
       <h2>{{element.firstname}} {{element.name}}</h2><br>
       {{element.age}} ans, {{element.gender}} {{element.sexuality}} à {{element.distance}} m<br>
       Pourcentage de compatibilite (A confirmer) {{element.interests}}
-      Interet commun
+      Interet commun {{element.tagCount}}
       Score de popularite
       <span v-for="(data, index) in element.interest" :key="index">#{{index}} </span>
       <br>

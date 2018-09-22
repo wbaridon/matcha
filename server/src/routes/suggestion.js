@@ -9,6 +9,7 @@ var interests = require('../models/interests.js');
 var geolib = require('geolib');
 var localisation = require('../utils/localisation');
 var jwt = require('jsonwebtoken');
+var interestsCheck = require('../utils/interestsCheck');
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -35,52 +36,10 @@ router.post('/', function(req, res) {
 	})
 })
 
-function deleteInterest(list, callback) {
-	return new Promise ((resolve, reject) => {
-		for (index in list) {
-			if (list[index] === 0)
-				delete list[index]
-		}
-		callback(list, resolve)
-	})
-}
-
-function getUserPromise(id, callback) {
-	return new Promise ((resolve, reject) => {
-		interests.getUser(id, ret => {
-			delete ret[0]['id_account']
-			delete ret[0]['id']
-			deleteInterest(ret[0], list => {
-				callback(list, resolve);
-			})
-		});
-	});
-}
-
-var users = []
-
-function thisIsAPromise(user) {
-	return new Promise(async (resolve, reject) => {
-		for (var i = 0; i < user.length; i++) {
-					await getUserPromise(user[i].id, (ret, resolve) => {
-					//	delete ret[0]['id_account']
-					//	delete ret[0]['id']
-						user[i].interest = ret// Comment faire pour joindre les deux tableaux ?
-
-						resolve();
-					})
-		}
-		resolve(user);
-	})
-}
-
-async function getInterests(data, id, callback)
+function getInterests(data, id, callback)
 {
-
-	await thisIsAPromise(data).then((users) => {
-
-	 console.log(users[5])
-		callback(users)
+	interestsCheck.commonTagCount(id, data, array => {
+			callback(array)
 	})
 }
 
