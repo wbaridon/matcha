@@ -1,6 +1,6 @@
 <template>
   <div v-if="listData.length > 0">
-    <div v-for="element in paginatedData" :key="element.id" class="card">
+    <div v-if="viewFilter(element) && filterInterest(element)" v-for="element in paginatedData" :key="element.id" class="card">
       <h2>{{element.firstname}} {{element.name}}</h2><br>
       {{element.age}} ans, {{element.gender}} {{element.sexuality}} à {{element.distance}} m<br>
       Pourcentage de compatibilite (A confirmer) {{element.interests}}
@@ -24,6 +24,9 @@ export default {
   props: {
     listData: {
       type: Array,
+      required: true
+    },
+    filter: {
       required: true
     },
     size: {
@@ -55,6 +58,26 @@ export default {
     },
     prevPage () {
       this.pageNumber--
+    },
+    viewFilter (element) {
+      var count = 0
+      if (element.age >= this.filter.minAge) { count++ }
+      if (element.age <= this.filter.maxAge) { count++ }
+      if (element.distance >= this.filter.minDistance) { count++ }
+      if (element.distance <= this.filter.maxDistance) { count++ }
+      if (element.popularite >= this.filter.minPop) { count++ }
+      if (element.popularite <= this.filter.maxPop) { count++ }
+      if (count === 6) { return true }
+    },
+    filterInterest (element) {
+      var i = 0
+      var count = 0
+      for (i in this.filter.checkedInterests) {
+        if (element.interest[this.filter.checkedInterests[i]]) { count++ }
+      }
+      if (this.filter.checkedInterests.length === count) {
+        return true
+      }
     }
   }
 }
