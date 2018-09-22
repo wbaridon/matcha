@@ -35,10 +35,24 @@ router.post('/', function(req, res) {
 	})
 })
 
+function deleteInterest(list, callback) {
+	return new Promise ((resolve, reject) => {
+		for (index in list) {
+			if (list[index] === 0)
+				delete list[index]
+		}
+		callback(list, resolve)
+	})
+}
+
 function getUserPromise(id, callback) {
 	return new Promise ((resolve, reject) => {
 		interests.getUser(id, ret => {
-			callback(ret, resolve);
+			delete ret[0]['id_account']
+			delete ret[0]['id']
+			deleteInterest(ret[0], list => {
+				callback(list, resolve);
+			})
 		});
 	});
 }
@@ -49,19 +63,23 @@ function thisIsAPromise(user) {
 	return new Promise(async (resolve, reject) => {
 		for (var i = 0; i < user.length; i++) {
 					await getUserPromise(user[i].id, (ret, resolve) => {
-						users[i] = ret[0]// Comment faire pour joindre les deux tableaux ?
+					//	delete ret[0]['id_account']
+					//	delete ret[0]['id']
+						user[i].interest = ret// Comment faire pour joindre les deux tableaux ?
+
 						resolve();
 					})
 		}
-		resolve(users);
+		resolve(user);
 	})
 }
 
 async function getInterests(data, id, callback)
 {
+
 	await thisIsAPromise(data).then((users) => {
-	
-		console.log(users.copyWithin(2))
+
+	 console.log(users[5])
 		callback(users)
 	})
 }
