@@ -5,7 +5,9 @@
       {{element.age}} ans, {{element.gender}} {{element.sexuality}} à {{element.distance}} m<br>
       Pourcentage de compatibilite (A confirmer) {{element.interests}}
       Interet commun
-      Score de popularite<br>
+      Score de popularite
+      <span v-for="(data, index) in element.interest" :key="index">#{{index}} </span>
+      <br>
       <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
     </div>
     <button @click="prevPage" :disabled="pageNumber===0">Precedent</button>

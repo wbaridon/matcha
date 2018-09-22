@@ -32,7 +32,7 @@
 import Profile from '@/services/ProfileService'
 export default {
 
-  name: 'profile',
+  name: 'Profile',
   data () {
     return {
       feedback: '',
