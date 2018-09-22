@@ -31,7 +31,6 @@ export default {
     // Displays messages stored in database so far
     this.getMessages()
     this.socket.on('GET_MESSAGES', (history) => {
-      console.log(history)
       this.messages = history
     })
     // Displays messages received since connection
@@ -42,7 +41,7 @@ export default {
   methods: {
     getMessages () {
       this.socket.emit('GET_MESSAGES', {
-        token: this.$cookie.get('authToken')
+        token: this.$cookie.get('authToken'),
       })
     },
     sendMessage () {
@@ -54,6 +53,23 @@ export default {
     },
     close () {
       this.$emit('close')
+    },
+    created()
+    {
+      let uri = window.location.href.split('?');
+      if (uri.length == 2)
+      {
+        let vars = uri[1].split('&');
+        let getVars = {};
+        let tmp = '';
+        vars.forEach(function(v){
+          tmp = v.split('=');
+          if(tmp.length == 2)
+          getVars[tmp[0]] = tmp[1];
+        });
+        console.log(getVars);
+        // do
+      }
     }
   }
 }
