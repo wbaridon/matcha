@@ -5,9 +5,9 @@ import Home from '@/components/Home/_Home'
 import Register from '@/components/Register'
 import Reset from '@/components/Reset'
 import ConfirmReset from '@/components/ConfirmReset'
-import Profile from '@/components/Profile'
+import Profile from '@/components/Profile/Public/Profile'
 import Myprofile from '@/components/Profile/_UserProfile'
-import Suggestion from '@/components/Suggestion'
+import Suggestion from '@/components/Suggestion/_Suggestion'
 import Activate from '@/components/Activate'
 import Chat from '@/components/Chat'
 import { store } from '../_store/store'
@@ -51,7 +51,7 @@ const router = new Router({
         requiresAuth: true
       }
     },
-    { path: '/profile/:userId', name: 'profile', component: Profile },
+    { path: '/profile/:userId', name: 'Profile', component: Profile },
     { path: '*', redirect: '/' }
   ]
 })

@@ -1,10 +1,13 @@
 <template>
   <div v-if="listData.length > 0">
-    <div v-if="element.distance >= filter.minDistance && element.distance <= filter.maxDistance"
-      v-for="element in paginatedData" :key="element.id" class="searchElement">
-      <h2>{{element.firstname}} {{element.name}}</h2>
-      {{element.gender}} {{element.age}} ans / Popularite: {{element.popularite}}<br> {{element.distance}}m
+    <div v-if="viewFilter(element) && filterInterest(element)" v-for="element in paginatedData" :key="element.id" class="card">
+      <h2>{{element.firstname}} {{element.name}}</h2><br>
+      {{element.age}} ans, {{element.gender}} {{element.sexuality}} à {{element.distance}} m<br>
+      Pourcentage de compatibilite (A confirmer) {{element.interests}}
+      Interet commun {{element.tagCount}}
+      Score de popularite
       <span v-for="(data, index) in element.interest" :key="index">#{{index}} </span>
+      <br>
       <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
     </div>
     <button @click="prevPage" :disabled="pageNumber===0">Precedent</button>
@@ -17,19 +20,19 @@
 
 <script>
 export default {
-  name: 'searchList',
+  name: 'suggestionList',
   props: {
     listData: {
       type: Array,
+      required: true
+    },
+    filter: {
       required: true
     },
     size: {
       type: Number,
       required: false,
       default: 10
-    },
-    filter: {
-      required: true
     }
   },
   data () {
@@ -55,6 +58,26 @@ export default {
     },
     prevPage () {
       this.pageNumber--
+    },
+    viewFilter (element) {
+      var count = 0
+      if (element.age >= this.filter.minAge) { count++ }
+      if (element.age <= this.filter.maxAge) { count++ }
+      if (element.distance >= this.filter.minDistance) { count++ }
+      if (element.distance <= this.filter.maxDistance) { count++ }
+      if (element.popularite >= this.filter.minPop) { count++ }
+      if (element.popularite <= this.filter.maxPop) { count++ }
+      if (count === 6) { return true }
+    },
+    filterInterest (element) {
+      var i = 0
+      var count = 0
+      for (i in this.filter.checkedInterests) {
+        if (element.interest[this.filter.checkedInterests[i]]) { count++ }
+      }
+      if (this.filter.checkedInterests.length === count) {
+        return true
+      }
     }
   }
 }
