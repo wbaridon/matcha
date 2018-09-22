@@ -10,10 +10,49 @@
       <option> Localisation</option>
       <option> Tags en commun</option>
     </select>
-    | popularitem tags en commun
-      // Rajouter un filtre par intervale age, localisation, popularite et tags<br>
+    <div class="search">
+      <h2> Vos filtres </h2>
+      <div class="searchItem">
+          <div class="searchTitle">
+            <strong>Age</strong>
+          </div>
+          <div class="searchContent">
+            De: <input type="number" name="minAge" v-model="ask.minAge">
+            à: <input type="number" name="maxAge" v-model="ask.maxAge"> ans
+          </div>
+      </div>
+      <div class="searchItem">
+          <div class="searchTitle">
+            <strong>Score de popularite</strong>
+          </div>
+          <div class="searchContent">
+            De: <input type="number" name="minPop" v-model="ask.minPop">
+            à: <input type="number" name="maxPop" v-model="ask.maxPop">
+          </div>
+      </div>
+      <div class="searchItem">
+          <div class="searchTitle">
+            <strong>Localisation</strong>
+          </div>
+          <div class="searchContent">
+            De: <input type="number" name="minDistance" v-model="ask.minDistance">
+            à: <input type="number" name="maxDistance" v-model="ask.maxDistance"> mètres
+          </div>
+      </div>
+      <div class="searchItem">
+          <div class="searchTitle">
+            <strong>Interets</strong>
+          </div>
+          <div class="searchContent searchInterests">
+                <span v-for="index in interests" v-bind:key="index">
+                  <input type="checkbox" v-bind:value="index" v-model="ask.checkedInterests">{{index}}
+                </span>
+          </div>
+      </div>
+    </div>
+    <br>
       // Bloquer la vue de la page si profil etendue non remplis
-     <SuggestionList :listData="array"></SuggestionList>
+     <SuggestionList :listData="array" :filter="ask"></SuggestionList>
   </div>
   <div v-else>Merci de vous connecter</div>
 </template>
@@ -21,6 +60,7 @@
 <script>
 import Suggestion from '@/services/Suggestion/SuggestionService'
 import SuggestionList from '@/components/Suggestion/SuggestionList'
+import Profile from '@/services/ProfileService'
 export default {
   name: 'suggestion',
   components: {
@@ -28,12 +68,23 @@ export default {
   },
   data () {
     return {
+      sort: '',
+      ask: {
+        minAge: '18',
+        maxAge: '99',
+        minPop: '0',
+        maxPop: '100',
+        minDistance: '0',
+        maxDistance: '5000',
+        checkedInterests: []
+      },
       array: [],
-      sort: ''
+      interests: []
     }
   },
   mounted () {
     this.getAll()
+    this.getInterestsList()
   },
   computed: {
     isAuth () {
@@ -45,6 +96,11 @@ export default {
       var token = this.$cookie.get('authToken')
       Suggestion.getAll(token, callback => {
         this.array = callback.data
+      })
+    },
+    getInterestsList () {
+      Profile.getInterestsList(callback => {
+        this.interests = callback
       })
     },
     Sort () {

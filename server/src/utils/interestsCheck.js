@@ -49,24 +49,18 @@ function keepSelectedInterests(array) {
 	})
 }
 
-/* Lance la fonction pour recuperer liste des interets */
-
 function getInterestList(user) {
 	return new Promise(async (resolve, reject) => {
-		console.log('enter')
-	//	console.log(user)
 		for (var i = 0; i < user.length; i++) {
 					await getUserPromise(user[i].id, (ret, resolve) => {
 						user[i].interest = ret
 						resolve();
 					})
 		}
-		console.log('ici')
 		resolve(user);
 	})
 }
 
-/* Itere le call a la db pour chaque user */
 
 function getUserPromise(id, callback) {
 	return new Promise ((resolve, reject) => {
@@ -101,7 +95,6 @@ async function 	userLoop (user, myInterest, callback) {
 
 function getUsersInterest(user, myInterest) {
 	return new Promise((resolve, reject) => {
-		console.log('arrive' + myInterest)
 		userLoop(user, myInterest, finalTab => {
 			resolve(finalTab)
 		})

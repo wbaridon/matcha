@@ -6,6 +6,8 @@ var profile = require('../models/profile.js');
 var jwt = require('jsonwebtoken')
 var localisation = require('../utils/localisation');
 var interestsCheck = require('../utils/interestsCheck');
+var sexualCheck = require('../utils/sexualCheck');
+
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -23,11 +25,17 @@ router.post('/ask', function (req, res) {
 		 sexualPref = user[0].sexuality
 		 gender = user[0].gender
 		 launchSearch(id, gender, sexualPref, req.body.ask, req.body.interests, result => {
+			 if (result.length > 0) {
 				localisation.getDistance(result, id, distance => {
 					interestsCheck.commonTagCount(id, distance, array => {
-							res.send(array)
+							sexualCheck.convertUserData(array, convert => {
+								res.send(convert)
+						})
 					})
 				})
+			 } else {
+				res.send([])
+			}
 		 })
 	 })
 	})

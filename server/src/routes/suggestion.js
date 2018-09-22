@@ -10,6 +10,7 @@ var geolib = require('geolib');
 var localisation = require('../utils/localisation');
 var jwt = require('jsonwebtoken');
 var interestsCheck = require('../utils/interestsCheck');
+var sexualCheck = require('../utils/sexualCheck');
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -24,7 +25,7 @@ router.post('/', function(req, res) {
 			sexualPref = user[0].sexuality
 			gender = user[0].gender
 			suggestionList.showList(id, gender, sexualPref, result => {
-				convertUserData(result, user => {
+				sexualCheck.convertUserData(result, user => {
 					localisation.getDistance(user, id, finalUser => {
 								getInterests(finalUser, id, callback => {
 										res.send(callback)
@@ -41,38 +42,6 @@ function getInterests(data, id, callback)
 	interestsCheck.commonTagCount(id, data, array => {
 			callback(array)
 	})
-}
-
-function convertUserData(user, callback) {
-  // synchrone ou asynchrone ?
-	var counter = user.length;
-
-	user.forEach(function (item, index, array) {
-		switch (item.gender) {
-	    case 0:
-	      item.gender = 'Homme';
-	      break;
-	    case 1:
-	      item.gender = "Femme";
-	      break;
-	  }
-		switch (item.sexuality) {
-	    case 0:
-	      item.sexuality = 'Hetero';
-	      break;
-	    case 1:
-	      item.sexuality = 'Homo';
-	      break;
-	    case 2:
-	      item.sexuality = 'Bisexuel';
-	      break;
-	  }
-		counter--
-		if (counter === 0) {
-			callback(array)
-		}
-	})
-
 }
 
 module.exports = router;

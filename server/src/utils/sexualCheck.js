@@ -48,5 +48,36 @@ function	foodAnalysis(preference, ret) {
 	}
 }
 
+function convertUserData(user, callback) {
+	var counter = user.length;
+	user.forEach(function (item, index, array) {
+		switch (item.gender) {
+	    case 0:
+	      item.gender = 'Homme';
+	      break;
+	    case 1:
+	      item.gender = "Femme";
+	      break;
+	  }
+		switch (item.sexuality) {
+	    case 0:
+	      item.sexuality = 'Hetero';
+	      break;
+	    case 1:
+	      item.sexuality = 'Homo';
+	      break;
+	    case 2:
+	      item.sexuality = 'Bisexuel';
+	      break;
+	  }
+		counter--
+		if (counter === 0) {
+			callback(array)
+		}
+	})
+
+}
+
 module.exports.analysis = sexualAnalysis;
 module.exports.sqlSentence = foodAnalysis;
+module.exports.convertUserData = convertUserData;

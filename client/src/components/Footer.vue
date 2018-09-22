@@ -1,13 +1,21 @@
 <template>
   <footer>
+    <Chat v-if="showChat"  @close="showChat = false"></Chat>
+    <div id="showChat" @click="showChat = true" v-if="!showChat">Discussion instantanée (0)</div>
     <p>wbaridon © 2018</p>
   </footer>
 </template>
 
 <script>
+import Chat from '@/components/Chat'
 export default {
+  components: {
+    'Chat': Chat
+  },
   data () {
-    return {}
+    return {
+      showChat: ''
+    }
   }
 }
 </script>
@@ -20,5 +28,25 @@ export default {
     align-items: center;
     background-color: #24292e;
     width: 100%;
+    position: relative;
+  }
+  #chat {
+    position: absolute;
+    background-color: white;
+    border: solid black 1px;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+  }
+  #showChat {
+    position: absolute;
+    bottom: 0;
+    right: 25px;
+    background-color: lightgrey;
+    color: black;
+    border: solid 1px black;
+    box-shadow: 5px black;
+    padding: 5px;
+
   }
 </style>

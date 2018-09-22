@@ -3,7 +3,7 @@
     <div v-if="element.distance >= filter.minDistance && element.distance <= filter.maxDistance"
       v-for="element in paginatedData" :key="element.id" class="searchElement">
       <h2>{{element.firstname}} {{element.name}}</h2>
-      {{element.age}} ans / Popularite: {{element.popularite}}<br> {{element.distance}}m
+      {{element.gender}} {{element.age}} ans / Popularite: {{element.popularite}}<br> {{element.distance}}m
       <span v-for="(data, index) in element.interest" :key="index">#{{index}} </span>
       <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
     </div>
