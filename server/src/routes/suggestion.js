@@ -11,10 +11,18 @@ var localisation = require('../utils/localisation');
 var jwt = require('jsonwebtoken');
 var interestsCheck = require('../utils/interestsCheck');
 var sexualCheck = require('../utils/sexualCheck');
+var helpers = require('../utils/helpers.js');
 
 router.get('/', (req, res) => {
-	res.send('The server is working...'
-)
+		res.send('The server is working...')
+})
+
+router.post('/getUser', (req, res) => {
+	helpers.getId(req.body.token, callback => {
+		profile.select(callback, (err, user) => {
+			res.send(user[0]);
+		})
+	})
 })
 
 router.post('/', function(req, res) {

@@ -1,7 +1,7 @@
 <template>
   <div v-if="isAuth" id="myprofile">
     <h1>Mon profil</h1>
-    <router-link :to="'/profile/' + user.id">Voir mon profil public</router-link><br><br>
+    <router-link :to="'/profile/' + user.id" class="link">Voir mon profil public</router-link><br><br>
 
           <h2> {{user.firstname}} {{user.name}} </h2>
     <div id="topProfile">
@@ -270,5 +270,7 @@ export default {
     flex-wrap: wrap;
     justify-content: center;
   }
-
+  .link {
+    color: black;
+  }
 </style>

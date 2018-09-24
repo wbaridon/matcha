@@ -2,8 +2,8 @@
   <header>
     <div id="branding">
       <div id="siteTitle">
-        <i class="far fa-kiss-wink-heart"></i>
-        <a href="/">Matcha</a>
+        <a href="/"><i class="far fa-kiss-wink-heart"></i>
+        Matcha</a>
       </div>
     </div>
     <nav v-if="!isAuth">
