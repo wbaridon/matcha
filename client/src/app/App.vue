@@ -11,14 +11,14 @@
     </head>
     <body>
         <div id="page">
-        <app-header></app-header>
-        <div class='cover'>
-            <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
-        </div>
-        <div class="content">
-        <router-view></router-view>
-        </div>
-        <app-footer></app-footer>
+          <app-header></app-header>
+          <div class='cover'>
+              <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
+          </div>
+          <div class="content">
+          <router-view></router-view>
+          </div>
+          <app-footer></app-footer>
       </div>
     </body>
   </html>
@@ -54,14 +54,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-.content {
-  flex-grow: 1;
-}
-</style>
