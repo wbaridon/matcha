@@ -16,7 +16,7 @@
               <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
           </div>
           <div class="content">
-          <router-view></router-view>
+              <router-view></router-view>
           </div>
           <app-footer></app-footer>
       </div>
