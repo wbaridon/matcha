@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Chat from '@/components/Chat'
+import Chat from '@/components/Chat/FooterChat'
 export default {
   components: {
     'Chat': Chat
@@ -30,7 +30,7 @@ export default {
     width: 100%;
     position: relative;
   }
-  #chat {
+  #Footerchat {
     position: absolute;
     background-color: white;
     border: solid black 1px;

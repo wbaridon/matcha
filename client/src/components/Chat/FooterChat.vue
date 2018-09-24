@@ -1,6 +1,7 @@
 <template>
-  <div id="chat">
+  <div id="Footerchat">
     <!-- Sent messages output -->
+    <div @click="close" id="topChat">Close X</div>
     <div class="messages" v-for="msg in messages" :key="msg.id">
       <p><span>{{ msg.login }}: </span>{{ msg.message }}</p>
     </div>
@@ -12,7 +13,7 @@
 </template>
 
 <script>
-// import Chat from '@/services/ChatService' --> Inutile pour le moment non ?
+// import Chat from '@/services/ChatService'
 import io from 'socket.io-client'
 export default {
   name: 'chat',
@@ -47,11 +48,19 @@ export default {
         message: this.message
       })
       this.message = ''
+    },
+    close () {
+      this.$emit('close')
     }
   }
 }
 </script>
 
 <style>
-
+  #topChat {
+    background-color: lightgrey;
+    padding: 5px;
+    color: black;
+    text-align: right;
+  }
 </style>
