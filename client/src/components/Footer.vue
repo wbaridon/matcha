@@ -1,7 +1,7 @@
 <template>
   <footer>
     <Chat v-if="showChat"  @close="showChat = false"></Chat>
-    <div id="showChat" @click="showChat = true" v-if="!showChat">Discussion instantanée (0)</div>
+    <div id="showChat" @click="showChat = true" v-if="!showChat && isAuth">Discussion instantanée (0)</div>
     <p>wbaridon © 2018</p>
   </footer>
 </template>
@@ -16,6 +16,11 @@ export default {
     return {
       showChat: ''
     }
+  },
+  computed: {
+    isAuth () {
+      return this.$store.state.isAuth
+    }
   }
 }
 </script>
@@ -28,7 +33,8 @@ export default {
     align-items: center;
     background-color: #24292e;
     width: 100%;
-    position: relative;
+    position: absolute;
+    bottom: 0;
   }
   #Footerchat {
     position: absolute;
