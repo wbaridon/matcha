@@ -1,7 +1,10 @@
 <template>
   <header>
     <div id="branding">
-      <div id="siteTitle"><a href="/">Matcha</a></div>
+      <div id="siteTitle">
+        <i class="far fa-kiss-wink-heart"></i>
+        <a href="/">Matcha</a>
+      </div>
     </div>
     <nav v-if="!isAuth">
       <div class="element">

@@ -7,7 +7,7 @@
       <link rel="stylesheet" media="all and (max-width: 775px)" href="/static/css/mobile.css" type="text/css" />
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
             integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-      <title>Titre non gere</title>
+      <title>Matcha</title>
     </head>
     <body>
         <div id="page">
