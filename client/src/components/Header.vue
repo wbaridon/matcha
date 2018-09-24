@@ -30,10 +30,11 @@
     </nav>
     <nav v-else>
         <div class="element">
-      <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
-      <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
-    </div>
-      <button @click="logOut()">Se deconnecter</button>
+          <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
+          <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
+          <i class="far fa-bell fa-lg"></i>
+          <i @click="logOut()" class="fas fa-sign-out-alt fa-lg"></i>
+        </div>
     </nav>
   </header>
 </template>
