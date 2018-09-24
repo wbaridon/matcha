@@ -33,8 +33,7 @@ export default {
     align-items: center;
     background-color: #24292e;
     width: 100%;
-    position: absolute;
-    bottom: 0;
+    position: relative;
   }
   #Footerchat {
     position: absolute;
