@@ -78,3 +78,9 @@ a:hover {
 .form-inline {
   display: inline;
 }
+i:hover {
+  opacity: 0.8;
+}
+i {
+  padding: 5px;
+}
