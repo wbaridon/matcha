@@ -13,35 +13,31 @@
 
 <script>
 // import Chat from '@/services/ChatService' --> Inutile pour le moment non ?
-import io from 'socket.io-client'
 export default {
   name: 'chat',
   data () {
     return {
       message: '',
-      messages: [],
-      socket: io('http://localhost:8081')
+      messages: []
     }
   },
   mounted () {
     // Displays messages stored in database so far
     this.getMessages()
-    this.socket.on('GET_MESSAGES', (history) => {
+    this.$socket.on('GET_MESSAGES', (history) => {
       this.messages = history
     })
     // Displays messages received since connection
-    this.socket.on('MESSAGE', (data) => {
+    this.$socket.on('MESSAGE', (data) => {
       this.messages.push(data)
     })
   },
   methods: {
     getMessages () {
-      this.socket.emit('GET_MESSAGES', {
-        token: this.$cookie.get('authToken'),
-      })
+      this.$socket.emit('GET_MESSAGES', { token: this.$cookie.get('authToken') })
     },
     sendMessage () {
-      this.socket.emit('SEND_MESSAGE', {
+      this.$socket.emit('SEND_MESSAGE', {
         token: this.$cookie.get('authToken'),
         message: this.message
       })

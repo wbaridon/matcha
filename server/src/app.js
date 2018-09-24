@@ -122,6 +122,13 @@ io.on('connection', function(socket) {
     io.emit('MESSAGE', data)
   })
 
+  // ON VISIT A NEW PROFILE
+  socket.on('PROFILE_VISIT', function(data) {
+    getUsername(data.token, login => {
+      data.login = login
+      console.log('ici') // A faire
+    })
+  })
   // WHEN SOCKET DISCONNECTS
 
   socket.on('disconnect', function () {
