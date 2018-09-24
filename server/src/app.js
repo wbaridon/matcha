@@ -4,6 +4,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const cookieParser = require('cookie-parser')
 const app = express()
+const helpers = require('./utils/helpers.js');
 
 app.use(morgan('tiny'))
 app.use(bodyParser.json())
@@ -37,17 +38,6 @@ const io = require('socket.io')(server, {
  pingTimeout: 5000,
 })
 const chat = require('./models/chat.js')
-
-function getUsername(token, callback) {
-  const jwt = require('jsonwebtoken')
-  jwt.verify(token, 'MatchaSecretKey', function(err, decoded) {
-    if (err) {
-      throw(err);
-    } else {
-      callback(decoded.login);
-    }
-  })
-}
 
 function fillHistory(login, recipient, callback) {
   chat.getMessages(login, recipient, (err, result) => {
@@ -83,25 +73,26 @@ function getCookie(cname, socket) {
 var userSockets = new Array()
 
 io.on('connection', function(socket) {
-
   // CONNECTION EVENT
+  console.log('Cookie: '+getCookie('authToken', socket))
 
-  getUsername(getCookie('authToken', socket), function(r){
-    if (!userSockets[r]) {
-      userSockets[r] = new Array(socket.id)
-    }
-    else
-      userSockets[r].push(socket.id)
-    socket.myUsername = r
-  });
-  console.log('\n' + socket.myUsername + ' is: ' + socket.id + '\n')
-  console.log(userSockets)
-
+  if (getCookie('authToken', socket)) { // Check si on a un cookie sinon cela bug
+    helpers.getUsername(getCookie('authToken', socket), function(r){
+      if (!userSockets[r]) {
+        userSockets[r] = new Array(socket.id)
+      }
+      else
+        userSockets[r].push(socket.id)
+      socket.myUsername = r
+    });
+    console.log('\n' + socket.myUsername + ' is: ' + socket.id + '\n')
+    console.log(userSockets)
+  }
   // LOADS MESSAGES FROM DATABASE
 
   socket.on('GET_MESSAGES', function(data){
     // Shows history with 'anyone fo nao' from database
-    getUsername(data.token, login => {
+    helpers.getUsername(data.token, login => {
       fillHistory(login, 'anyone fo nao', res => {
         var history = res
         io.emit('GET_MESSAGES', history)
@@ -112,7 +103,7 @@ io.on('connection', function(socket) {
   // ON SEND MESSAGE EVENT
 
   socket.on('SEND_MESSAGE', function(data) {
-    getUsername(data.token, login => {
+    helpers.getUsername(data.token, login => {
       data.login = login
     })
     // TO DO: recipient depending on how the message is sent
@@ -122,15 +113,25 @@ io.on('connection', function(socket) {
     io.emit('MESSAGE', data)
   })
 
+  // ON VISIT A NEW PROFILE
+  socket.on('PROFILE_VISIT', function(data) {
+    helpers.getUsername(data.token, login => {
+      data.login = login
+      console.log('ici') // A faire
+    })
+  })
   // WHEN SOCKET DISCONNECTS
 
   socket.on('disconnect', function () {
-    console.log('User disconnected')
-    let userIDs = userSockets[socket.myUsername]
-    if (userIDs.length >= 1) {
-      for (var i = userIDs.length - 1; i >= 0; i--) {
-        if (userIDs[i] === socket.id) {
-          userIDs.splice(i, 1)
+
+    if (getCookie('authToken', socket)) { // Verifier si cela fonctionne bien comme cela
+      console.log('User disconnected')
+      let userIDs = userSockets[socket.myUsername]
+      if (userIDs.length >= 1) {
+        for (var i = userIDs.length - 1; i >= 0; i--) {
+          if (userIDs[i] === socket.id) {
+            userIDs.splice(i, 1)
+          }
         }
       }
     }

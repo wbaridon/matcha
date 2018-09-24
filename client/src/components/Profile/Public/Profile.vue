@@ -8,17 +8,7 @@
     <h3>QUI SUIS JE? </h3>
     {{user.bio}}
     <h3>VOS PASSIONS</h3>
-    <div id='interests'>
-      <div v-for="interest in interests" v-bind:key="interest">
-        <span class='sticker'>#{{interest}} &times;</span>
-      </div>
-      <div>
-        <form class="" action="index.html" method="post">
-          <input type="text" name="interest" value="">
-          <input type="submit" name="submit" value="Ajouter">
-        </form>
-      </div>
-    </div>
+
     <button @click="blockUser()"> Bloquer l'utilisateur </button>
     {{feedback}}
     <button @click.once="fakeProfile()"> Signaler ce profil comme un fake </button>
@@ -50,19 +40,20 @@ export default {
       like: {
         status: '', // Si oui ou non on a liker l'user
         other: '' // Si l'autre nous a liker mettre yes
-      },
-      result: [ ],
-      // Quand il y aura la sauvegarde enlever les valeurs par defaut
-      interests: ['php', 'html'], // Liste possible sous forme de tags
-      pictures: '' // 5 images max dont une pour le profil
-
+      }
     }
   },
   mounted () {
+    this.newVisit()
     this.user.id = this.$route.params.userId
     this.getProfile()
   },
   methods: {
+    newVisit () {
+      this.$socket.emit('PROFILE_VISIT', {
+        token: this.$cookie.get('authToken')
+      })
+    },
     getProfile () {
       Profile.viewProfile(this.user, callback => {
         this.user = callback
