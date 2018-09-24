@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <Chat v-if="showChat"  @close="showChat = false"></Chat>
+    <Chat v-if="showChat && isAuth"  @close="showChat = false"></Chat>
     <div id="showChat" @click="showChat = true" v-if="!showChat && isAuth">Discussion instantanée (0)</div>
     <p>wbaridon © 2018</p>
   </footer>
