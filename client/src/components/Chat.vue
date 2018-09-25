@@ -18,10 +18,14 @@ export default {
   data () {
     return {
       message: '',
-      messages: []
+      messages: [],
+      recipient: '',
+      // socket: io('http://localhost:8081')
     }
   },
   mounted () {
+    // Gets recipient
+    this.recipient = this.$route.params.userId
     // Displays messages stored in database so far
     this.getMessages()
     this.$socket.on('GET_MESSAGES', (history) => {
@@ -34,12 +38,16 @@ export default {
   },
   methods: {
     getMessages () {
-      this.$socket.emit('GET_MESSAGES', { token: this.$cookie.get('authToken') })
+      this.$socket.emit('GET_MESSAGES', { 
+        token: this.$cookie.get('authToken'),
+        recipient:this.recipient
+      })
     },
     sendMessage () {
       this.$socket.emit('SEND_MESSAGE', {
         token: this.$cookie.get('authToken'),
-        message: this.message
+        message: this.message,
+        recipient: this.recipient
       })
       this.message = ''
     }

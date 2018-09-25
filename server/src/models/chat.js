@@ -20,3 +20,10 @@ module.exports.getMessages = function (login, recipient, callback) {
       [login, recipient, login, recipient],
       callback);
 }
+
+// Gets login from ID
+module.exports.getUsernameFromId = function (id, callback) {
+  db.query('SELECT * FROM accounts WHERE id = ?',
+    id,
+		callback);
+}

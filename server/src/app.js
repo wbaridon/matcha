@@ -47,6 +47,14 @@ function fillHistory(login, recipient, callback) {
   });
 }
 
+function getUsernameFromId(userId, callback) {
+  chat.getUsernameFromId(userId, (err, result) => {
+    if (result.length > 0) {
+      callback(result);
+    }
+  });
+}
+
 function getCookie(cname, socket) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(socket.handshake.headers.cookie);
@@ -106,11 +114,12 @@ io.on('connection', function(socket) {
     helpers.getUsername(data.token, login => {
       data.login = login
     })
-    // TO DO: recipient depending on how the message is sent
-    data.recipient = 'anyone fo nao'
-    chat.storeMessage(data)
+    getUsernameFromId(data.recipient, result => {
+      data.recipient = result[0].login
+      chat.storeMessage(data)
+    })
     // Pushes message to screen with sockets
-    io.emit('MESSAGE', data)
+     io.to(userSockets[data.recipient][0]).emit('MESSAGE', data.message);
   })
 
   // ON VISIT A NEW PROFILE
