@@ -247,7 +247,8 @@ function fillProfile(userId, callback) {
           bio: result[0].bio,
           email: '',
 					zipcode: result[0].zipcode,
-					city: result[0].city
+					city: result[0].city,
+					isFill: result[0].isFill
         }
       callback(user)
     }

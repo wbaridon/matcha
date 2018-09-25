@@ -1,6 +1,7 @@
 <template>
-  <div id="chat">
+  <div id="Footerchat">
     <!-- Sent messages output -->
+    <div @click="close" id="topChat">Close X</div>
     <div class="messages" v-for="msg in messages" :key="msg.id">
       <p><span>{{ msg.login }}: </span>{{ msg.message }}</p>
     </div>
@@ -12,49 +13,54 @@
 </template>
 
 <script>
-// import Chat from '@/services/ChatService' --> Inutile pour le moment non ?
+// import Chat from '@/services/ChatService'
+import io from 'socket.io-client'
 export default {
   name: 'chat',
   data () {
     return {
       message: '',
       messages: [],
-      recipient: '',
-      // socket: io('http://localhost:8081')
+      socket: io('http://localhost:8081')
     }
   },
   mounted () {
-    // Gets recipient
-    this.recipient = this.$route.params.userId
     // Displays messages stored in database so far
     this.getMessages()
-    this.$socket.on('GET_MESSAGES', (history) => {
+    this.socket.on('GET_MESSAGES', (history) => {
+      console.log(history)
       this.messages = history
     })
     // Displays messages received since connection
-    this.$socket.on('MESSAGE', (data) => {
+    this.socket.on('MESSAGE', (data) => {
       this.messages.push(data)
     })
   },
   methods: {
     getMessages () {
-      this.$socket.emit('GET_MESSAGES', { 
-        token: this.$cookie.get('authToken'),
-        recipient:this.recipient
+      this.socket.emit('GET_MESSAGES', {
+        token: this.$cookie.get('authToken')
       })
     },
     sendMessage () {
-      this.$socket.emit('SEND_MESSAGE', {
+      this.socket.emit('SEND_MESSAGE', {
         token: this.$cookie.get('authToken'),
-        message: this.message,
-        recipient: this.recipient
+        message: this.message
       })
       this.message = ''
+    },
+    close () {
+      this.$emit('close')
     }
   }
 }
 </script>
 
 <style>
-
+  #topChat {
+    background-color: lightgrey;
+    padding: 5px;
+    color: black;
+    text-align: right;
+  }
 </style>

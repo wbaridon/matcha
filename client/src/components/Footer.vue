@@ -1,13 +1,13 @@
 <template>
   <footer>
-    <Chat v-if="showChat"  @close="showChat = false"></Chat>
-    <div id="showChat" @click="showChat = true" v-if="!showChat">Discussion instantanée (0)</div>
+    <Chat v-if="showChat && isAuth"  @close="showChat = false"></Chat>
+    <div id="showChat" @click="showChat = true" v-if="!showChat && isAuth">Discussion instantanée (0)</div>
     <p>wbaridon © 2018</p>
   </footer>
 </template>
 
 <script>
-import Chat from '@/components/Chat'
+import Chat from '@/components/Chat/FooterChat'
 export default {
   components: {
     'Chat': Chat
@@ -15,6 +15,11 @@ export default {
   data () {
     return {
       showChat: ''
+    }
+  },
+  computed: {
+    isAuth () {
+      return this.$store.state.isAuth
     }
   }
 }
@@ -30,7 +35,7 @@ export default {
     width: 100%;
     position: relative;
   }
-  #chat {
+  #Footerchat {
     position: absolute;
     background-color: white;
     border: solid black 1px;

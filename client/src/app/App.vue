@@ -4,20 +4,22 @@
     <head>
       <meta charset="utf-8">
       <link rel="stylesheet" href="/static/css/basic.css" type="text/css" />
-      <link rel="stylesheet" media="all and (max-width: 650px)" href="/static/css/mobile.css" type="text/css" />
+      <link rel="stylesheet" media="all and (max-width: 775px)" href="/static/css/mobile.css" type="text/css" />
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
             integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-      <title>Titre non gere</title>
+      <title>Matcha</title>
     </head>
     <body>
-        <app-header></app-header>
-        <div class='cover'>
-            <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
-        </div>
-        <div class="content">
-        <router-view></router-view>
-        </div>
-        <app-footer></app-footer>
+        <div id="page">
+          <app-header></app-header>
+          <div class='cover'>
+              <h2>Soyez sûr de rencontrer <br>la bonne personne !</h2>
+          </div>
+          <div class="content">
+              <router-view></router-view>
+          </div>
+          <app-footer></app-footer>
+      </div>
     </body>
   </html>
 </template>

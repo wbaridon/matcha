@@ -1,7 +1,7 @@
 <template>
   <div v-if="isAuth" id="myprofile">
     <h1>Mon profil</h1>
-    <router-link :to="'/profile/' + user.id">Voir mon profil public</router-link><br><br>
+    <router-link :to="'/profile/' + user.id" class="link">Voir mon profil public</router-link><br><br>
 
           <h2> {{user.firstname}} {{user.name}} </h2>
     <div id="topProfile">
@@ -170,6 +170,7 @@ export default {
           this.user = callback
           this.getPic(this.user.id)
           this.getInterests(this.user.id)
+          this.isFill(this.user.id)
         })
       }
     },
@@ -199,6 +200,14 @@ export default {
         this.update.perso = false
         this.update.pwd = false
       })
+    },
+    isFill () {
+      if (this.user.isFill === 0) {
+        if (this.images.count > 0 && this.interests.length > 0 &&
+        this.user.age > 0 && this.user.city && this.user.bio) {
+          // Mettre if fill a 1
+        }
+      }
     },
     locate () {
       /* Fonctionne que si geolocalisation active voir pour avec ip */
@@ -270,5 +279,7 @@ export default {
     flex-wrap: wrap;
     justify-content: center;
   }
-
+  .link {
+    color: black;
+  }
 </style>

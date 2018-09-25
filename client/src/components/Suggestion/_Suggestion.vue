@@ -1,58 +1,60 @@
 <template>
   <div v-if="isAuth" id="suggestion">
-    <h1>Liste suggestion</h1>
-    <strong> Trier les resultats par: </strong>
-    <select v-model="sort" @change="Sort">
-      <option disabled value="">Choisir un filtre</option>
-      <option> Age </option>
-      <option> Popularite +</option>
-      <option> Popularite -</option>
-      <option> Localisation</option>
-      <option> Tags en commun</option>
-    </select>
-    <div class="search">
-      <h2> Vos filtres </h2>
-      <div class="searchItem">
-          <div class="searchTitle">
-            <strong>Age</strong>
+      <div v-if="!user.isFill">Merci de remplir votre profil pour pouvoir avoir accès a cette page</div>
+      <div v-if="user.isFill">
+        <h1>Liste suggestion</h1>
+        <strong> Trier les resultats par: </strong>
+        <select v-model="sort" @change="Sort">
+          <option disabled value="">Choisir un filtre</option>
+          <option> Age </option>
+          <option> Popularite +</option>
+          <option> Popularite -</option>
+          <option> Localisation</option>
+          <option> Tags en commun</option>
+        </select>
+        <div class="search">
+          <h2> Vos filtres </h2>
+          <div class="searchItem">
+              <div class="searchTitle">
+                <strong>Age</strong>
+              </div>
+              <div class="searchContent">
+                De: <input type="number" name="minAge" v-model="ask.minAge">
+                à: <input type="number" name="maxAge" v-model="ask.maxAge"> ans
+              </div>
           </div>
-          <div class="searchContent">
-            De: <input type="number" name="minAge" v-model="ask.minAge">
-            à: <input type="number" name="maxAge" v-model="ask.maxAge"> ans
+          <div class="searchItem">
+              <div class="searchTitle">
+                <strong>Score de popularite</strong>
+              </div>
+              <div class="searchContent">
+                De: <input type="number" name="minPop" v-model="ask.minPop">
+                à: <input type="number" name="maxPop" v-model="ask.maxPop">
+              </div>
           </div>
+          <div class="searchItem">
+              <div class="searchTitle">
+                <strong>Localisation</strong>
+              </div>
+              <div class="searchContent">
+                De: <input type="number" name="minDistance" v-model="ask.minDistance">
+                à: <input type="number" name="maxDistance" v-model="ask.maxDistance"> mètres
+              </div>
+          </div>
+          <div class="searchItem">
+              <div class="searchTitle">
+                <strong>Interets</strong>
+              </div>
+              <div class="searchContent searchInterests">
+                    <span v-for="index in interests" v-bind:key="index">
+                      <input type="checkbox" v-bind:value="index" v-model="ask.checkedInterests">{{index}}
+                    </span>
+              </div>
+          </div>
+        </div>
+        <br>
+         <SuggestionList :listData="array" :filter="ask"></SuggestionList>
       </div>
-      <div class="searchItem">
-          <div class="searchTitle">
-            <strong>Score de popularite</strong>
-          </div>
-          <div class="searchContent">
-            De: <input type="number" name="minPop" v-model="ask.minPop">
-            à: <input type="number" name="maxPop" v-model="ask.maxPop">
-          </div>
-      </div>
-      <div class="searchItem">
-          <div class="searchTitle">
-            <strong>Localisation</strong>
-          </div>
-          <div class="searchContent">
-            De: <input type="number" name="minDistance" v-model="ask.minDistance">
-            à: <input type="number" name="maxDistance" v-model="ask.maxDistance"> mètres
-          </div>
-      </div>
-      <div class="searchItem">
-          <div class="searchTitle">
-            <strong>Interets</strong>
-          </div>
-          <div class="searchContent searchInterests">
-                <span v-for="index in interests" v-bind:key="index">
-                  <input type="checkbox" v-bind:value="index" v-model="ask.checkedInterests">{{index}}
-                </span>
-          </div>
-      </div>
-    </div>
-    <br>
-      // Bloquer la vue de la page si profil etendue non remplis
-     <SuggestionList :listData="array" :filter="ask"></SuggestionList>
   </div>
   <div v-else>Merci de vous connecter</div>
 </template>
@@ -79,10 +81,12 @@ export default {
         checkedInterests: []
       },
       array: [],
-      interests: []
+      interests: [],
+      user: []
     }
   },
   mounted () {
+    this.getUser(this.$cookie.get('authToken'))
     this.getAll()
     this.getInterestsList()
   },
@@ -92,6 +96,11 @@ export default {
     }
   },
   methods: {
+    getUser (token) {
+      Suggestion.getUser(token, callback => {
+        this.user = callback
+      })
+    },
     getAll () {
       var token = this.$cookie.get('authToken')
       Suggestion.getAll(token, callback => {
