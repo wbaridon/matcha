@@ -57,6 +57,14 @@ function fillHistory(login, recipient, callback) {
   });
 }
 
+function getUsernameFromId(userId, callback) {
+  chat.getUsernameFromId(userId, (err, result) => {
+    if (result.length > 0) {
+      callback(result);
+    }
+  });
+}
+
 function getCookie(cname, socket) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(socket.handshake.headers.cookie);
@@ -94,7 +102,7 @@ io.on('connection', function(socket) {
       userSockets[r].push(socket.id)
     socket.myUsername = r
   });
-  console.log('\n' + socket.myUsername + ' is: ' + socket.id + '\n')
+  console.log('\n' + socket.myUsername + ' is connected with: ' + socket.id + '\n')
   console.log(userSockets)
 
   // LOADS MESSAGES FROM DATABASE
@@ -102,9 +110,8 @@ io.on('connection', function(socket) {
   socket.on('GET_MESSAGES', function(data){
     if (data.recipient == null)
       return
-    // Shows history with 'anyone fo nao' from database
     getUsernameFromToken(data.token, login => {
-      fillHistory(login, 'anyone fo nao', res => {
+      fillHistory(login, data.recipient, res => {
         var history = res
         io.emit('GET_MESSAGES', history)
       })
@@ -114,18 +121,17 @@ io.on('connection', function(socket) {
   // ON SEND MESSAGE EVENT
 
   socket.on('SEND_MESSAGE', function(data) {
-    if (data.recipient == null)
+    if (data.recipient == null || data.message == null || data.token == null)
       return
     getUsernameFromToken(data.token, login => {
       data.login = login
-      chat.getUsernameFromId(data.recipient, login => {
-        data.recipient = login
-      })
+    })
+    getUsernameFromId(data.recipient, result => {
+      data.recipient = result[0].login
       chat.storeMessage(data)
     })
-
     // Pushes message to screen with sockets
-    io.emit('MESSAGE', data)
+     io.to(userSockets[data.recipient][0]).emit('MESSAGE', data.message);
   })
 
   // WHEN SOCKET DISCONNECTS

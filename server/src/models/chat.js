@@ -23,12 +23,7 @@ module.exports.getMessages = function (login, recipient, callback) {
 
 // Gets login from ID
 module.exports.getUsernameFromId = function (id, callback) {
-  db.query('SELECT login FROM accounts WHERE id = ?',
-    [id],
-		function (err, result) {
-			if (err) throw err;
-			else {
-				console.log('Recipients name found');
-			}
-		});
+  db.query('SELECT * FROM accounts WHERE id = ?',
+    id,
+		callback);
 }
