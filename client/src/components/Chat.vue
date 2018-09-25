@@ -12,15 +12,14 @@
 </template>
 
 <script>
-// import Chat from '@/services/ChatService' --> Inutile pour le moment non ?
+// import Chat from '@/services/ChatService' --> Inutile pour le moment non ? --> yes
 export default {
   name: 'chat',
   data () {
     return {
       message: '',
       messages: [],
-      recipient: '',
-      // socket: io('http://localhost:8081')
+      recipient: ''
     }
   },
   mounted () {
@@ -38,9 +37,9 @@ export default {
   },
   methods: {
     getMessages () {
-      this.$socket.emit('GET_MESSAGES', { 
+      this.$socket.emit('GET_MESSAGES', {
         token: this.$cookie.get('authToken'),
-        recipient:this.recipient
+        recipient: this.recipient
       })
     },
     sendMessage () {
