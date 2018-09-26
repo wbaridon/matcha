@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 		filename: function (req, file, callback) {
 			crypto.pseudoRandomBytes(16, function(err, raw) {
 				if (err) return callback(err);
-				callback(null, raw.toString('hex')+path.extname(file.originalname))
+    		callback(null, raw.toString('hex')+path.extname(file.originalname))
 			});
 		}
 })
@@ -65,17 +65,17 @@ router.post('/fakeReport', function(req, res) {
 })
 
 
-router.post('/uploadPic', upload.single('userPic'), function(req, res) {
-	// On doit faire une verification du fichier avant de le sauvegarder format, taille et si on en a pas deja 5 pour user
+router.post('/uploadPic', upload.single('userPic'), (req, res, next) => {
 	if (!req.file) {
-		console.log('No file received');
 		return res.send({success: false})
 	} else {
 		if (!req.body.isProfile) {
 			req.body.isProfile = 0;
 		}
 		profile.addPic(req.body.id, req.body.isProfile, req.file.filename, callback => {
-				return res.send({success: true})
+				setTimeout(function() {
+					res.send({success: true})
+				}, 1000);
 		})
 	}
 })
@@ -86,7 +86,6 @@ router.post('/getPic', function(req, res) {
 					gallery: callback,
 					count: callback.length
 				}
-				console.log(images)
 				return res.send(images)
 		})
 })

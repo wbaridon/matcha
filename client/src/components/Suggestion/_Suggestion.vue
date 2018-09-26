@@ -104,7 +104,10 @@ export default {
     getAll () {
       var token = this.$cookie.get('authToken')
       Suggestion.getAll(token, callback => {
-        this.array = callback.data
+        if (callback.data.error !== 1) {
+          this.array = callback.data
+          this.user.isFill = 1
+        }
       })
     },
     getInterestsList () {

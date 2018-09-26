@@ -29,7 +29,7 @@ input[type=submit] {
 /* Cover */
 .cover {
   height: inherit;
-  padding: 10px 0px 10px 0;
+  padding: 50px 0px 50px 0;
   background-color: #24292e;
   font-size: 1em;
 }
@@ -52,43 +52,3 @@ button {
 .searchItem {
   flex-direction: column;
 }
-/*
-.search {
-  margin-top: 15px;
-  background-color: lightgrey;
-  padding: 15px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-}
-.searchItem {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 5px;
-}
-.searchTitle {
-  background-color: grey;
-  padding: 10px;
-  flex-basis: 25%;
-}
-.searchContent {
-  background-color: white;
-  padding: 10px;
-  flex-grow: 1;
-}
-.searchElement {
-  border: solid 1px lightgrey;
-  margin: 2px;
-  padding: 5px;
-}
-.searchElement:hover {
-  background-color: rgba(227, 242, 253, 0.5);
-}
-.searchInterests {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-
-}*/
