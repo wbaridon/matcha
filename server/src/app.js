@@ -100,7 +100,11 @@ io.on('connection', function(socket) {
       // Shows history from database
       helpers.getId(data.token, id => {
         fillHistory(id, data.recipient, res => {
-          io.to(userSockets['id'+id][0]).emit('GET_MESSAGES', res)
+          var i = 0
+          while (userSockets['id'+id][i]) {
+            io.to(userSockets['id'+id][i]).emit('GET_MESSAGES', res);
+            i++;
+          }
         })
       })
     })
@@ -108,6 +112,8 @@ io.on('connection', function(socket) {
     // ON SEND MESSAGE EVENT
 
     socket.on('SEND_MESSAGE', function(data) {
+      if (!data.recipient)
+        return
       helpers.getId(data.token, id => {
         data.id = id
       })
@@ -116,13 +122,17 @@ io.on('connection', function(socket) {
       if (userSockets['id'+data.recipient]) {
         getUsernameFromId(data.id, username => {
           data.login = username[0].login
-          io.to(userSockets['id'+data.recipient]).emit('MESSAGE', data);
+          for (var i = 0; i < userSockets['id'+data.recipient].length; i++) {
+            io.to(userSockets['id'+data.recipient][i]).emit('MESSAGE', data);
+          }
         })
       }
       helpers.getId(data.token, id => {
         getUsernameFromId(data.id, username => {
           data.login = username[0].login
-          io.to(userSockets['id'+id]).emit('MESSAGE', data)
+          for (var i = 0; i < userSockets['id'+id].length; i++) {
+            io.to(userSockets['id'+id][i]).emit('MESSAGE', data);
+          }
         })
       })
     })
@@ -134,15 +144,18 @@ io.on('connection', function(socket) {
         console.log('ici') // A faire
       })
     })
-    // WHEN SOCKET DISCONNECTS
 
+    // WHEN SOCKET DISCONNECTS
     socket.on('disconnect', function () {
-        console.log('User disconnected')
+        console.log(socket.myUsername+' disconnected')
         let userIDs = userSockets['id'+socket.myUsername]
         if (userIDs.length >= 1) {
           for (var i = userIDs.length - 1; i >= 0; i--) {
             if (userIDs[i] === socket.id) {
               userIDs.splice(i, 1)
+              if (!Array.isArray(userIDs) || !userIDs.length) {
+                delete userSockets['id'+socket.myUsername]
+              }
             }
           }
         }
