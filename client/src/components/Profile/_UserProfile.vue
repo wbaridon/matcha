@@ -71,6 +71,8 @@
       <input type="submit" name="submit" value="Valider">
     </form>
     <UserInterests @updateInterest="updateInterest" :userId="user.id" :interests="interests"></UserInterests>
+      <UserLikes></UserLikes>
+      <UserVisits></UserVisits>
   </div>
   <div v-else>Merci de vous connecter</div>
 </template>
@@ -81,12 +83,16 @@ import Pictures from '@/services/Profile/PicturesService'
 import UserPictures from '@/components/Profile/UserPictures'
 import UserProfilePic from '@/components/Profile/UserProfilePic'
 import UserInterests from '@/components/Profile/UserInterests'
+import UserLikes from '@/components/Profile/UserLikes'
+import UserVisits from '@/components/Profile/UserVisits'
 export default {
   name: 'myprofile',
   components: {
     'UserPictures': UserPictures,
     'UserProfilePic': UserProfilePic,
-    'UserInterests': UserInterests
+    'UserInterests': UserInterests,
+    'UserLikes': UserLikes,
+    'UserVisits': UserVisits
   },
   data () {
     return {
@@ -200,7 +206,6 @@ export default {
       })
     },
     locate () {
-      /* Fonctionne que si geolocalisation active voir pour avec ip */
       if ('geolocation' in navigator) {
         var getPosition = (result) => {
           return new Promise((resolve, reject) => {
