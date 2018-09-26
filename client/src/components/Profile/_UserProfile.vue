@@ -169,7 +169,6 @@ export default {
           this.user = callback
           this.getPic(this.user.id)
           this.getInterests(this.user.id)
-          this.isFill(this.user.id)
         })
       }
     },
@@ -199,15 +198,6 @@ export default {
         this.update.perso = false
         this.update.pwd = false
       })
-    },
-    isFill () {
-      if (this.user.isFill === 0) {
-        if (this.images.count > 0 && this.interests.length > 0 &&
-        this.user.age > 0 && this.user.city && this.user.bio) {
-          // Mettre if fill a 1
-          console.log('mettre is fill a 1')
-        }
-      }
     },
     locate () {
       /* Fonctionne que si geolocalisation active voir pour avec ip */

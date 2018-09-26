@@ -124,3 +124,4 @@ function commonTagCount(id, user, callback) {
 
 module.exports.checkInterests = checkInterests;
 module.exports.commonTagCount = commonTagCount;
+module.exports.keepInterests = keepSelectedInterests;

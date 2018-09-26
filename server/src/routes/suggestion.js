@@ -30,17 +30,24 @@ router.post('/', function(req, res) {
 	jwt.verify(token, 'MatchaSecretKey', function(err, decoded) {
 		id = decoded.id
 		profile.select(id, (err, user) => {
-			sexualPref = user[0].sexuality
-			gender = user[0].gender
-			suggestionList.showList(id, gender, sexualPref, result => {
-				sexualCheck.convertUserData(result, user => {
-					localisation.getDistance(user, id, finalUser => {
-								getInterests(finalUser, id, callback => {
-										res.send(callback)
-								})
+			helpers.profileIsFill(user, callback => {
+				if (callback === 1) {
+					sexualPref = user[0].sexuality
+					gender = user[0].gender
+					suggestionList.showList(id, gender, sexualPref, result => {
+						sexualCheck.convertUserData(result, user => {
+							localisation.getDistance(user, id, finalUser => {
+										getInterests(finalUser, id, callback => {
+												res.send(callback)
+										})
+							})
+						})
 					})
-				})
-			})
+				}
+				else {
+					res.send({error: 1})
+				}
+			});
 		})
 	})
 })
