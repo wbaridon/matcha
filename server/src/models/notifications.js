@@ -14,3 +14,10 @@ module.exports.newAction = function (action, id_account, emitter, callback) {
       [id_account, action, emitter],
       callback);
 }
+
+module.exports.getAllFrom = function (id_account, action, callback) {
+    db.query('SELECT * FROM notifications\
+        WHERE id_account = ? AND action=?',
+        [id_account, action],
+        callback);
+}

@@ -71,8 +71,8 @@
       <input type="submit" name="submit" value="Valider">
     </form>
     <UserInterests @updateInterest="updateInterest" :userId="user.id" :interests="interests"></UserInterests>
-      <UserLikes></UserLikes>
-      <UserVisits></UserVisits>
+    <UserLikes :userId="user.id" :likes="likes"></UserLikes>
+    <UserVisits :userId="user.id" :visits="visits"></UserVisits>
   </div>
   <div v-else>Merci de vous connecter</div>
 </template>
@@ -80,6 +80,7 @@
 <script>
 import Profile from '@/services/ProfileService'
 import Pictures from '@/services/Profile/PicturesService'
+import Notifications from '@/services/Profile/NotificationsService'
 import UserPictures from '@/components/Profile/UserPictures'
 import UserProfilePic from '@/components/Profile/UserProfilePic'
 import UserInterests from '@/components/Profile/UserInterests'
@@ -113,7 +114,9 @@ export default {
         newpwd: '',
         pwdString: ''
       },
-      interests: []
+      interests: [],
+      likes: [],
+      visits: []
     }
   },
   mounted () {
@@ -134,6 +137,18 @@ export default {
     getInterests (id) {
       Profile.getInterests(id, callback => {
         this.interests = callback
+      })
+    },
+    getNotifications (action, id) {
+      Notifications.getNotifications(action, this.user.id, callback => {
+        switch (callback.action) {
+          case 'visits':
+            this.visits = callback.callback
+            break
+          case 'likes':
+            this.likes = callback.callback
+            break
+        }
       })
     },
     updateGallery (name, data) {
@@ -175,6 +190,8 @@ export default {
           this.user = callback
           this.getPic(this.user.id)
           this.getInterests(this.user.id)
+          this.getNotifications('likes', this.user.id)
+          this.getNotifications('visits', this.user.id)
         })
       }
     },
