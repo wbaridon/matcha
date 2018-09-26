@@ -110,8 +110,8 @@ export default {
       interests: []
     }
   },
-  created () {
-    this.editProfile()
+  mounted () {
+    this.getProfile(this.$cookie.get('authToken'))
   },
   computed: {
     isAuth () {
@@ -163,8 +163,7 @@ export default {
           break
       }
     },
-    editProfile () {
-      var token = this.$cookie.get('authToken')
+    getProfile (token) {
       if (token) {
         Profile.edit(this.user, token, callback => {
           this.user = callback
@@ -206,6 +205,7 @@ export default {
         if (this.images.count > 0 && this.interests.length > 0 &&
         this.user.age > 0 && this.user.city && this.user.bio) {
           // Mettre if fill a 1
+          console.log('mettre is fill a 1')
         }
       }
     },
