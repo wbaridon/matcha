@@ -52,6 +52,7 @@
     <h3> Vos preferences </h3>
     <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
     <p v-if="!update.pref">
+      <strong>Votre popularite: </strong> {{user.popularite}} <br>
       <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
       <strong>Ma localisation: </strong> {{user.city}} {{user.zipcode}} <button @click="locate">Mettre a jour</button>
     </p>
