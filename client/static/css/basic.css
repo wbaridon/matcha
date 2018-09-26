@@ -67,11 +67,12 @@ nav {
 .element a {
   margin: 5px;
 }
-a {
+header a {
   color: white;
   text-decoration: none;
   font-weight: bold;
 }
+
 a:hover {
   opacity: 0.8;
 }
