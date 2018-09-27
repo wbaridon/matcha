@@ -1,13 +1,8 @@
 import Api from '@/services/Api'
 
 export default {
-  getMessages (user) {
-    return Api().post('chat/', user).then(function (response) {
-      return (response.data)
-    })
-  },
-  sendMessage (user) {
-    return Api().post('chat/', user).then(function (response) {
+  checkMatch (data) {
+    return Api().post('chat/checkmatch', data).then(function (response) {
       return (response.data)
     })
   }

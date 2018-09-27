@@ -12,7 +12,7 @@
 </template>
 
 <script>
-// import Chat from '@/services/ChatService' --> Inutile pour le moment non ? --> yes
+import checkMatch from '@/services/ChatService.js'
 export default {
   name: 'chat',
   data () {
@@ -25,14 +25,19 @@ export default {
   mounted () {
     // Gets recipient
     this.recipient = this.$route.params.userId
+    // Checks if users matched
+    this.checkMatch()
     // Displays messages stored in database so far
     this.getMessages()
     this.$socket.on('GET_MESSAGES', (history) => {
       this.messages = history
     })
-    // Displays messages received since connection
+    // Displays messages received while page not refreshed
     this.$socket.on('MESSAGE', (data) => {
-      this.messages.push(data)
+      // Doesn't send MESSAGE if user isn't on right conversation
+      if (this.recipient === data.userid.toString() || this.recipient === data.recipient) {
+        this.messages.push(data)
+      }
     })
   },
   methods: {
@@ -40,6 +45,17 @@ export default {
       this.$socket.emit('GET_MESSAGES', {
         token: this.$cookie.get('authToken'),
         recipient: this.recipient
+      })
+    },
+    checkMatch () {
+      checkMatch.checkMatch({
+        recipient: this.recipient,
+        token: this.$cookie.get('authToken')
+      }).then(res => {
+        // If user did not match, redirect to match page
+        if (res === false) {
+          this.$router.push('/chat')
+        }
       })
     },
     sendMessage () {

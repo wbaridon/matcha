@@ -4,7 +4,7 @@ module.exports.storeMessage = function (newMessage) {
 	db.query('INSERT INTO chat \
 		(login, recipient, message) \
 		VALUES (?,?,?)',
-	 	[newMessage.id, newMessage.recipient, newMessage.message],
+	 	[newMessage.userid, newMessage.recipient, newMessage.message],
 		function (err, result) {
 			if (err) throw err;
 			else {
@@ -15,7 +15,7 @@ module.exports.storeMessage = function (newMessage) {
 
 // Gets all messages from history between 2 specific users
 module.exports.getMessages = function (login, recipient, callback) {
-  db.query('SELECT accounts.login, chat.message \
+  db.query('SELECT accounts.login, chat.message, chat.id \
 	FROM accounts \
 	INNER JOIN chat \
 	ON chat.login=accounts.id \

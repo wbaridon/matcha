@@ -20,6 +20,8 @@ app.use('/activate', require('./routes/activate'))
 app.use('/reset', require('./routes/resetPassword'))
 app.use('/search', require('./routes/search'))
 app.use('/notifications', require('./routes/notifications'))
+app.use('/matches', require('./routes/matches'))
+app.use('/chat', require('./routes/chat'))
 
   app.get('/', (req, res) => {
     res.send('The server is working...')
@@ -117,20 +119,22 @@ io.on('connection', function(socket) {
       if (!data.recipient)
         return
       helpers.getId(data.token, id => {
-        data.id = id
+        data.userid = id
       })
       chat.storeMessage(data)
       // Pushes message to screen with sockets
+      // --> To recipient
       if (userSockets['id'+data.recipient]) {
-        getUsernameFromId(data.id, username => {
+        getUsernameFromId(data.userid, username => {
           data.login = username[0].login
           for (var i = 0; i < userSockets['id'+data.recipient].length; i++) {
             io.to(userSockets['id'+data.recipient][i]).emit('MESSAGE', data);
           }
         })
       }
+      // --> to sender
       helpers.getId(data.token, id => {
-        getUsernameFromId(data.id, username => {
+        getUsernameFromId(data.userid, username => {
           data.login = username[0].login
           for (var i = 0; i < userSockets['id'+id].length; i++) {
             io.to(userSockets['id'+id][i]).emit('MESSAGE', data);
@@ -156,7 +160,7 @@ io.on('connection', function(socket) {
             if (userIDs[i] === socket.id) {
               userIDs.splice(i, 1)
               if (!Array.isArray(userIDs) || !userIDs.length) {
-                delete userSockets['id'+socket.myUsername]
+                delete userIDs
               }
             }
           }
