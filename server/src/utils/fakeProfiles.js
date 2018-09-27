@@ -52,9 +52,11 @@ let Profile = function() {
     this.age = getRandomAge();
     this.sexuality = getRandomInt(NBR_OF_SEXUALITY);
     this.idAccount;
+    this.isFill = 1;
+    this.popularite = getRandomInt(500);
 
     this.getSQLAccounts = () => {
-        return `(${ACTIVATED_ACCOUNT}, '${this.login}', '${this.email}', ${this.timestamp})`;
+        return `(${ACTIVATED_ACCOUNT}, '${this.login}', '${this.email}', ${this.timestamp} )`;
     };
 
     this.setIdAccount = () => {
@@ -68,7 +70,8 @@ let Profile = function() {
     };
 
     this.getSQLProfiles = () => {
-        return `('${this.idAccount}', '${this.name}', '${this.firstname}', ${this.gender}, ${this.age}, ${this.sexuality})`;
+        return `('${this.idAccount}', '${this.name}', '${this.firstname}', ${this.gender}, ${this.age},\
+         ${this.sexuality}, ${this.popularite}, ${this.isFill})`;
     };
 
     this.getSQLInterests = (nbrInterests) => {
@@ -117,7 +120,7 @@ let addInDb = (nbr) => {
 let addInDbProfiles = (nbr) => {
     return new Promise((resolve, reject) => {
         let SQLQuery = 'INSERT INTO profiles \
-        (id_account, name, firstname, gender, age, sexuality) \
+        (id_account, name, firstname, gender, age, sexuality, popularite, isFill) \
         VALUES ';
         for (let i = 0; i < nbr; i++) {
             SQLQuery += prfs[i].getSQLProfiles();

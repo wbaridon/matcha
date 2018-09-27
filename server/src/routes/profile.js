@@ -169,6 +169,7 @@ router.post('/updatePref', function(req, res) {
 
 router.post('/updatePerso', function(req, res) {
   id = req.body.id
+	console.log(req.body)
   profile.updateUser(id, 'name', req.body.user.name, (err, result) => {
     profile.updateUser(id, 'firstname', req.body.user.firstname, (err, result) => {
       account.updateUser(id, 'email', req.body.user.email, (err, result) => {
@@ -247,7 +248,8 @@ function fillProfile(userId, callback) {
           email: '',
 					zipcode: result[0].zipcode,
 					city: result[0].city,
-					isFill: result[0].isFill
+					isFill: result[0].isFill,
+					popularite: result[0].popularite
         }
       callback(user)
     }
