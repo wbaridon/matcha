@@ -1,36 +1,41 @@
 <template>
-  <div v-if="isAuth" id="userProfile">
-    <h1>Mon profil</h1>
-    <router-link :to="'/profile/' + user.id" class="link">Voir mon profil public</router-link><br><br>
-    <h2> {{user.firstname}} {{user.name}} </h2>
-    <UserProfilePic :images="images"></UserProfilePic>
-    <UserPersonal :user="user" :password="password" @changePerso="changePerso"></UserPersonal>
-    <UserPictures @updatePic="updateGallery" :images="images" :userId="user.id"></UserPictures>
-    <h3> Vos preferences </h3>
-    <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
-    <p v-if="!update.pref">
-      <strong>Votre popularite: </strong> {{user.popularite}} <br>
-      <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
-      <strong>Ma localisation: </strong> {{user.city}} {{user.zipcode}} <button @click="locate">Mettre a jour</button>
-    </p>
-    <form v-if="update.pref" v-on:submit.prevent="changePref()">
-      <select v-model="user.sexuality" name='sexuality'>
-         <option  value="0">Hetero</option>
-         <option value="1">Homo</option>
-         <option value="2">Bisexuel</option>
-      </select><br>
-      <input type="submit" name="submit" value="Valider">
-    </form>
-    <h3>Votre biographie</h3>
-    <button v-if="!update.bio" @click="update.bio = !update.bio">Modifier ma bio</button>
-    <p v-if="user.bio && !update.bio">"{{user.bio}}"</p>
-    <form v-if="update.bio" class="" method="post" v-on:submit.prevent="changeBio()">
-      <textarea name="bio" rows="8" cols="80" v-model="user.bio"></textarea>
-      <input type="submit" name="submit" value="Valider">
-    </form>
-    <UserInterests @updateInterest="updateInterest" :userId="user.id" :interests="interests"></UserInterests>
-    <UserLikes :userId="user.id" :likes="likes"></UserLikes>
-    <UserVisits :userId="user.id" :visits="visits"></UserVisits>
+  <div v-if="isAuth" id="userProfile" class="container">
+    <aside>
+        <UserProfilePic :images="images"></UserProfilePic><br>
+        <router-link :to="'/profile/' + user.id" class="link">Voir mon profil public</router-link><br>
+        <hr>
+            <i class="far fa-star"></i>
+            <strong>Popularite: {{user.popularite}}</strong><br>
+    </aside>
+    <section class="userProfile">
+      <h2> {{user.firstname}} {{user.name}} </h2>
+      <UserPersonal :user="user" :password="password" @changePerso="changePerso"></UserPersonal>
+      <UserPictures @updatePic="updateGallery" :images="images" :userId="user.id"></UserPictures>
+      <h3> Vos preferences </h3>
+      <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
+      <p v-if="!update.pref">
+        <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
+        <strong>Ma localisation: </strong> {{user.city}} {{user.zipcode}} <button @click="locate">Mettre a jour</button>
+      </p>
+      <form v-if="update.pref" v-on:submit.prevent="changePref()">
+        <select v-model="user.sexuality" name='sexuality'>
+           <option  value="0">Hetero</option>
+           <option value="1">Homo</option>
+           <option value="2">Bisexuel</option>
+        </select><br>
+        <input type="submit" name="submit" value="Valider">
+      </form>
+      <h3>Votre biographie</h3>
+      <button v-if="!update.bio" @click="update.bio = !update.bio">Modifier ma bio</button>
+      <p v-if="user.bio && !update.bio">"{{user.bio}}"</p>
+      <form v-if="update.bio" class="" method="post" v-on:submit.prevent="changeBio()">
+        <textarea name="bio" rows="8" cols="80" v-model="user.bio"></textarea>
+        <input type="submit" name="submit" value="Valider">
+      </form>
+      <UserInterests @updateInterest="updateInterest" :userId="user.id" :interests="interests"></UserInterests>
+      <UserLikes :userId="user.id" :likes="likes"></UserLikes>
+      <UserVisits :userId="user.id" :visits="visits"></UserVisits>
+    </section>
   </div>
   <div v-else>Merci de vous connecter</div>
 </template>
@@ -258,4 +263,15 @@ export default {
   .btBlue:hover {
     opacity: 0.8;
   }
+  .container {
+    display: flex;
+  }
+
+  .userProfile {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 15px;
+  }
+
 </style>
