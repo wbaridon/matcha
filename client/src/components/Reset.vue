@@ -62,15 +62,14 @@ export default {
           })
           break
         case 'newPass':
-        if (this.weakPassword || this.lengthPassword || this.user.pass2 === '') {
-          this.feedback = 'Votre mot de passe doit contenir au minimum 6 caracteres dont 1 chiffre'
-        } else {
-          Login.reset(this.user).then(res => {
-            this.feedback = res
-          })
-        }
+          if (this.weakPassword || this.lengthPassword || this.user.pass2 === '') {
+            this.feedback = 'Votre mot de passe doit contenir au minimum 6 caracteres dont 1 chiffre'
+          } else {
+            Login.reset(this.user).then(res => {
+              this.feedback = res
+            })
+          }
           break
-
       }
     },
     getParams () {
