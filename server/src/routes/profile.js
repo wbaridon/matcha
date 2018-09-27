@@ -210,7 +210,22 @@ router.post('/localisation', function(req, res) {
 })
 
 router.post('/updatePwd', function(req, res) {
-    res.send('non operationnel')
+		console.log(req.body)
+		id = req.body.id
+		oldpwd = req.body.password.oldpwd
+		newpwd = req.body.password.newpwd
+	account.userLoginFromId(id, (err, data) => {
+		argon2.verify(data[0].password, oldpwd).then(match => {
+			if (match) {
+				argon2.hash(newpwd).then(hash => {
+					account.updateUser(id, "password", hash)
+					res.send('Password changed')
+				})
+			} else {
+				res.send({'error':1})
+			}
+		})
+	})
 })
 
 module.exports = router;

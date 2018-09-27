@@ -6,7 +6,6 @@ var myhash = require('../utils/hash')
 var mail = require('nodemailer')
 
 passwordHash = (pass, callback) => {
-    console.log(pass);
     myhash.hash(pass, res => {
         callback(res);
     })

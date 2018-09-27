@@ -10,6 +10,7 @@
     <section class="userProfile">
       <h2> {{user.firstname}} {{user.name}} </h2>
       <UserPersonal :user="user" :password="password" @changePerso="changePerso"></UserPersonal>
+      <p v-if="password.feedback">{{password.feedback}}</p>
       <UserPictures @updatePic="updateGallery" :images="images" :userId="user.id"></UserPictures>
       <h3> Vos preferences </h3>
       <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
@@ -74,7 +75,8 @@ export default {
       user: [],
       password: {
         oldpwd: '',
-        newpwd: ''
+        newpwd: '',
+        feedback: ''
       },
       interests: [],
       likes: [],
@@ -165,8 +167,14 @@ export default {
             this.user = callback
           })
           break
-        case 'pwd':
-          Profile.updatePwd(data, this.user.id, callback => { })
+        case 'password':
+          Profile.updatePwd(data, this.user.id, callback => {
+            if (callback.error === 1) {
+              this.password.feedback = 'Votre ancien mot de passe est faux'
+            } else {
+              this.password.feedback = ''
+            }
+          })
           break
       }
     },

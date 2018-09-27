@@ -43,6 +43,12 @@ module.exports.userLogin = function (login, callback) {
 	});
 }
 
+module.exports.userLoginFromId = function (id, callback) {
+	db.query('SELECT * FROM accounts WHERE id = ?', [id], function(err, result) {
+		callback(null, result);
+	});
+}
+
 module.exports.userIsActivate = function (login, callback) {
 	db.query('SELECT activation FROM accounts WHERE login = ?', [login], function(err, result) {
 		callback(null, result);
