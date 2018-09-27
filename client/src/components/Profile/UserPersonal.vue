@@ -82,7 +82,7 @@ export default {
       if (action === 'perso' && (data.name === '' || data.firstname === '' || data.email === '' || data.age < 18)) {
         this.feedback = 'Merci de verifier que tous les champs sont remplis et que vous avez un age de 18 ans au minimum'
       } else if (action === 'password' && (this.weakPassword || this.lengthPassword)) {
-        this.feedback = 'Votre mot de passe doit contenir 6 caracteres au minimum dont 1 chiffre et une majuscule'
+        this.feedback = 'Votre mot de passe doit contenir 6 caracteres au minimum dont 1 chiffre'
       } else {
         this.$emit('changePerso', action, data)
         this.update.perso = false
