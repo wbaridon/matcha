@@ -1,53 +1,10 @@
 <template>
-  <div v-if="isAuth" id="myprofile">
+  <div v-if="isAuth" id="userProfile">
     <h1>Mon profil</h1>
     <router-link :to="'/profile/' + user.id" class="link">Voir mon profil public</router-link><br><br>
-
-          <h2> {{user.firstname}} {{user.name}} </h2>
-    <div id="topProfile">
-        <div class="element">
-        <UserProfilePic :images="images"></UserProfilePic>
-        </div>
-        <div class="element" v-if="!update.perso && !update.pwd">
-          <h3> Vos informations perso </h3>
-          <p><strong>Email:</strong> {{user.email}}</p>
-          <p><strong>Sexe:</strong>  {{user.gender}}</p>
-          <p><strong>Age:</strong> {{user.age}}</p>
-          <button v-if="!update.perso && !update.pwd" @click="update.pwd = true">
-            Modifier mon mot de passe
-          </button> {{password.pwdString}}
-        </div>
-        <div class="element" v-if="update.perso">
-          <form class="updateProfile" method='post' v-on:submit.prevent="changePerso()">
-            <label for="firstname">Prenom:</label>
-            <input type="text" name="firstname"  v-model="user.firstname"><br>
-            <label for="name">Nom:</label>
-            <input type="text" name="name" v-model="user.name"><br>
-            <label for="email">Email:</label>
-            <input type="text" name="email" v-model="user.email"><br>
-            <label for="age">Age:</label>
-            <input type="text" name="age" v-model="user.age"><br>
-            <label for="age">Genre:</label>
-            <select v-model="user.gender" name='gender'>
-               <option  value="0">Homme</option>
-                <option value="1">Femme</option>
-            </select><br>
-            <input type="submit" name="submit" value="Valider">
-          </form>
-        </div>
-        <div class="element" v-if="update.pwd">
-          <form class="updateProfile" method='post' v-on:submit.prevent="changePwd()">
-            <label for="oldpwd">Ancien mot de passe:</label>
-            <input type="password" name="oldpwd" v-model="password.oldpwd"><br>
-            <label for="name">Nouveau mot de passe:</label>
-            <input type="password" name="newpwd" v-model="password.newpwd"><br>
-            <input type="submit" name="submit" value="Valider">
-          </form>
-        </div>
-        <div class="element">
-            <button v-if="!update.perso && !update.pwd" @click="update.perso = true">Modifier mes infos</button>
-        </div>
-    </div>
+    <h2> {{user.firstname}} {{user.name}} </h2>
+    <UserProfilePic :images="images"></UserProfilePic>
+    <UserPersonal :user="user" :password="password" @changePerso="changePerso"></UserPersonal>
     <UserPictures @updatePic="updateGallery" :images="images" :userId="user.id"></UserPictures>
     <h3> Vos preferences </h3>
     <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
@@ -82,6 +39,7 @@
 import Profile from '@/services/ProfileService'
 import Pictures from '@/services/Profile/PicturesService'
 import Notifications from '@/services/Profile/NotificationsService'
+import UserPersonal from '@/components/Profile/UserPersonal'
 import UserPictures from '@/components/Profile/UserPictures'
 import UserProfilePic from '@/components/Profile/UserProfilePic'
 import UserInterests from '@/components/Profile/UserInterests'
@@ -94,7 +52,8 @@ export default {
     'UserProfilePic': UserProfilePic,
     'UserInterests': UserInterests,
     'UserLikes': UserLikes,
-    'UserVisits': UserVisits
+    'UserVisits': UserVisits,
+    'UserPersonal': UserPersonal
   },
   data () {
     return {
@@ -104,16 +63,13 @@ export default {
         addFile: ''
       },
       update: {
-        perso: false,
         bio: false,
-        pwd: false,
         pref: false
       },
       user: [],
       password: {
         oldpwd: '',
-        newpwd: '',
-        pwdString: ''
+        newpwd: ''
       },
       interests: [],
       likes: [],
@@ -197,12 +153,17 @@ export default {
       }
     },
 
-    changePerso () {
-      // Faire un controle des nouvelles valeur avant envoi comme pour register
-      Profile.updatePerso(this.user, this.user.id, callback => {
-        this.user = callback
-        this.update.perso = false
-      })
+    changePerso (action, data) {
+      switch (action) {
+        case 'perso':
+          Profile.updatePerso(data, this.user.id, callback => {
+            this.user = callback
+          })
+          break
+        case 'pwd':
+          Profile.updatePwd(data, this.user.id, callback => { })
+          break
+      }
     },
     changeBio () {
       Profile.updateBio(this.user.bio, this.user.id, callback => {
@@ -214,13 +175,6 @@ export default {
       Profile.updatePref(this.user, this.user.id, callback => {
         this.user = callback
         this.update.pref = false
-      })
-    },
-    changePwd () {
-      Profile.updatePwd(this.password, this.user.id, callback => {
-        this.pwdString = callback
-        this.update.perso = false
-        this.update.pwd = false
       })
     },
     locate () {
@@ -258,6 +212,7 @@ export default {
 </script>
 
 <style>
+
   #interests {
     display: flex;
     margin: 1%;
@@ -294,5 +249,13 @@ export default {
   }
   .link {
     color: black;
+  }
+  .btBlue {
+    background-color: #24292e;
+    color: white;
+    padding: 10px;
+  }
+  .btBlue:hover {
+    opacity: 0.8;
   }
 </style>
