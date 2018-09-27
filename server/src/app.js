@@ -133,13 +133,11 @@ io.on('connection', function(socket) {
         })
       }
       // --> to sender
-      helpers.getId(data.token, id => {
-        getUsernameFromId(data.userid, username => {
-          data.login = username[0].login
-          for (var i = 0; i < userSockets['id'+id].length; i++) {
-            io.to(userSockets['id'+id][i]).emit('MESSAGE', data);
-          }
-        })
+      getUsernameFromId(data.userid, username => {
+        data.login = username[0].login
+        for (var i = 0; i < userSockets['id'+data.userid].length; i++) {
+          io.to(userSockets['id'+data.userid][i]).emit('MESSAGE', data);
+        }
       })
     })
 
