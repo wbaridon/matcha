@@ -169,6 +169,7 @@ router.post('/updatePref', function(req, res) {
 
 router.post('/updatePerso', function(req, res) {
   id = req.body.id
+	console.log(req.body)
   profile.updateUser(id, 'name', req.body.user.name, (err, result) => {
     profile.updateUser(id, 'firstname', req.body.user.firstname, (err, result) => {
       account.updateUser(id, 'email', req.body.user.email, (err, result) => {
@@ -209,7 +210,22 @@ router.post('/localisation', function(req, res) {
 })
 
 router.post('/updatePwd', function(req, res) {
-    res.send('non operationnel')
+		console.log(req.body)
+		id = req.body.id
+		oldpwd = req.body.password.oldpwd
+		newpwd = req.body.password.newpwd
+	account.userLoginFromId(id, (err, data) => {
+		argon2.verify(data[0].password, oldpwd).then(match => {
+			if (match) {
+				argon2.hash(newpwd).then(hash => {
+					account.updateUser(id, "password", hash)
+					res.send('Password changed')
+				})
+			} else {
+				res.send({'error':1})
+			}
+		})
+	})
 })
 
 module.exports = router;
@@ -247,7 +263,8 @@ function fillProfile(userId, callback) {
           email: '',
 					zipcode: result[0].zipcode,
 					city: result[0].city,
-					isFill: result[0].isFill
+					isFill: result[0].isFill,
+					popularite: result[0].popularite
         }
       callback(user)
     }

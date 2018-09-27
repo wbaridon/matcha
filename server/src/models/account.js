@@ -43,6 +43,12 @@ module.exports.userLogin = function (login, callback) {
 	});
 }
 
+module.exports.userLoginFromId = function (id, callback) {
+	db.query('SELECT * FROM accounts WHERE id = ?', [id], function(err, result) {
+		callback(null, result);
+	});
+}
+
 module.exports.userIsActivate = function (login, callback) {
 	db.query('SELECT activation FROM accounts WHERE login = ?', [login], function(err, result) {
 		callback(null, result);
@@ -70,7 +76,7 @@ module.exports.updateUser = function (id, column, value, callback) {
 }
 
 module.exports.userTimestampPasswordFromEmail = function (email, callback) {
-	db.query('SELECT timestampPassword, password, id FROM accounts WHERE email = ?', [email, login], function(err, result) {
+	db.query('SELECT timestampPassword, password, id FROM accounts WHERE email = ?', [email], function(err, result) {
 		callback(err, result);
 	});
 }
