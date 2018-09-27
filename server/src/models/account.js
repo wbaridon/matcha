@@ -70,7 +70,7 @@ module.exports.updateUser = function (id, column, value, callback) {
 }
 
 module.exports.userTimestampPasswordFromEmail = function (email, callback) {
-	db.query('SELECT timestampPassword, password, id FROM accounts WHERE email = ?', [email, login], function(err, result) {
+	db.query('SELECT timestampPassword, password, id FROM accounts WHERE email = ?', [email], function(err, result) {
 		callback(err, result);
 	});
 }
