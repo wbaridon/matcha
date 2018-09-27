@@ -31,7 +31,7 @@
 
     <div class="element" v-if="update.pwd">
 
-      <form class="updateProfile" method='post' v-on:submit.prevent="change('password')">
+      <form class="updateProfile" method='post' v-on:submit.prevent="change('password', password)">
         <p v-if="feedback">{{feedback}}</p>
         <label for="oldpwd">Ancien mot de passe:</label>
         <input type="password" name="oldpwd" v-model="password.oldpwd"><br>
