@@ -1,7 +1,7 @@
 <template>
   <footer>
     <Chat v-if="showChat && isAuth"  @close="showChat = false"></Chat>
-    <div id="showChat" @click="showChat = true" v-if="!showChat && isAuth">Discussion instantanée (0)</div>
+    <div id="showChat" @click="showChat = true" v-if="!showChat && isAuth">Mes matches</div>
     <p>wbaridon © 2018</p>
   </footer>
 </template>
@@ -21,7 +21,8 @@ export default {
     isAuth () {
       return this.$store.state.isAuth
     }
-  }
+  },
+  methods: {}
 }
 </script>
 

@@ -70,7 +70,6 @@ const router = new Router({
         requiresAuth: true
       }
     },
-    { path: '/matches', name: 'matches', component: Matches },
     { path: '*', redirect: '/' }
   ]
 })

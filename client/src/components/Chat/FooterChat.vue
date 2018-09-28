@@ -2,52 +2,46 @@
   <div id="Footerchat">
     <!-- Sent messages output -->
     <div @click="close" id="topChat">Close X</div>
-    <div class="messages" v-for="msg in messages" :key="msg.id">
-      <p><span>{{ msg.login }}: </span>{{ msg.message }}</p>
+    <div id="all_discussions">
+      <!-- Sent messages output -->
+      <ul>
+        <li class="match" v-for="match in matches" :key="match.id">
+          <router-link class="linkBlock" :to="'/chat/' + match.emitter">
+            <i :class="isOnline" aria-hidden="true"></i> {{match.firstname}}
+          </router-link>
+        </li>
+      </ul>
     </div>
-    <form @submit.prevent="sendMessage">
-      <input id="message" v-model="message" type="text" placeholder="type in your message">
-      <button id="submit" type="submit">Send</button>
-    </form>
   </div>
 </template>
 
 <script>
-// import Chat from '@/services/ChatService'
-import io from 'socket.io-client'
+import allMatches from '@/services/Profile/NotificationsService.js'
 export default {
   name: 'chat',
+  props: ['totalMatches'],
   data () {
     return {
-      message: '',
-      messages: [],
-      socket: io('http://localhost:8081')
+      matches: []
     }
   },
   mounted () {
     // Displays messages stored in database so far
-    this.getMessages()
-    this.socket.on('GET_MESSAGES', (history) => {
-      console.log(history)
-      this.messages = history
-    })
-    // Displays messages received since connection
-    this.socket.on('MESSAGE', (data) => {
-      this.messages.push(data)
-    })
+    this.getMatches()
+  },
+  computed: {
+    isOnline: function () {
+      if (this.matches.online) {
+        return 'fa fa-circle fa-xs online'
+      } else { return 'fa fa-circle offline' }
+    }
   },
   methods: {
-    getMessages () {
-      this.socket.emit('GET_MESSAGES', {
-        token: this.$cookie.get('authToken')
+    getMatches () {
+      allMatches.getMatches(this.$cookie.get('authToken'), (response) => {
+        this.matches = response
+        this.$emit('totalMatches', this.matches.length)
       })
-    },
-    sendMessage () {
-      this.socket.emit('SEND_MESSAGE', {
-        token: this.$cookie.get('authToken'),
-        message: this.message
-      })
-      this.message = ''
     },
     close () {
       this.$emit('close')
@@ -62,5 +56,23 @@ export default {
     padding: 5px;
     color: black;
     text-align: right;
+  }
+  .linkBlock {
+    display: block;
+  }
+  .match {
+    list-style: none;
+    padding: 5px;
+  }
+  .match:hover {
+    background-color: lightgrey;
+  }
+  .online {
+    color: green;
+    font-size: 7px;
+  }
+  .offline {
+    color: red;
+    font-size: 7px;
   }
 </style>

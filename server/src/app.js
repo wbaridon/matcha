@@ -145,6 +145,7 @@ io.on('connection', function(socket) {
     socket.on('PROFILE_VISIT', function(data) {
       helpers.getUsername(data.token, login => {
         data.login = login
+        
         console.log('ici') // A faire
       })
     })

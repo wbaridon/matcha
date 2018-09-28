@@ -2,7 +2,7 @@
   <div id="all_discussions">
     <!-- Sent messages output -->
     <div class="indiv_discussion" v-for="match in matches" :key="match.id">
-      <p><span>{{ match.emitter }}: </span><router-link v-bind:to="match.emitter.toString()" append>click here to chat</router-link></p>
+      <p><span>{{ match.emitter }}: </span><router-link :to="'/chat/' + match.emitter">click here to chat</router-link></p>
     </div>
   </div>
 </template>
