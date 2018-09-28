@@ -1,14 +1,14 @@
 <template>
   <div id="Footerchat">
     <!-- Sent messages output -->
-    <div @click="close" id="topChat">Close X</div>
+    <div @click="close" id="topChat">Mes matches</div>
     <div id="all_discussions">
       <!-- Sent messages output -->
       <ul>
         <li class="match" v-for="match in matches" :key="match.id">
-          <router-link class="linkBlock" :to="'/chat/' + match.emitter">
+          <div class="linkBlock" @click="open(match.emitter)">
             <i :class="isOnline" aria-hidden="true"></i> {{match.firstname}}
-          </router-link>
+          </div>
         </li>
       </ul>
     </div>
@@ -19,7 +19,7 @@
 import allMatches from '@/services/Profile/NotificationsService.js'
 export default {
   name: 'chat',
-  props: ['totalMatches'],
+  props: ['chatId'],
   data () {
     return {
       matches: []
@@ -40,8 +40,10 @@ export default {
     getMatches () {
       allMatches.getMatches(this.$cookie.get('authToken'), (response) => {
         this.matches = response
-        this.$emit('totalMatches', this.matches.length)
       })
+    },
+    open (data) {
+      this.$emit('openChat', data)
     },
     close () {
       this.$emit('close')
@@ -55,7 +57,8 @@ export default {
     background-color: lightgrey;
     padding: 5px;
     color: black;
-    text-align: right;
+    text-align: center;
+    display: block;
   }
   .linkBlock {
     display: block;
@@ -63,6 +66,7 @@ export default {
   .match {
     list-style: none;
     padding: 5px;
+    color: black;
   }
   .match:hover {
     background-color: lightgrey;
@@ -74,5 +78,8 @@ export default {
   .offline {
     color: red;
     font-size: 7px;
+  }
+  ul {
+    padding: 5px;
   }
 </style>
