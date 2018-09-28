@@ -7,8 +7,12 @@ module.exports = router;
 
 router.post('/get', (req, res) => {
  	helpers.getId(req.body.userid, callback => {
-    matches.getMatches(callback, (err, response) => {
-      res.send(response)
+    matches.getMatchesAsEmitter(callback, (err, emitterRes) => {
+        matches.getMatchesAsReceiver(callback, (err, receiverRes) => {
+          var response = emitterRes.concat(receiverRes)
+          console.log(response)
+          res.send(response)
+        })
     })
   })
 })

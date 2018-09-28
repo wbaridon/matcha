@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     isOnline: function () {
-      if (this.matches.online) {
+      if (this.matches.online === true) {
         return 'fa fa-circle fa-xs online'
       } else { return 'fa fa-circle offline' }
     }

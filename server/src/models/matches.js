@@ -1,7 +1,7 @@
 var db = require('../config/db');
 
-// Gets all matches from someone
-module.exports.getMatches = function (userid, callback) {
+// Gets all matches from someone as receiver
+module.exports.getMatchesAsReceiver = function (userid, callback) {
   db.query('SELECT n.*, p.firstname  \
 	FROM notifications AS n INNER JOIN profiles AS p \
   ON p.id_account = n.emitter\
@@ -10,6 +10,18 @@ module.exports.getMatches = function (userid, callback) {
   userid,
   callback);
 }
+
+// Gets all matches from someone as emitter
+module.exports.getMatchesAsEmitter = function (userid, callback) {
+  db.query('SELECT n.*, p.firstname  \
+	FROM notifications AS n INNER JOIN profiles AS p \
+  ON p.id_account = n.id_account\
+	WHERE n.emitter = ? \
+ 	AND n.action = 4',
+  userid,
+  callback);
+}
+
 
 // Check if user matched before (returns either FILLED ARRAY or EMPTY ARRAY)
 module.exports.checkMatched = function (userid, recipient, callback) {
