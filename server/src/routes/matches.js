@@ -10,7 +10,6 @@ router.post('/get', (req, res) => {
     matches.getMatchesAsEmitter(callback, (err, emitterRes) => {
         matches.getMatchesAsReceiver(callback, (err, receiverRes) => {
           var response = emitterRes.concat(receiverRes)
-          console.log(response)
           res.send(response)
         })
     })
