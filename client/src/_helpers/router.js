@@ -10,6 +10,8 @@ import Myprofile from '@/components/Profile/_UserProfile'
 import Suggestion from '@/components/Suggestion/_Suggestion'
 import Activate from '@/components/Activate'
 import Chat from '@/components/Chat'
+import Matches from '@/components/Matches'
+import Notifications from '@/components/Notifications'
 import { store } from '../_store/store'
 import Login from '@/services/LoginService'
 
@@ -43,15 +45,32 @@ const router = new Router({
         requiresAuth: true
       }
     },
+    { path: '/profile/:userId', name: 'profile', component: Profile },
     {
       path: '/chat',
       name: 'chat',
+      component: Matches,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/chat/:userId',
+      name: 'chatwith',
       component: Chat,
       meta: {
         requiresAuth: true
       }
     },
-    { path: '/profile/:userId', name: 'Profile', component: Profile },
+    {
+      path: '/notifications',
+      name: 'notifications',
+      component: Notifications,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    { path: '/matches', name: 'matches', component: Matches },
     { path: '*', redirect: '/' }
   ]
 })

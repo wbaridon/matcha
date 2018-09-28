@@ -4,7 +4,8 @@ const cors = require('cors')
 const morgan = require('morgan')
 const cookieParser = require('cookie-parser')
 const app = express()
-const helpers = require('./utils/helpers.js');
+const helpers = require('./utils/helpers.js')
+const jwt = require('jsonwebtoken')
 
 app.use(morgan('tiny'))
 app.use(bodyParser.json())
@@ -19,6 +20,8 @@ app.use('/activate', require('./routes/activate'))
 app.use('/reset', require('./routes/resetPassword'))
 app.use('/search', require('./routes/search'))
 app.use('/notifications', require('./routes/notifications'))
+app.use('/matches', require('./routes/matches'))
+app.use('/chat', require('./routes/chat'))
 
   app.get('/', (req, res) => {
     res.send('The server is working...')
@@ -41,10 +44,16 @@ const io = require('socket.io')(server, {
 })
 const chat = require('./models/chat.js')
 
-function fillHistory(login, recipient, callback) {
-  chat.getMessages(login, recipient, (err, result) => {
+function fillHistory(idsender, idrecipient, callback) {
+  chat.getMessages(idsender, idrecipient, (err, result) => {
+    callback(result)
+  });
+}
+
+function getUsernameFromId(userId, callback) {
+  chat.getUsernameFromId(userId, (err, result) => {
     if (result.length > 0) {
-      callback(result)
+      callback(result);
     }
   });
 }
@@ -76,66 +85,84 @@ var userSockets = new Array()
 
 io.on('connection', function(socket) {
   // CONNECTION EVENT
-  console.log('Cookie: '+getCookie('authToken', socket))
-
   if (getCookie('authToken', socket)) { // Check si on a un cookie sinon cela bug
-    helpers.getUsername(getCookie('authToken', socket), function(r){
-      if (!userSockets[r]) {
-        userSockets[r] = new Array(socket.id)
+    console.log('Cookie: '+getCookie('authToken', socket))
+    helpers.getId(getCookie('authToken', socket), function(r){
+      if (!userSockets['id'+r]) {
+        userSockets['id'+r] = new Array(socket.id)
       }
       else
-        userSockets[r].push(socket.id)
+        userSockets['id'+r].push(socket.id)
       socket.myUsername = r
     });
     console.log('\n' + socket.myUsername + ' is: ' + socket.id + '\n')
     console.log(userSockets)
-  }
-  // LOADS MESSAGES FROM DATABASE
 
-  socket.on('GET_MESSAGES', function(data){
-    // Shows history with 'anyone fo nao' from database
-    helpers.getUsername(data.token, login => {
-      fillHistory(login, 'anyone fo nao', res => {
-        var history = res
-        io.emit('GET_MESSAGES', history)
+    // LOADS MESSAGES FROM DATABASE
+
+    socket.on('GET_MESSAGES', function(data){
+      // Shows history from database
+      helpers.getId(data.token, id => {
+        fillHistory(id, data.recipient, res => {
+          var i = 0
+          while (userSockets['id'+id][i]) {
+            io.to(userSockets['id'+id][i]).emit('GET_MESSAGES', res);
+            i++;
+          }
+        })
       })
     })
-  })
 
-  // ON SEND MESSAGE EVENT
+    // ON SEND MESSAGE EVENT
 
-  socket.on('SEND_MESSAGE', function(data) {
-    helpers.getUsername(data.token, login => {
-      data.login = login
+    socket.on('SEND_MESSAGE', function(data) {
+      if (!data.recipient)
+        return
+      helpers.getId(data.token, id => {
+        data.userid = id
+      })
+      chat.storeMessage(data)
+      // Pushes message to screen with sockets
+      // --> To recipient
+      if (userSockets['id'+data.recipient]) {
+        getUsernameFromId(data.userid, username => {
+          data.login = username[0].login
+          for (var i = 0; i < userSockets['id'+data.recipient].length; i++) {
+            io.to(userSockets['id'+data.recipient][i]).emit('MESSAGE', data);
+          }
+        })
+      }
+      // --> to sender
+      getUsernameFromId(data.userid, username => {
+        data.login = username[0].login
+        for (var i = 0; i < userSockets['id'+data.userid].length; i++) {
+          io.to(userSockets['id'+data.userid][i]).emit('MESSAGE', data);
+        }
+      })
     })
-    // TO DO: recipient depending on how the message is sent
-    data.recipient = 'anyone fo nao'
-    chat.storeMessage(data)
-    // Pushes message to screen with sockets
-    io.emit('MESSAGE', data)
-  })
 
-  // ON VISIT A NEW PROFILE
-  socket.on('PROFILE_VISIT', function(data) {
-    helpers.getUsername(data.token, login => {
-      data.login = login
-      console.log('ici') // A faire
+    // ON VISIT A NEW PROFILE
+    socket.on('PROFILE_VISIT', function(data) {
+      helpers.getUsername(data.token, login => {
+        data.login = login
+        console.log('ici') // A faire
+      })
     })
-  })
-  // WHEN SOCKET DISCONNECTS
 
-  socket.on('disconnect', function () {
-
-    if (getCookie('authToken', socket)) { // Verifier si cela fonctionne bien comme cela
-      console.log('User disconnected')
-      let userIDs = userSockets[socket.myUsername]
-      if (userIDs.length >= 1) {
-        for (var i = userIDs.length - 1; i >= 0; i--) {
-          if (userIDs[i] === socket.id) {
-            userIDs.splice(i, 1)
+    // WHEN SOCKET DISCONNECTS
+    socket.on('disconnect', function () {
+        console.log(socket.myUsername+' disconnected')
+        let userIDs = userSockets['id'+socket.myUsername]
+        if (userIDs.length >= 1) {
+          for (var i = userIDs.length - 1; i >= 0; i--) {
+            if (userIDs[i] === socket.id) {
+              userIDs.splice(i, 1)
+              if (!Array.isArray(userIDs) || !userIDs.length) {
+                delete userIDs
+              }
+            }
           }
         }
-      }
+      })
     }
   })
-})
