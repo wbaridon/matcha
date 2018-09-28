@@ -36,6 +36,10 @@ router.post('/get', function (req, res) {
 	}
 });
 
+router.post('/profileVisit', function (req, res) {
+	console.log('arrive dans profile visit')
+})
+
 module.exports = router;
 
 async function getUsersResume(array, callback)

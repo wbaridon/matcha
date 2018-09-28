@@ -2,10 +2,11 @@ var db = require('../config/db');
 
 // Gets all matches from someone
 module.exports.getMatches = function (userid, callback) {
-  db.query('SELECT * \
-	FROM notifications \
-	WHERE id_account = ? \
- 	AND action = 4',
+  db.query('SELECT n.*, p.firstname  \
+	FROM notifications AS n INNER JOIN profiles AS p \
+  ON p.id_account = n.emitter\
+	WHERE n.id_account = ? \
+ 	AND n.action = 4',
   userid,
   callback);
 }
