@@ -1,7 +1,7 @@
 <template>
   <div id="profile" v-if="user.userExist">
-    <button @click.once="newLike" v-if="!like"> J'aime </button>
-    <button v-if="like"> Je n'aime plus </button>
+    <button @click.once="setLike(0)" v-if="!like"> J'aime </button>
+    <button @click.once="setLike(4)" v-if="like"> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
     {{user.gender}}, {{user.age}} ans,     {{user.sexuality}}<br>
       Score de popularite: <br>
@@ -38,7 +38,7 @@ export default {
         gender: '',
         email: ''
       },
-      like: ''
+      like: false
     }
   },
   mounted () {
@@ -55,13 +55,13 @@ export default {
         action: 1
       })
     },
-    newLike () {
+    setLike (newAction) {
       this.$socket.emit('profileNewAction', {
         token: this.$cookie.get('authToken'),
         receiver: this.$route.params.userId,
-        action: 0
+        action: newAction
       })
-      this.like = 1
+      this.like = !this.like
     },
     getProfile () {
       Profile.viewProfile(this.user, callback => {

@@ -27,3 +27,9 @@ module.exports.getActionsFromEmitter = function (emitter, action, callback) {
         [emitter, action],
         callback);
 }
+
+module.exports.deleteAction = function (action, id_account, emitter, callback) {
+  db.query('DELETE FROM notifications WHERE id_account=? AND action=? AND emitter = ?',
+    [id_account, action, emitter],
+    callback);
+}

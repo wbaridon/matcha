@@ -182,20 +182,43 @@ function profileNewAction(data) {
       break;
     case 1: notifications.newAction(data.action, data.receiver, data.emitter)
       break;
+    case 4: deleteLike(data)
+      break;
   }
 }
 
 function checkNewLike(data) {
   // On check si l'autre ne nous a pas deja like
 
-  notifications.getAllFrom(data.receiver, 0, (err, result) => {
+  notifications.getAllFrom(data.emitter, 0, (err, result) => {
+
     if (result.length != 0) {
       // L'autre nous a deja like
-      notifications.newAction(4, data.receiver, data.emitter)
+      notifications.newAction(3, data.receiver, data.emitter)
     } else {
       // L'autre ne nous a pas encore like
-      notifications.newAction(0, data.receiver, data.emitter)
+     notifications.newAction(0, data.receiver, data.emitter)
     }
   })
 
+}
+
+function deleteLike(data) {
+  // On check si l'autre nous avait like ou pas car c'etait un match et on doit donc envoyer une notif
+  // Sinon on retire simplement le like
+  console.log(data)
+  notifications.getAllFrom(data.receiver, 0, (err, result) => {
+    notifications.getAllFrom(data.receiver, 3, (err, otherResult) => {
+      final = result.concat(otherResult)
+      console.log('Result length' + final.length)
+      if (final.length != 0) {
+        // L'autre nous a deja like
+        console.log('autre like us')
+      //  notifications.newAction(4, data.receiver, data.emitter)
+      } else {
+        console.log('autre dont like us')
+      //  notifications.deleteAction(0, data.receiver, data.emitter)
+      }
+    })
+  })
 }
