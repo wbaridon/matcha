@@ -6,7 +6,11 @@ export default {
       callback(response.data)
     })
   },
-
+  getAllNotifications (token, callback) {
+    return Api().post('notifications/getAll', {'token': token}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   getMatches (userid, callback) {
     return Api().post('matches/get', {'userid': userid}, callback).then(function (response) {
       callback(response.data)

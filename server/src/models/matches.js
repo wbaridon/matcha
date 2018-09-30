@@ -27,6 +27,6 @@ module.exports.getMatchesAsEmitter = function (userid, callback) {
 module.exports.checkMatched = function (userid, recipient, callback) {
   db.query('SELECT * \
   FROM notifications \
-  WHERE id_account = ? AND action = ? AND emitter = ?',
-  [userid, 4, recipient, recipient, 4, userid], callback);
+  WHERE action = 4 AND ((id_account = ? AND emitter = ?) OR (id_account = ? AND emitter = ?))',
+  [userid, recipient, recipient, userid], callback);
 }
