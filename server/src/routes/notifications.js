@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var notifications = require('../models/notifications');
 var profile = require('../models/profile');
+var helpers = require('../utils/helpers');
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -35,6 +36,15 @@ router.post('/get', function (req, res) {
 			break;
 	}
 });
+
+router.post('/getAll', function (req, res) {
+	console.log(req.body)
+	helpers.getId(req.body.token, id => {
+		notifications.getAll(id, (err, array) => {
+			res.send(array)
+		})
+	})
+})
 
 router.post('/profileVisit', function (req, res) {
 	console.log('arrive dans profile visit')
