@@ -137,11 +137,11 @@ io.on('connection', function(socket) {
     })
 
     // ON VISIT A NEW PROFILE
-    socket.on('PROFILE_VISIT', function(data) {
+    socket.on('profileNewAction', function(data) {
       helpers.getId(data.token, id => {
         data.emitter = id
         console.log(data)
-        notifications.newAction(data.action, data.receiver, data.emitter)
+        profileNewAction(data)
       // Si connecte sent notifications via socket io sinon on store en db
       // LE SOCKET IO N'EST PAS ENCORE FAIT
       })
@@ -174,4 +174,28 @@ function sendNotifications(data) {
       }
     })
   }
+}
+
+function profileNewAction(data) {
+  switch (data.action) {
+    case 0: checkNewLike(data)
+      break;
+    case 1: notifications.newAction(data.action, data.receiver, data.emitter)
+      break;
+  }
+}
+
+function checkNewLike(data) {
+  // On check si l'autre ne nous a pas deja like
+
+  notifications.getAllFrom(data.receiver, 0, (err, result) => {
+    if (result.length != 0) {
+      // L'autre nous a deja like
+      notifications.newAction(4, data.receiver, data.emitter)
+    } else {
+      // L'autre ne nous a pas encore like
+      notifications.newAction(0, data.receiver, data.emitter)
+    }
+  })
+
 }

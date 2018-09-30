@@ -1,6 +1,6 @@
 <template>
   <div id="profile" v-if="user.userExist">
-    <button> J'aime </button>
+    <button @click="newLike"> J'aime </button>
     <button> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
     {{user.gender}}, {{user.age}} ans,     {{user.sexuality}}<br>
@@ -50,10 +50,17 @@ export default {
   },
   methods: {
     newVisit () {
-      this.$socket.emit('PROFILE_VISIT', {
+      this.$socket.emit('profileNewAction', {
         token: this.$cookie.get('authToken'),
         receiver: this.$route.params.userId,
         action: 1
+      })
+    },
+    newLike () {
+      this.$socket.emit('profileNewAction', {
+        token: this.$cookie.get('authToken'),
+        receiver: this.$route.params.userId,
+        action: 0
       })
     },
     getProfile () {
