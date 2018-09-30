@@ -7,7 +7,7 @@ export default {
     })
   },
   getAllNotifications (token, callback) {
-    return Api().post('notifications/getAll', {'token' : token}, callback).then(function (response) {
+    return Api().post('notifications/getAll', {'token': token}, callback).then(function (response) {
       callback(response.data)
     })
   },

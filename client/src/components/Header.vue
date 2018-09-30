@@ -32,8 +32,9 @@
         <div class="element">
           <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
           <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
-          <i class="far fa-bell fa-lg" @click="showNotifications = true"></i>
             {{notifications.length}}
+            <i class="far fa-bell fa-lg" @click="showNotifications = true"></i>
+          </span>
           <Notifications v-if="showNotifications" :notifications='notifications' @close="showNotifications = false"></Notifications>
           <i @click="logOut()" class="fas fa-sign-out-alt fa-lg"></i>
         </div>
@@ -54,7 +55,7 @@ export default {
         password: ''
       },
       showError: false,
-      showNotifications: true,
+      showNotifications: '',
       notifications: []
     }
   },
@@ -98,3 +99,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>

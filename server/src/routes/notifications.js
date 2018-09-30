@@ -41,7 +41,9 @@ router.post('/getAll', function (req, res) {
 	console.log(req.body)
 	helpers.getId(req.body.token, id => {
 		notifications.getAll(id, (err, array) => {
-			res.send(array)
+			translateNotification(array).then(result => {
+				res.send(result)
+			})
 		})
 	})
 })
@@ -66,5 +68,28 @@ function getResumeFrom(id) {
 		profile.select(id, (err, result) => {
 			resolve(result[0])
 		})
+	})
+}
+
+function translateNotification(array) {
+	return new Promise ((resolve,reject) => {
+		for (var i = 0; i < array.length; i++) {
+			switch (array[i].action) {
+				case 0: array[i].action = 'vient de vous liker'
+					break;
+				case 1: array[i].action = 'vient de visiter votre profil'
+					break;
+				case 2: array[i].action = 'vient de vous envoyer un message'
+					break;
+				case 3: array[i].action = 'vient de vous liker en retour'
+					break;
+				case 4: array[i].action = 'vient d\'annuler le match'
+					break;
+				default:
+
+			}
+
+		}
+		resolve(array)
 	})
 }
