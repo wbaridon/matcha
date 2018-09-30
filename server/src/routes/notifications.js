@@ -37,6 +37,15 @@ router.post('/get', function (req, res) {
 	}
 });
 
+router.post('/getLikeStatus', function (req, res) {
+	helpers.getId(req.body.token, id => {
+		notifications.getActionsFromEmitter(id, req.body.action, (err, result) => {
+			if (result.length > 0) { res.send ({'like':1})}
+			else {res.send({'like':0})}
+		})
+	})
+})
+
 router.post('/getAll', function (req, res) {
 	helpers.getId(req.body.token, id => {
 		notifications.getAll(id, (err, array) => {
