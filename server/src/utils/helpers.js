@@ -48,3 +48,19 @@ module.exports.profileIsFill = function(user, callback)
     callback(1)
   }
 }
+
+module.exports.getUsersProfileFromEmitter = async function (array, callback)
+{
+  for (var i = 0; i < array.length; i++) {
+    array[i].emitterProfile = await getProfile(array[i].emitter)
+  }
+  callback(array)
+}
+
+function getProfile(id) {
+  return new Promise((resolve, reject) => {
+    profile.select(id, (err, callback) => {
+      resolve(callback[0])
+    })
+  })
+}

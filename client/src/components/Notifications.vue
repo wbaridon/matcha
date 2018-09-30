@@ -6,7 +6,10 @@
       <!-- Sent messages output -->
       <ul>
         <li class="notifications" v-for="element in notifications" :key="element.id">
-          {{element.id}} - {{element.action}}
+          <router-link :to="'/profile/' + element.emitterProfile.id_account" class="link">
+            {{element.emitterProfile.firstname}}
+          </router-link>
+          {{element.action}}
         </li>
       </ul>
     </div>
@@ -38,5 +41,14 @@ export default {
     background-color: lightgrey;
     text-align: right;
     display: block;
+  }
+  .link {
+    color: black;
+  }
+  .notifications {
+    list-style-type: none;
+  }
+  #all_notifications ul {
+    padding: 2px;
   }
 </style>

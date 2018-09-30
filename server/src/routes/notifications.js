@@ -38,11 +38,13 @@ router.post('/get', function (req, res) {
 });
 
 router.post('/getAll', function (req, res) {
-	console.log(req.body)
 	helpers.getId(req.body.token, id => {
 		notifications.getAll(id, (err, array) => {
-			translateNotification(array).then(result => {
-				res.send(result)
+			translateNotification(array)
+			.then(result => {
+				helpers.getUsersProfileFromEmitter(result, callback => {
+					res.send(callback)
+				})
 			})
 		})
 	})
