@@ -21,3 +21,15 @@ module.exports.getAllFrom = function (id_account, action, callback) {
         [id_account, action],
         callback);
 }
+module.exports.getActionsFromEmitter = function (emitter, action, callback) {
+    db.query('SELECT * FROM notifications\
+        WHERE emitter = ? AND action=?',
+        [emitter, action],
+        callback);
+}
+
+module.exports.deleteAction = function (action, id_account, emitter, callback) {
+  db.query('DELETE FROM notifications WHERE id_account=? AND action=? AND emitter = ?',
+    [id_account, action, emitter],
+    callback);
+}

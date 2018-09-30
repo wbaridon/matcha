@@ -37,12 +37,26 @@ router.post('/get', function (req, res) {
 	}
 });
 
+router.post('/getLikeStatus', function (req, res) {
+	helpers.getId(req.body.token, id => {
+		notifications.getActionsFromEmitter(id, req.body.action, (err, result) => {
+			notifications.getActionsFromEmitter(id, 3, (err, otherResult) => {
+				final = result.concat(otherResult)
+				if (final.length > 0) { res.send ({'like':true})}
+				else {res.send({'like':false})}
+				})
+		})
+	})
+})
+
 router.post('/getAll', function (req, res) {
-	console.log(req.body)
 	helpers.getId(req.body.token, id => {
 		notifications.getAll(id, (err, array) => {
-			translateNotification(array).then(result => {
-				res.send(result)
+			translateNotification(array)
+			.then(result => {
+				helpers.getUsersProfileFromEmitter(result, callback => {
+					res.send(callback)
+				})
 			})
 		})
 	})

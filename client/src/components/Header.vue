@@ -34,7 +34,6 @@
           <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
             {{notifications.length}}
             <i class="far fa-bell fa-lg" @click="showNotifications = true"></i>
-          </span>
           <Notifications v-if="showNotifications" :notifications='notifications' @close="showNotifications = false"></Notifications>
           <i @click="logOut()" class="fas fa-sign-out-alt fa-lg"></i>
         </div>

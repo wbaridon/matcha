@@ -1,7 +1,7 @@
 <template>
   <div id="profile" v-if="user.userExist">
-    <button> J'aime </button>
-    <button> Je n'aime plus </button>
+    <button @click.once="setLike(0)" v-if="!like"> J'aime </button>
+    <button @click.once="setLike(4)" v-if="like"> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
     {{user.gender}}, {{user.age}} ans,     {{user.sexuality}}<br>
       Score de popularite: <br>
@@ -20,6 +20,7 @@
 
 <script>
 import Profile from '@/services/ProfileService'
+import Notifications from '@/services/Profile/NotificationsService'
 export default {
 
   name: 'Profile',
@@ -37,28 +38,39 @@ export default {
         gender: '',
         email: ''
       },
-      like: {
-        status: '', // Si oui ou non on a liker l'user
-        other: '' // Si l'autre nous a liker mettre yes
-      }
+      like: false
     }
   },
   mounted () {
     this.newVisit()
     this.user.id = this.$route.params.userId
     this.getProfile()
+    this.getLikeStatus()
   },
   methods: {
     newVisit () {
-      this.$socket.emit('PROFILE_VISIT', {
+      this.$socket.emit('profileNewAction', {
         token: this.$cookie.get('authToken'),
         receiver: this.$route.params.userId,
         action: 1
       })
     },
+    setLike (newAction) {
+      this.$socket.emit('profileNewAction', {
+        token: this.$cookie.get('authToken'),
+        receiver: this.$route.params.userId,
+        action: newAction
+      })
+      this.like = !this.like
+    },
     getProfile () {
       Profile.viewProfile(this.user, callback => {
         this.user = callback
+      })
+    },
+    getLikeStatus () {
+      Notifications.getLikeStatus(0, this.$cookie.get('authToken'), callback => {
+        this.like = callback.like
       })
     },
     fakeProfile () {
