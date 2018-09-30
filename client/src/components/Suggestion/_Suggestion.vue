@@ -132,8 +132,6 @@ export default {
         case 'Tags en commun':
           this.array.sort((a, b) => b.tagCount - a.tagCount)
           break
-        default:
-          return this.array
       }
     }
   }
