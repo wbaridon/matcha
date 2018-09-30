@@ -3,7 +3,7 @@
     <!-- Sent messages output -->
     <div @click="close" id="topChat">Close</div>
     <div class="discussionContent">
-      <div class="messages" v-for="msg in messages" :key="msg.id">
+      <div class="messages" v-for="msg in messages.slice().reverse()" :key="msg.id">
         <p><span>{{ msg.login }}: </span>{{ msg.message }}</p>
       </div>
     </div>

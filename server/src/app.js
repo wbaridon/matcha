@@ -125,6 +125,7 @@ io.on('connection', function(socket) {
       // Pushes message to screen with sockets
       // --> To recipient
       if (userSockets['id'+data.recipient]) {
+        console.log('Recipient='+data.recipient)
         getUsernameFromId(data.userid, username => {
           data.login = username[0].login
           for (var i = 0; i < userSockets['id'+data.recipient].length; i++) {
