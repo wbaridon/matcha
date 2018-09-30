@@ -6,7 +6,7 @@ module.exports.getMatchesAsReceiver = function (userid, callback) {
 	FROM notifications AS n INNER JOIN profiles AS p \
   ON p.id_account = n.emitter\
 	WHERE n.id_account = ? \
- 	AND n.action = 4',
+ 	AND n.action = 3',
   userid,
   callback);
 }
@@ -17,7 +17,7 @@ module.exports.getMatchesAsEmitter = function (userid, callback) {
 	FROM notifications AS n INNER JOIN profiles AS p \
   ON p.id_account = n.id_account\
 	WHERE n.emitter = ? \
- 	AND n.action = 4',
+ 	AND n.action = 3',
   userid,
   callback);
 }
@@ -27,6 +27,6 @@ module.exports.getMatchesAsEmitter = function (userid, callback) {
 module.exports.checkMatched = function (userid, recipient, callback) {
   db.query('SELECT * \
   FROM notifications \
-  WHERE action = 4 AND ((id_account = ? AND emitter = ?) OR (id_account = ? AND emitter = ?))',
+  WHERE action = 3 AND ((id_account = ? AND emitter = ?) OR (id_account = ? AND emitter = ?))',
   [userid, recipient, recipient, userid], callback);
 }

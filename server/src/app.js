@@ -143,7 +143,7 @@ io.on('connection', function(socket) {
         console.log(data)
         notifications.newAction(data.action, data.receiver, data.emitter)
       // Si connecte sent notifications via socket io sinon on store en db
-      // LE SOCKET IO N'EST PAS ENCORE FAIT   
+      // LE SOCKET IO N'EST PAS ENCORE FAIT
       })
     })
 
