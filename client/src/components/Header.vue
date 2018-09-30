@@ -33,6 +33,9 @@
           <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
           <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
           <i class="far fa-bell fa-lg"></i>
+          <div class="" v-for="element in notifications">
+            {{element}}
+          </div>
           <i @click="logOut()" class="fas fa-sign-out-alt fa-lg"></i>
         </div>
     </nav>
@@ -49,7 +52,8 @@ export default {
         login: '',
         password: ''
       },
-      showError: false
+      showError: false,
+      notifications: []
     }
   },
   components: {
@@ -59,6 +63,15 @@ export default {
     isAuth () {
       return this.$store.state.isAuth
     }
+  },
+  mounted () {
+    this.$socket.on('NEW_VISIT', (data) => {
+      // Doesn't send MESSAGE if user isn't on right conversation
+    //  if (this.recipient === data.userid.toString() || this.recipient === data.recipient) {
+        this.notifications.push(data)
+        console.log(data)
+    //  }
+    })
   },
   methods: {
     userLogin () {

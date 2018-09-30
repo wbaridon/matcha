@@ -43,6 +43,7 @@ const io = require('socket.io')(server, {
  pingTimeout: 5000,
 })
 const chat = require('./models/chat.js')
+const notifications = require('./models/notifications.js')
 
 function fillHistory(idsender, idrecipient, callback) {
   chat.getMessages(idsender, idrecipient, (err, result) => {
@@ -124,15 +125,8 @@ io.on('connection', function(socket) {
       chat.storeMessage(data)
       // Pushes message to screen with sockets
       // --> To recipient
-      if (userSockets['id'+data.recipient]) {
-        console.log('Recipient='+data.recipient)
-        getUsernameFromId(data.userid, username => {
-          data.login = username[0].login
-          for (var i = 0; i < userSockets['id'+data.recipient].length; i++) {
-            io.to(userSockets['id'+data.recipient][i]).emit('MESSAGE', data);
-          }
-        })
-      }
+      sendNotifications(data); // Je l'ai deporter en bas pour pouvoir la
+      //re utiliser a voir si on peut rendre code + universel egalement pour le receiver
       // --> to sender
       getUsernameFromId(data.userid, username => {
         data.login = username[0].login
@@ -144,10 +138,12 @@ io.on('connection', function(socket) {
 
     // ON VISIT A NEW PROFILE
     socket.on('PROFILE_VISIT', function(data) {
-      helpers.getUsername(data.token, login => {
-        data.login = login
-
-        console.log('ici') // A faire
+      helpers.getId(data.token, id => {
+        data.emitter = id
+        console.log(data)
+        notifications.newAction(data.action, data.receiver, data.emitter)
+      // Si connecte sent notifications via socket io sinon on store en db
+      // LE SOCKET IO N'EST PAS ENCORE FAIT   
       })
     })
 
@@ -168,3 +164,14 @@ io.on('connection', function(socket) {
       })
     }
   })
+
+function sendNotifications(data) {
+  if (userSockets['id'+data.recipient]) {
+    getUsernameFromId(data.userid, username => {
+      data.login = username[0].login
+      for (var i = 0; i < userSockets['id'+data.recipient].length; i++) {
+        io.to(userSockets['id'+data.recipient][i]).emit('MESSAGE', data);
+      }
+    })
+  }
+}

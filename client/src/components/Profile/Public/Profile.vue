@@ -51,7 +51,9 @@ export default {
   methods: {
     newVisit () {
       this.$socket.emit('PROFILE_VISIT', {
-        token: this.$cookie.get('authToken')
+        token: this.$cookie.get('authToken'),
+        receiver: this.$route.params.userId,
+        action: 1
       })
     },
     getProfile () {
