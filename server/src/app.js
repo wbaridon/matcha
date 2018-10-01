@@ -43,6 +43,7 @@ const io = require('socket.io')(server, {
  pingTimeout: 5000,
 })
 const chat = require('./models/chat.js')
+const matches = require('./models/matches.js')
 const notifications = require('./models/notifications.js')
 
 function fillHistory(idsender, idrecipient, callback) {
@@ -206,19 +207,26 @@ function checkNewLike(data) {
 function deleteLike(data) {
   // On check si l'autre nous avait like ou pas car c'etait un match et on doit donc envoyer une notif
   // Sinon on retire simplement le like
-  console.log(data)
-  notifications.getAllFrom(data.receiver, 0, (err, result) => {
-    notifications.getAllFrom(data.receiver, 3, (err, otherResult) => {
-      final = result.concat(otherResult)
-      console.log('Result length' + final.length)
-      if (final.length != 0) {
-        // L'autre nous a deja like
-        console.log('autre like us')
+  matches.checkMatched(data.receiver, data.emitter, (err, result) => {
+      if (result.length != 0) {
+        notifications.getLikeAction(data.emitter, data.receiver, (err, id) => {
+          switch (id[0].action) {
+            case 3:
+              notifications.deleteAction(3, data.receiver, data.emitter)
+              break;
+            case 0:
+                notifications.deleteAction(0, data.receiver, data.emitter)
+                notifications.changeAction(3, 0, data.receiver, data.emitter)
+            // En plus d'update on va devoir passer l'autre 3 en 0
+              break;
+          }
+        })
+        // Il y a un match, on va supprimer le like mais il faut prevenir l'autre via socket io
       //  notifications.newAction(4, data.receiver, data.emitter)
       } else {
-        console.log('autre dont like us')
-      //  notifications.deleteAction(0, data.receiver, data.emitter)
+        // Ce n'est pas un match
+        notifications.deleteAction(0, data.receiver, data.emitter)
       }
-    })
   })
+
 }
