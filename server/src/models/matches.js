@@ -22,7 +22,6 @@ module.exports.getMatchesAsEmitter = function (userid, callback) {
   callback);
 }
 
-
 // Check if user matched before (returns either FILLED ARRAY or EMPTY ARRAY)
 module.exports.checkMatched = function (userid, recipient, callback) {
   db.query('SELECT * \

@@ -28,6 +28,18 @@ module.exports.getActionsFromEmitter = function (emitter, action, callback) {
         callback);
 }
 
+module.exports.getLikeAction = function (emitter, receiver, callback) {
+  db.query('SELECT * FROM notifications WHERE id_account =? AND emitter =? AND (action=3 OR action=0)',
+  [receiver, emitter],
+  callback);
+}
+
+module.exports.changeAction = function (action, newAction, emitter, receiver, callback) {
+  db.query('UPDATE notifications SET action=? WHERE id_account=? AND emitter=? AND action=?',
+  [newAction, receiver, emitter, action],
+  callback);
+}
+
 module.exports.deleteAction = function (action, id_account, emitter, callback) {
   db.query('DELETE FROM notifications WHERE id_account=? AND action=? AND emitter = ?',
     [id_account, action, emitter],

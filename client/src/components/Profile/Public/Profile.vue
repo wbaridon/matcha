@@ -1,7 +1,7 @@
 <template>
   <div id="profile" v-if="user.userExist">
-    <button @click.once="setLike(0)" v-if="!like"> J'aime </button>
-    <button @click.once="setLike(4)" v-if="like"> Je n'aime plus </button>
+    <button @click="setLike(0)" v-if="!like"> J'aime </button>
+    <button @click="setLike(4)" v-if="like"> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
     {{user.gender}}, {{user.age}} ans,     {{user.sexuality}}<br>
       Score de popularite: <br>
