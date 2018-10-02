@@ -143,8 +143,9 @@ io.on('connection', function(socket) {
       helpers.getId(data.token, id => {
         data.emitter = id
         console.log(data)
-        profileNewAction(data)
-        // Faire une protection si on est sur son propre profil
+        if (data.emitter != data.receiver) {
+          profileNewAction(data)
+        }
       // Si connecte sent notifications via socket io sinon on store en db
       // LE SOCKET IO N'EST PAS ENCORE FAIT
       })
