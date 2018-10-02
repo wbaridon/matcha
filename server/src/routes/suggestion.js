@@ -12,6 +12,7 @@ var jwt = require('jsonwebtoken');
 var interestsCheck = require('../utils/interestsCheck');
 var sexualCheck = require('../utils/sexualCheck');
 var helpers = require('../utils/helpers.js');
+var block = require('../utils/block.js');
 
 router.get('/', (req, res) => {
 		res.send('The server is working...')
@@ -38,7 +39,10 @@ router.post('/', function(req, res) {
 						sexualCheck.convertUserData(result, user => {
 							localisation.getDistance(user, id, finalUser => {
 										getInterests(finalUser, id, callback => {
-												res.send(callback)
+											block.filter(id, callback, filterView => {
+													res.send(filterView)
+											})
+
 										})
 							})
 						})

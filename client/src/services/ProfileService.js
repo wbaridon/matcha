@@ -66,5 +66,10 @@ export default {
     return Api().post('profile/getInterestsList', callback).then(function (response) {
       callback(response.data)
     })
+  },
+  blockUser (idBlocked, token, callback) {
+    return Api().post('profile/blockUser', {'id_blocked': idBlocked, token}, callback).then(function (response) {
+      callback(response)
+    })
   }
 }

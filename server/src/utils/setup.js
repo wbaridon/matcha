@@ -52,6 +52,11 @@ CREATE TABLE IF NOT EXISTS chat ( \
     recipient VARCHAR(50), \
     message VARCHAR(200));',' \
 \
+CREATE TABLE IF NOT EXISTS blacklist ( \
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    id_blocked INT NOT NULL, \
+    id_by INT NOT NULL);',' \
+\
 CREATE TABLE IF NOT EXISTS notifications (\
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
     id_account INT NOT NULL, \

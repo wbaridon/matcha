@@ -4,6 +4,8 @@ var argon2 = require('argon2');
 var profile = require('../models/profile.js');
 var interests = require('../models/interests.js');
 var account = require('../models/account.js');
+var blacklist = require('../models/blacklist.js');
+var helpers = require('../utils/helpers.js')
 var jwt = require('jsonwebtoken');
 var NodeGeocoder = require('node-geocoder')
 var geocoder = NodeGeocoder({
@@ -106,8 +108,6 @@ router.post('/getInterestsList', function(req, res) {
 router.post('/addInterest', function(req, res) {
 		interest = req.body.data
 		id = req.body.id
-		console.log(req.body)
-		console.log(interest + ' et ' + id)
 		interests.getInterestsList(callback => {
 			array = callback.map(v => v.COLUMN_NAME)
 			if (array.indexOf(interest) > -1) {
@@ -121,6 +121,14 @@ router.post('/addInterest', function(req, res) {
 					})
 				})
 			}
+		})
+})
+
+router.post('/blockUser',  function(req, res) {
+		helpers.getId(req.body.token, id => {
+			blacklist.blockUser(req.body.id_blocked, id, (err, result) => {
+				res.send(result)
+			})
 		})
 })
 
