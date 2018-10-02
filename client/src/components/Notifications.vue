@@ -8,8 +8,7 @@
         <li class="notifications" v-for="element in notifications" :key="element.id">
           <router-link :to="'/profile/' + element.emitterProfile.id_account" class="link">
             {{element.emitterProfile.firstname}}
-          </router-link>
-          {{element.action}}
+          </router-link> {{element.action}}
         </li>
       </ul>
     </div>

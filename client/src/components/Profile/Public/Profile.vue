@@ -94,7 +94,9 @@ export default {
       })
     },
     blockUser () {
-      console.log('a faire')
+      Profile.blockUser(this.$route.params.userId, this.$cookie.get('authToken'), callback => {
+        this.feedback = 'Utilisateur bloque'
+      })
     }
   }
 }
