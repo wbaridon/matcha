@@ -1,8 +1,11 @@
 <template>
   <div id="profile" v-if="user.userExist">
-    <button @click="setLike(0)" v-if="!like"> J'aime </button>
-    <button @click="setLike(4)" v-if="like"> Je n'aime plus </button>
+    <button @click="setLike(0)" v-if="!like && images.count > 0"> J'aime </button>
+    <button @click="setLike(4)" v-if="like && images.count > 0"> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
+    <div v-for="picture in images.gallery" :key="picture.id" class="pic">
+        <img :src="'/static/images/uploads/'+picture.filename"/>
+    </div>
     {{user.gender}}, {{user.age}} ans,     {{user.sexuality}}<br>
       Score de popularite: <br>
     <h3>QUI SUIS JE? </h3>
@@ -21,6 +24,7 @@
 <script>
 import Profile from '@/services/ProfileService'
 import Notifications from '@/services/Profile/NotificationsService'
+import Pictures from '@/services/Profile/PicturesService'
 export default {
 
   name: 'Profile',
@@ -37,6 +41,10 @@ export default {
         bio: '',
         gender: '',
         email: ''
+      },
+      images: {
+        count: '',
+        gallery: []
       },
       like: false
     }
@@ -66,6 +74,13 @@ export default {
     getProfile () {
       Profile.viewProfile(this.user, callback => {
         this.user = callback
+        this.getPic(this.user.id)
+      })
+    },
+    getPic (id) {
+      Pictures.getPic(id, callback => {
+        this.images.count = callback.count
+        this.images.gallery = callback.gallery
       })
     },
     getLikeStatus () {
@@ -96,5 +111,9 @@ export default {
     padding: 5px;
     color: white;
     margin: 3px;
+  }
+  .pic img {
+    width: 200px;
+    height: 200px;
   }
 </style>
