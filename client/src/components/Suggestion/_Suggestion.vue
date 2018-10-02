@@ -85,6 +85,14 @@ export default {
       user: []
     }
   },
+  watch: {
+    ask: {
+      handler: function (val, oldVal) {
+        this.getAll()
+      },
+      deep: true
+    }
+  },
   mounted () {
     this.getUser(this.$cookie.get('authToken'))
     this.getAll()
