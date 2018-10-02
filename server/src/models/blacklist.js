@@ -8,9 +8,9 @@ module.exports.blockUser = function (id_blocked, id_by, callback) {
 		callback);
 }
 
-module.exports.getList = function (id, callback) {
-	db.query('SELECT * FROM blacklist WHERE id_by=?',
-		[id], function (err, result) {
+module.exports.getBlockStatus = function (id, idBlocked, callback) {
+	db.query('SELECT * FROM blacklist WHERE id_by=? AND id_blocked=?',
+		[id, idBlocked], function (err, result) {
 			if (err) throw err;
 			else {
 				callback(result)

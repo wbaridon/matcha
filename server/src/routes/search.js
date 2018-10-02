@@ -7,7 +7,7 @@ var jwt = require('jsonwebtoken')
 var localisation = require('../utils/localisation');
 var interestsCheck = require('../utils/interestsCheck');
 var sexualCheck = require('../utils/sexualCheck');
-
+var block = require('../utils/block')
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -29,7 +29,9 @@ router.post('/ask', function (req, res) {
 				localisation.getDistance(result, id, distance => {
 					interestsCheck.commonTagCount(id, distance, array => {
 							sexualCheck.convertUserData(array, convert => {
-								res.send(convert)
+								block.filter(id, convert, blockLess => {
+										res.send(blockLess)
+								})
 						})
 					})
 				})
