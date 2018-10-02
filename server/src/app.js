@@ -45,6 +45,7 @@ const io = require('socket.io')(server, {
 const chat = require('./models/chat.js')
 const matches = require('./models/matches.js')
 const notifications = require('./models/notifications.js')
+const profile = require('./models/profile.js')
 
 function fillHistory(idsender, idrecipient, callback) {
   chat.getMessages(idsender, idrecipient, (err, result) => {
@@ -143,6 +144,7 @@ io.on('connection', function(socket) {
         data.emitter = id
         console.log(data)
         profileNewAction(data)
+        // Faire une protection si on est sur son propre profil
       // Si connecte sent notifications via socket io sinon on store en db
       // LE SOCKET IO N'EST PAS ENCORE FAIT
       })
@@ -179,9 +181,13 @@ function sendNotifications(data) {
 
 function profileNewAction(data) {
   switch (data.action) {
-    case 0: checkNewLike(data)
+    case 0:
+      checkNewLike(data)
+      profile.addPopularite(data.receiver, 25)
       break;
-    case 1: notifications.newAction(data.action, data.receiver, data.emitter)
+    case 1:
+      notifications.newAction(data.action, data.receiver, data.emitter)
+      profile.addPopularite(data.receiver, 10)
       break;
     case 4: deleteLike(data)
       break;
@@ -196,6 +202,8 @@ function checkNewLike(data) {
     if (result.length != 0) {
       // L'autre nous a deja like
       notifications.newAction(3, data.receiver, data.emitter)
+      profile.addPopularite(data.receiver, 50)
+      profile.addPopularite(data.emitter, 50)
     } else {
       // L'autre ne nous a pas encore like
      notifications.newAction(0, data.receiver, data.emitter)

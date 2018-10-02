@@ -21,6 +21,15 @@ module.exports.updateUser = function (id_account, column, value, callback) {
         callback);
 }
 
+module.exports.addPopularite = function (id_account, value, callback) {
+		db.query("UPDATE profiles\
+        SET popularite= popularite + ?\
+        WHERE id_account = ?",
+        [value, id_account],
+        callback);
+}
+
+
 module.exports.updateProfilePic = function (idAccount, id, callback) {
 	db.query("UPDATE images\
 	 SET isProfile=0 WHERE id_account = ?",
