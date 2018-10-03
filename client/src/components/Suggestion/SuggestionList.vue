@@ -3,7 +3,7 @@
     <div v-if="viewFilter(element) && filterInterest(element)" v-for="element in paginatedData" :key="element.id" class="card">
       <h2>{{element.firstname}} {{element.name}}</h2><br>
       {{element.age}} ans, {{element.gender}} {{element.sexuality}} à {{element.distance}} m<br>
-      Pourcentage de compatibilite (A confirmer) {{element.interests}}
+      Compatible a {{element.compatibility}}% {{element.interests}}
       Interet commun {{element.tagCount}}
       Score de popularite
       <span v-for="(data, index) in element.interest" :key="index">#{{index}} </span>

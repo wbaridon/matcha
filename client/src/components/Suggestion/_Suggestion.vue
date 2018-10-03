@@ -114,6 +114,7 @@ export default {
       Suggestion.getAll(token, callback => {
         if (callback.data.error !== 1) {
           this.array = callback.data
+          this.array.sort((a, b) => b.compatibility - a.compatibility)
           this.user.isFill = 1
         }
       })
@@ -126,19 +127,19 @@ export default {
     Sort () {
       switch (this.sort) {
         case 'Age':
-          this.array.sort((a, b) => a.age - b.age)
+          this.array.sort((a, b) => a.age - b.age || b.compatibility - a.compatibility)
           break
         case 'Popularite +':
-          this.array.sort((a, b) => b.popularite - a.popularite)
+          this.array.sort((a, b) => b.popularite - a.popularite || b.compatibility - a.compatibility)
           break
         case 'Popularite -':
-          this.array.sort((a, b) => a.popularite - b.popularite)
+          this.array.sort((a, b) => a.popularite - b.popularite || b.compatibility - a.compatibility)
           break
         case 'Localisation':
-          this.array.sort((a, b) => a.distance - b.distance)
+          this.array.sort((a, b) => a.distance - b.distance || b.compatibility - a.compatibility)
           break
         case 'Tags en commun':
-          this.array.sort((a, b) => b.tagCount - a.tagCount)
+          this.array.sort((a, b) => b.tagCount - a.tagCount || b.compatibility - a.compatibility)
           break
       }
     }
