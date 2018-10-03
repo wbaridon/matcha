@@ -16,7 +16,12 @@
       <button @click="update.pref = true" v-if="!update.pref">Modifier mes preferences</button>
       <p v-if="!update.pref">
         <strong>Orientation sexuelle: </strong>{{user.sexuality}}<br>
-        <strong>Ma localisation: </strong> {{user.city}} {{user.zipcode}} <button @click="locate">Mettre a jour</button>
+        <strong>Ma localisation: </strong> {{user.city}} {{user.zipcode}} <button @click="locate">Mettre a jour</button><br><br>
+        <strong>Localisation personalisé</strong><br>
+        <span v-if="feedback">{{feedback}}</span><br>
+        Ville: <input type="text" v-model="user.city"><br>
+        Code postal: <input type="text" v-model="user.zipcode">
+        <button @click="persoLoc">Modifier ma localisation</button>
       </p>
       <form v-if="update.pref" v-on:submit.prevent="changePref()">
         <select v-model="user.sexuality" name='sexuality'>
@@ -80,7 +85,8 @@ export default {
       },
       interests: [],
       likes: [],
-      visits: []
+      visits: [],
+      feedback: ''
     }
   },
   mounted () {
@@ -189,6 +195,16 @@ export default {
         this.user = callback
         this.update.pref = false
       })
+    },
+    persoLoc () {
+      this.feedback = ''
+      if (this.user.city !== '' && this.user.zipcode !== '') {
+        Profile.persoLoc(this.user, callback => {
+          if (callback.feedback) {
+            this.feedback = callback.feedback
+          } else { this.getProfile(this.$cookie.get('authToken')) }
+        })
+      } else { this.feedback = 'Merci de remplir tous les champs' }
     },
     locate () {
       if ('geolocation' in navigator) {

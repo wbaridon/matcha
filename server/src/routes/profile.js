@@ -217,6 +217,29 @@ router.post('/localisation', function(req, res) {
 	})
 })
 
+router.post('/persoLoc', function (req, res) {
+	id = req.body.id
+	geocoder.geocode({ address: req.body.city, zipcode: req.body.zipcode, country: 'France'})
+	.then(call => {
+		if (call[0].countryCode === 'FR') {
+			profile.updateUser(id, 'zipcode', call[0].zipcode, (err, result) => {
+				profile.updateUser(id, 'city', call[0].city, (err, result) => {
+					profile.updateUser(id, 'latitude', call[0].latitude, (err, result) => {
+						profile.updateUser(id, 'longitude', call[0].longitude, (err, result) => {
+								res.send('Ok')
+						})
+					})
+				})
+			})
+		} else {
+			res.send({feedback: 'Votre localisation doit etre en France'})
+		}
+	})
+	.catch(err => {
+		res.send({feedback: 'Localisation non trouvé'})
+	})
+})
+
 router.post('/updatePwd', function(req, res) {
 		console.log(req.body)
 		id = req.body.id

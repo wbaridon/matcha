@@ -67,6 +67,11 @@ export default {
       callback(response.data)
     })
   },
+  persoLoc (user, callback) {
+    return Api().post('profile/persoLoc', user, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   blockUser (idBlocked, token, callback) {
     return Api().post('profile/blockUser', {'id_blocked': idBlocked, token}, callback).then(function (response) {
       callback(response)
