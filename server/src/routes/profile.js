@@ -4,6 +4,7 @@ var argon2 = require('argon2');
 var profile = require('../models/profile.js');
 var interests = require('../models/interests.js');
 var account = require('../models/account.js');
+var notifications = require('../models/notifications.js');
 var blacklist = require('../models/blacklist.js');
 var helpers = require('../utils/helpers.js')
 var jwt = require('jsonwebtoken');
@@ -256,6 +257,20 @@ router.post('/updatePwd', function(req, res) {
 				res.send({'error':1})
 			}
 		})
+	})
+})
+
+router.post('/userLikeUs', function(req, res) {
+	notifications.getActionsFromEmitter(req.body.id, 0, (err, result) => {
+		if (result.length > 0 ) {
+			res.send(true)
+		} else {
+			notifications.getActionsFromEmitter(req.body.id, 3, (err, final) => {
+				if (final.length > 0) {
+					res.send(true)
+				} else { res.send(false) }
+			})
+		}
 	})
 })
 

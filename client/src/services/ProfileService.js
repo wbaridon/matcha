@@ -47,6 +47,11 @@ export default {
       callback(result)
     })
   },
+  userLikeUs (id, callback) {
+    return Api().post('profile/userLikeUs', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   getInterests (id, callback) {
     return Api().post('profile/getInterests', {'id': id}, callback).then(function (response) {
       callback(response.data)
