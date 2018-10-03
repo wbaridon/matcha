@@ -35,12 +35,15 @@ router.post('/', function(req, res) {
 				if (callback === 1) {
 					sexualPref = user[0].sexuality
 					gender = user[0].gender
+					userPop = user[0].popularite
 					suggestionList.showList(id, gender, sexualPref, result => {
 						sexualCheck.convertUserData(result, user => {
 							localisation.getDistance(user, id, finalUser => {
 										getInterests(finalUser, id, callback => {
 											block.filter(id, callback, filterView => {
-													res.send(filterView)
+												addCompatibility(filterView, userPop, newArray => {
+														res.send(newArray)
+												})
 											})
 
 										})
@@ -61,6 +64,65 @@ function getInterests(data, id, callback)
 	interestsCheck.commonTagCount(id, data, array => {
 			callback(array)
 	})
+}
+
+function tagCompatibility(tagCount, callback) {
+	if (tagCount >= 6) { callback(15) }
+	else if (tagCount === 5) { callback(12) }
+	else if (tagCount === 4) { callback(10) }
+	else if (tagCount === 3) { callback(8) }
+	else if (tagCount === 2) { callback(4) }
+	else if (tagCount === 1) { callback(2) }
+	else { callback (0) }
+}
+
+function distanceCompatibility(distance, callback) {
+		if (distance < 1000) { callback(35) }
+		else if(distance < 2000) { callback(32) }
+		else if (distance < 3000) {callback(30) }
+		else if (distance < 4000) { callback(28) }
+		else if (distance < 5000) { callback(25) }
+		else if (distance < 6000) { callback(22) }
+		else if (distance < 4000) { callback(20) }
+		else if (distance < 5000) { callback(15) }
+		else if (distance < 6000) { callback(10) }
+		else if (distance < 7000) { callback(5) }
+		else { callback (0)}
+}
+
+function populariteCompatibility(user1Pop, user2Pop, callback) {
+	popularite = user1Pop - user2Pop
+	if (popularite <= -100 && popularite >= +100) { callback(10) }
+	else if (popularite <= -150 && popularite >= +150) { callback(8) }
+	else if (popularite <= -200 && popularite >= +200) { callback(7) }
+	else if (popularite <= -300 && popularite >= +300) { callback(6) }
+	else if (popularite <= -400 && popularite >= +400) { callback(4) }
+	else if (popularite <= -500 && popularite >= +500) { callback(2) }
+	else { callback (0) }
+}
+
+function compatibilityUser (user, userPop) {
+	return new Promise ((resolve, reject) => {
+		count = 40
+		// On doit aussi faire un rapport avec la popularite
+		distanceCompatibility(user.distance, distance => {
+			count = count + distance
+			tagCompatibility(user.tagCount, tagCount => {
+				count = count + tagCount
+				populariteCompatibility(user.popularite, userPop, popularite => {
+					count = count + popularite
+					resolve(count)
+				})
+			})
+		})
+	})
+}
+
+async function addCompatibility(array, userPop, callback) {
+	for (var i = 0; i < array.length; i++) {
+		array[i].compatibility = await compatibilityUser(array[i], userPop)
+	}
+	callback (array)
 }
 
 module.exports = router;
