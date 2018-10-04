@@ -6,6 +6,8 @@
         </div>
             <i class="far fa-star"></i>
             <strong>Popularite: {{user.popularite}}</strong><br>
+            <span v-if="user.isOnline"><strong>Ce membre est en ligne</strong><br></span>
+            <span v-if="!user.isOnline">Derniere visite: <strong>{{lastVisit}}</strong><br></span>
     </aside>
     <section class="userProfile">
     <button @click="setLike(0)" v-if="!like && images.count > 0"> J'aime </button>
@@ -43,17 +45,7 @@ export default {
   data () {
     return {
       feedback: '',
-      user: {
-        userExist: '',
-        id: '',
-        firstname: '',
-        name: '',
-        age: '',
-        sexuality: '',
-        bio: '',
-        gender: '',
-        email: ''
-      },
+      user: {},
       interests: [],
       images: {
         count: '',
@@ -68,6 +60,13 @@ export default {
     this.user.id = this.$route.params.userId
     this.getProfile()
     this.getLikeStatus()
+  },
+  computed: {
+    lastVisit: function () {
+      var visit = this.user.lastVisit.split('-')
+      var visit2 = visit[2].split('T')
+      return (visit2[0] + '/' + visit[1] + '/' + visit[0])
+    }
   },
   methods: {
     newVisit () {

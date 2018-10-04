@@ -281,8 +281,10 @@ function view (userId, callback) {
       if (result > 0) {
         fillProfile(userId, rawData => {
           convertUserData(rawData, newUser => {
-            account.userEmail(userId, email => {
-              newUser.email = email;
+            account.selectForProfile(userId, extraInfo => {
+              newUser.email = extraInfo.email;
+							newUser.isOnline = extraInfo.isOnline;
+							newUser.lastVisit = extraInfo.lastVisit;
               callback(newUser)
             })
           });
@@ -297,6 +299,7 @@ function view (userId, callback) {
 function fillProfile(userId, callback) {
   profile.select(userId, (err, result) => {
     if (result.length > 0) {
+				user = result[0]
         user = {
           userExist: true,
           id: userId,
@@ -310,7 +313,7 @@ function fillProfile(userId, callback) {
 					zipcode: result[0].zipcode,
 					city: result[0].city,
 					isFill: result[0].isFill,
-					popularite: result[0].popularite
+					popularite: result[0].popularite,
         }
       callback(user)
     }

@@ -28,7 +28,7 @@
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 import Login from '@/services/LoginService'
-// import io from 'socket.io-client'
+
 export default {
   data () {
     return {
@@ -40,8 +40,6 @@ export default {
   },
   mounted () {
     this.checkAuth()
-  },
-  computed: {
   },
   methods: {
     checkAuth () {

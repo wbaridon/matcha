@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS accounts ( \
     login VARCHAR(50), \
     password VARCHAR(128), \
     email VARCHAR(50), \
+    isOnline INT DEFAULT 0, \
+    lastVisit DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, \
     timestamp BIGINT NOT NULL, \
     timestampPassword BIGINT DEFAULT 0);',' \
 \

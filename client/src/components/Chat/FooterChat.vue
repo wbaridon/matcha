@@ -7,7 +7,8 @@
       <ul>
         <li class="match" v-for="match in matches" :key="match.id">
           <div class="linkBlock" @click="open(match.emitter)">
-            <i :class="isOnline" aria-hidden="true"></i> {{match.firstname}}
+            <i v-if="match.isOnline" class="fa fa-circle fa-xs online" aria-hidden="true"></i>
+            <i v-if="!match.isOnline" class="fa fa-circle fa-xs offline" aria-hidden="true"></i> {{match.firstname}}
           </div>
         </li>
       </ul>
@@ -26,15 +27,7 @@ export default {
     }
   },
   mounted () {
-    // Displays messages stored in database so far
     this.getMatches()
-  },
-  computed: {
-    isOnline: function () {
-      if (this.matches.online === true) {
-        return 'fa fa-circle fa-xs online'
-      } else { return 'fa fa-circle offline' }
-    }
   },
   methods: {
     getMatches () {
