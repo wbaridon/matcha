@@ -32,7 +32,7 @@
         <div class="element">
           <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
           <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
-            {{notifications.length}}
+            {{notificationsUnread}}
             <i class="far fa-bell fa-lg" @click="showNotifications = true"></i>
           <Notifications v-if="showNotifications" :notifications='notifications' @close="showNotifications = false"></Notifications>
           <i @click="logOut()" class="fas fa-sign-out-alt fa-lg"></i>
@@ -65,6 +65,15 @@ export default {
   computed: {
     isAuth () {
       return this.$store.state.isAuth
+    },
+    notificationsUnread: function () {
+      var j = 0
+      for (var i = 0; i < this.notifications.length; i++) {
+        if (this.notifications[i].readed === 0) {
+          j++
+        }
+      }
+      return (j)
     }
   },
   watch: {

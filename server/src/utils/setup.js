@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS notifications (\
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
     id_account INT NOT NULL, \
     action INT NOT NULL, \
-    emitter INT NOT NULL);','\
+    emitter INT NOT NULL, \
+    readed INT DEFAULT 0);','\
 \
 CREATE TABLE IF NOT EXISTS interests ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
