@@ -27,7 +27,6 @@ export default {
     }
   },
   mounted () {
-    // Displays messages stored in database so far
     this.getMatches()
   },
   methods: {

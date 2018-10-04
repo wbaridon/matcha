@@ -78,6 +78,7 @@ export default {
         if (res.error === 0) {
           this.$store.commit('logIn')
           this.$cookie.set('authToken', res.token, 1)
+          this.$router.push('/')
         } else {
           this.error = res
           this.showError = true
@@ -88,6 +89,7 @@ export default {
       this.$store.commit('logOut')
       this.$cookie.delete('authToken')
       this.$socket.emit('disconnect', function () { })
+      this.$router.push('/')
     },
     getNotifications () {
       // faudra faire un truc pour afficher les nouvelles cote nombre par rapport

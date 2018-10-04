@@ -89,6 +89,7 @@ var userSockets = new Array()
 
 io.on('connection', function(socket) {
   // CONNECTION EVENT
+  console.log('arrive')
   if (getCookie('authToken', socket)) { // Check si on a un cookie sinon cela bug
     console.log('Cookie: '+getCookie('authToken', socket))
     helpers.getId(getCookie('authToken', socket), function(r){
