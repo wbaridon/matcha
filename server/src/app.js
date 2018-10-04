@@ -89,7 +89,7 @@ var userSockets = new Array()
 
 io.on('connection', function(socket) {
   // CONNECTION EVENT
-  console.log('arrive')
+
   if (getCookie('authToken', socket)) { // Check si on a un cookie sinon cela bug
     console.log('Cookie: '+getCookie('authToken', socket))
     helpers.getId(getCookie('authToken', socket), function(r){
@@ -130,6 +130,7 @@ io.on('connection', function(socket) {
       chat.storeMessage(data)
       // Pushes message to screen with sockets
       // --> To recipient
+      console.log('juste avant send notif')
       sendNotifications(data); // Je l'ai deporter en bas pour pouvoir la
       //re utiliser a voir si on peut rendre code + universel egalement pour le receiver
       // --> to sender
@@ -155,6 +156,7 @@ io.on('connection', function(socket) {
 
     // WHEN SOCKET DISCONNECTS
     socket.on('disconnect', function () {
+
         console.log(socket.myUsername+' disconnected')
         let userIDs = userSockets['id'+socket.myUsername]
         if (userIDs.length >= 1) {
@@ -177,6 +179,7 @@ function sendNotifications(data) {
     getUsernameFromId(data.userid, username => {
       data.login = username[0].login
       for (var i = 0; i < userSockets['id'+data.recipient].length; i++) {
+        console.log('emet le message au recipient ' + data.recipient)
         io.to(userSockets['id'+data.recipient][i]).emit('MESSAGE', data);
       }
     })

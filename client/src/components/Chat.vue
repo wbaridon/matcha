@@ -2,7 +2,7 @@
   <div id="chat">
     <!-- Sent messages output -->
     <div class="messages" v-for="msg in messages" :key="msg.id">
-      <p><span>{{ msg.login }}: </span>{{ msg.message }}</p>
+        <p><span>{{ msg.login }}: </span>{{ msg.message }}</p>
     </div>
     <form @submit.prevent="sendMessage">
       <input id="message" v-model="message" type="text" placeholder="type in your message">
@@ -18,7 +18,6 @@ export default {
   data () {
     return {
       message: '',
-      messages: [],
       recipient: ''
     }
   },
@@ -29,16 +28,20 @@ export default {
     this.checkMatch()
     // Displays messages stored in database so far
     this.getMessages()
-    this.$socket.on('GET_MESSAGES', (history) => {
-      this.messages = history
-    })
+
     // Displays messages received while page not refreshed
-    this.$socket.on('MESSAGE', (data) => {
+    /*this.$socket.on('MESSAGE', (data) => {
       // Doesn't send MESSAGE if user isn't on right conversation
-      if (this.recipient === data.userid.toString() || this.recipient === data.recipient) {
-        this.messages.push(data)
-      }
-    })
+      console.log(data)
+    /*  if (this.recipient === data.userid.toString() || this.recipient === data.recipient) {*/
+      //  this.messages.push(data)
+    /*  }*/
+  //})
+  },
+  computed: {
+    messages () {
+      return this.$store.state.messages
+    }
   },
   methods: {
     getMessages () {
