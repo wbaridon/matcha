@@ -37,6 +37,12 @@ module.exports.userEmail = function (id, callback) {
 	});
 }
 
+module.exports.selectForProfile = function (id, callback) {
+	db.query('SELECT email, isOnline, lastVisit FROM accounts WHERE id = ?', [id], function(err, result) {
+		callback(result[0]);
+	});
+}
+
 module.exports.userLogin = function (login, callback) {
 	db.query('SELECT * FROM accounts WHERE login = ?', [login], function(err, result) {
 		callback(null, result);

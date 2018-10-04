@@ -87,6 +87,7 @@ export default {
     logOut () {
       this.$store.commit('logOut')
       this.$cookie.delete('authToken')
+      this.$socket.emit('disconnect', function () { })
     },
     getNotifications () {
       // faudra faire un truc pour afficher les nouvelles cote nombre par rapport

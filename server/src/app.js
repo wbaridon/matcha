@@ -46,6 +46,7 @@ const chat = require('./models/chat.js')
 const matches = require('./models/matches.js')
 const notifications = require('./models/notifications.js')
 const profile = require('./models/profile.js')
+const accounts = require('./models/account')
 
 function fillHistory(idsender, idrecipient, callback) {
   chat.getMessages(idsender, idrecipient, (err, result) => {
@@ -99,6 +100,7 @@ io.on('connection', function(socket) {
       socket.myUsername = r
     });
     console.log('\n' + socket.myUsername + ' is: ' + socket.id + '\n')
+    accounts.updateUser(socket.myUsername, 'isOnline', 1)
     console.log(userSockets)
 
     // LOADS MESSAGES FROM DATABASE
@@ -142,7 +144,6 @@ io.on('connection', function(socket) {
     socket.on('profileNewAction', function(data) {
       helpers.getId(data.token, id => {
         data.emitter = id
-        console.log(data)
         if (data.emitter != data.receiver) {
           profileNewAction(data)
         }
@@ -160,6 +161,7 @@ io.on('connection', function(socket) {
             if (userIDs[i] === socket.id) {
               userIDs.splice(i, 1)
               if (!Array.isArray(userIDs) || !userIDs.length) {
+                accounts.updateUser(socket.myUsername, 'isOnline', 0)
                 delete userIDs
               }
             }

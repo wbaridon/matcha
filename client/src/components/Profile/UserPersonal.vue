@@ -3,7 +3,6 @@
     <div class="element" v-if="!update.perso && !update.pwd">
 
       <h3> Vos informations perso </h3>
-
       <p><strong>Email:</strong> {{user.email}}</p>
       <p><strong>Sexe:</strong>  {{user.gender}}</p>
       <p><strong>Age:</strong> {{user.age}}</p>
