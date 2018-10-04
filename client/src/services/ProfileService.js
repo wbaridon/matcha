@@ -47,6 +47,11 @@ export default {
       callback(result)
     })
   },
+  userLikeUs (id, callback) {
+    return Api().post('profile/userLikeUs', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   getInterests (id, callback) {
     return Api().post('profile/getInterests', {'id': id}, callback).then(function (response) {
       callback(response.data)
@@ -65,6 +70,16 @@ export default {
   getInterestsList (callback) {
     return Api().post('profile/getInterestsList', callback).then(function (response) {
       callback(response.data)
+    })
+  },
+  persoLoc (user, callback) {
+    return Api().post('profile/persoLoc', user, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  blockUser (idBlocked, token, callback) {
+    return Api().post('profile/blockUser', {'id_blocked': idBlocked, token}, callback).then(function (response) {
+      callback(response)
     })
   }
 }

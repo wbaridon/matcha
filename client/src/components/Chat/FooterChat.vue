@@ -1,53 +1,42 @@
 <template>
   <div id="Footerchat">
     <!-- Sent messages output -->
-    <div @click="close" id="topChat">Close X</div>
-    <div class="messages" v-for="msg in messages" :key="msg.id">
-      <p><span>{{ msg.login }}: </span>{{ msg.message }}</p>
+    <div @click="close" id="topChat">Mes matches</div>
+    <div id="all_discussions">
+      <!-- Sent messages output -->
+      <ul>
+        <li class="match" v-for="match in matches" :key="match.id">
+          <div class="linkBlock" @click="open(match.emitter)">
+            <i v-if="match.isOnline" class="fa fa-circle fa-xs online" aria-hidden="true"></i>
+            <i v-if="!match.isOnline" class="fa fa-circle fa-xs offline" aria-hidden="true"></i> {{match.firstname}}
+          </div>
+        </li>
+      </ul>
     </div>
-    <form @submit.prevent="sendMessage">
-      <input id="message" v-model="message" type="text" placeholder="type in your message">
-      <button id="submit" type="submit">Send</button>
-    </form>
   </div>
 </template>
 
 <script>
-// import Chat from '@/services/ChatService'
-import io from 'socket.io-client'
+import allMatches from '@/services/Profile/NotificationsService.js'
 export default {
   name: 'chat',
+  props: ['chatId'],
   data () {
     return {
-      message: '',
-      messages: [],
-      socket: io('http://localhost:8081')
+      matches: []
     }
   },
   mounted () {
-    // Displays messages stored in database so far
-    this.getMessages()
-    this.socket.on('GET_MESSAGES', (history) => {
-      console.log(history)
-      this.messages = history
-    })
-    // Displays messages received since connection
-    this.socket.on('MESSAGE', (data) => {
-      this.messages.push(data)
-    })
+    this.getMatches()
   },
   methods: {
-    getMessages () {
-      this.socket.emit('GET_MESSAGES', {
-        token: this.$cookie.get('authToken')
+    getMatches () {
+      allMatches.getMatches(this.$cookie.get('authToken'), (response) => {
+        this.matches = response
       })
     },
-    sendMessage () {
-      this.socket.emit('SEND_MESSAGE', {
-        token: this.$cookie.get('authToken'),
-        message: this.message
-      })
-      this.message = ''
+    open (data) {
+      this.$emit('openChat', data)
     },
     close () {
       this.$emit('close')
@@ -61,6 +50,29 @@ export default {
     background-color: lightgrey;
     padding: 5px;
     color: black;
-    text-align: right;
+    text-align: center;
+    display: block;
+  }
+  .linkBlock {
+    display: block;
+  }
+  .match {
+    list-style: none;
+    padding: 5px;
+    color: black;
+  }
+  .match:hover {
+    background-color: lightgrey;
+  }
+  .online {
+    color: green;
+    font-size: 7px;
+  }
+  .offline {
+    color: red;
+    font-size: 7px;
+  }
+  ul {
+    padding: 5px;
   }
 </style>

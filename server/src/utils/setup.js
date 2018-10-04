@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS accounts ( \
     login VARCHAR(50), \
     password VARCHAR(128), \
     email VARCHAR(50), \
+    isOnline INT DEFAULT 0, \
+    lastVisit DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, \
     timestamp BIGINT NOT NULL, \
     timestampPassword BIGINT DEFAULT 0);',' \
 \
@@ -51,6 +53,11 @@ CREATE TABLE IF NOT EXISTS chat ( \
     login VARCHAR(50), \
     recipient VARCHAR(50), \
     message VARCHAR(200));',' \
+\
+CREATE TABLE IF NOT EXISTS blacklist ( \
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    id_blocked INT NOT NULL, \
+    id_by INT NOT NULL);',' \
 \
 CREATE TABLE IF NOT EXISTS notifications (\
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \

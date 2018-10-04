@@ -45,7 +45,13 @@ const router = new Router({
         requiresAuth: true
       }
     },
-    { path: '/profile/:userId', name: 'profile', component: Profile },
+    { path: '/profile/:userId',
+      name: 'profile',
+      component: Profile,
+      meta: {
+        requiresAuth: true
+      }
+    },
     {
       path: '/chat',
       name: 'chat',
@@ -70,7 +76,6 @@ const router = new Router({
         requiresAuth: true
       }
     },
-    { path: '/matches', name: 'matches', component: Matches },
     { path: '*', redirect: '/' }
   ]
 })

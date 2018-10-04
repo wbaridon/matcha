@@ -1,25 +1,36 @@
 <template>
   <footer>
-    <Chat v-if="showChat && isAuth"  @close="showChat = false"></Chat>
-    <div id="showChat" @click="showChat = true" v-if="!showChat && isAuth">Discussion instantanée (0)</div>
+    <Matches v-if="showMatches && isAuth"  @close="showMatches = false" @openChat="openChat"></Matches>
+    <div id="showMatches" @click="showMatches = true" v-if="!showMatches && isAuth">Mes matches</div>
+    <Discussion v-if="showDiscussion && isAuth"  @close="showDiscussion = false" :chatId="chatId"></Discussion>
     <p>wbaridon © 2018</p>
   </footer>
 </template>
 
 <script>
-import Chat from '@/components/Chat/FooterChat'
+import Discussion from '@/components/Chat/FooterDiscussion'
+import Matches from '@/components/Chat/FooterChat'
 export default {
   components: {
-    'Chat': Chat
+    'Matches': Matches,
+    'Discussion': Discussion
   },
   data () {
     return {
-      showChat: ''
+      showMatches: '',
+      showDiscussion: '',
+      chatId: ''
     }
   },
   computed: {
     isAuth () {
       return this.$store.state.isAuth
+    }
+  },
+  methods: {
+    openChat (data) {
+      this.showDiscussion = true
+      this.chatId = data
     }
   }
 }
@@ -41,9 +52,23 @@ export default {
     border: solid black 1px;
     bottom: 0;
     right: 0;
-    width: 300px;
+    width: 200px;
   }
-  #showChat {
+  #FooterDiscussion {
+    position: absolute;
+    background-color: white;
+    border: solid black 1px;
+    right: 220px;
+    width: 200px;
+    bottom: 0;
+  }
+  .discussionContent {
+    overflow: scroll;
+    display: flex;
+    flex-direction: column-reverse;
+    height: 250px;
+  }
+  #showMatches {
     position: absolute;
     bottom: 0;
     right: 25px;

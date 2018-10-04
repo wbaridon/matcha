@@ -4,6 +4,9 @@ var argon2 = require('argon2');
 var profile = require('../models/profile.js');
 var interests = require('../models/interests.js');
 var account = require('../models/account.js');
+var notifications = require('../models/notifications.js');
+var blacklist = require('../models/blacklist.js');
+var helpers = require('../utils/helpers.js')
 var jwt = require('jsonwebtoken');
 var NodeGeocoder = require('node-geocoder')
 var geocoder = NodeGeocoder({
@@ -106,8 +109,6 @@ router.post('/getInterestsList', function(req, res) {
 router.post('/addInterest', function(req, res) {
 		interest = req.body.data
 		id = req.body.id
-		console.log(req.body)
-		console.log(interest + ' et ' + id)
 		interests.getInterestsList(callback => {
 			array = callback.map(v => v.COLUMN_NAME)
 			if (array.indexOf(interest) > -1) {
@@ -121,6 +122,14 @@ router.post('/addInterest', function(req, res) {
 					})
 				})
 			}
+		})
+})
+
+router.post('/blockUser',  function(req, res) {
+		helpers.getId(req.body.token, id => {
+			blacklist.blockUser(req.body.id_blocked, id, (err, result) => {
+				res.send(result)
+			})
 		})
 })
 
@@ -209,6 +218,29 @@ router.post('/localisation', function(req, res) {
 	})
 })
 
+router.post('/persoLoc', function (req, res) {
+	id = req.body.id
+	geocoder.geocode({ address: req.body.city, zipcode: req.body.zipcode, country: 'France'})
+	.then(call => {
+		if (call[0].countryCode === 'FR') {
+			profile.updateUser(id, 'zipcode', call[0].zipcode, (err, result) => {
+				profile.updateUser(id, 'city', call[0].city, (err, result) => {
+					profile.updateUser(id, 'latitude', call[0].latitude, (err, result) => {
+						profile.updateUser(id, 'longitude', call[0].longitude, (err, result) => {
+								res.send('Ok')
+						})
+					})
+				})
+			})
+		} else {
+			res.send({feedback: 'Votre localisation doit etre en France'})
+		}
+	})
+	.catch(err => {
+		res.send({feedback: 'Localisation non trouvé'})
+	})
+})
+
 router.post('/updatePwd', function(req, res) {
 		console.log(req.body)
 		id = req.body.id
@@ -228,6 +260,20 @@ router.post('/updatePwd', function(req, res) {
 	})
 })
 
+router.post('/userLikeUs', function(req, res) {
+	notifications.getActionsFromEmitter(req.body.id, 0, (err, result) => {
+		if (result.length > 0 ) {
+			res.send(true)
+		} else {
+			notifications.getActionsFromEmitter(req.body.id, 3, (err, final) => {
+				if (final.length > 0) {
+					res.send(true)
+				} else { res.send(false) }
+			})
+		}
+	})
+})
+
 module.exports = router;
 
 function view (userId, callback) {
@@ -235,8 +281,10 @@ function view (userId, callback) {
       if (result > 0) {
         fillProfile(userId, rawData => {
           convertUserData(rawData, newUser => {
-            account.userEmail(userId, email => {
-              newUser.email = email;
+            account.selectForProfile(userId, extraInfo => {
+              newUser.email = extraInfo.email;
+							newUser.isOnline = extraInfo.isOnline;
+							newUser.lastVisit = extraInfo.lastVisit;
               callback(newUser)
             })
           });
@@ -251,6 +299,7 @@ function view (userId, callback) {
 function fillProfile(userId, callback) {
   profile.select(userId, (err, result) => {
     if (result.length > 0) {
+				user = result[0]
         user = {
           userExist: true,
           id: userId,
@@ -264,7 +313,7 @@ function fillProfile(userId, callback) {
 					zipcode: result[0].zipcode,
 					city: result[0].city,
 					isFill: result[0].isFill,
-					popularite: result[0].popularite
+					popularite: result[0].popularite,
         }
       callback(user)
     }

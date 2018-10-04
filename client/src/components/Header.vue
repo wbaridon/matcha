@@ -32,7 +32,9 @@
         <div class="element">
           <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
           <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
-          <i class="far fa-bell fa-lg"></i>
+            {{notifications.length}}
+            <i class="far fa-bell fa-lg" @click="showNotifications = true"></i>
+          <Notifications v-if="showNotifications" :notifications='notifications' @close="showNotifications = false"></Notifications>
           <i @click="logOut()" class="fas fa-sign-out-alt fa-lg"></i>
         </div>
     </nav>
@@ -41,6 +43,8 @@
 <script>
 import Login from '@/services/LoginService'
 import Modal from '@/components/Modal'
+import NotificationsService from '@/services/Profile/NotificationsService.js'
+import Notifications from '@/components/Notifications'
 export default {
   data () {
     return {
@@ -49,15 +53,23 @@ export default {
         login: '',
         password: ''
       },
-      showError: false
+      showError: false,
+      showNotifications: '',
+      notifications: []
     }
   },
   components: {
-    'modal': Modal
+    'modal': Modal,
+    'Notifications': Notifications
   },
   computed: {
     isAuth () {
       return this.$store.state.isAuth
+    }
+  },
+  watch: {
+    isAuth: function (newValue, oldValue) {
+      if (newValue === true) { this.getNotifications() }
     }
   },
   methods: {
@@ -66,6 +78,7 @@ export default {
         if (res.error === 0) {
           this.$store.commit('logIn')
           this.$cookie.set('authToken', res.token, 1)
+          this.$router.push('/')
         } else {
           this.error = res
           this.showError = true
@@ -75,7 +88,20 @@ export default {
     logOut () {
       this.$store.commit('logOut')
       this.$cookie.delete('authToken')
+      this.$socket.emit('disconnect', function () { })
+      this.$router.push('/')
+    },
+    getNotifications () {
+      // faudra faire un truc pour afficher les nouvelles cote nombre par rapport
+      // a celle lu, mais ceci est une premiere approche
+      NotificationsService.getAllNotifications(this.$cookie.get('authToken'), callback => {
+        this.notifications = callback
+      })
     }
   }
 }
 </script>
+
+<style>
+
+</style>
