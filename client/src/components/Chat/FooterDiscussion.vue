@@ -46,9 +46,10 @@ export default {
     // Displays messages received while page not refreshed
     this.$socket.on('MESSAGE', (data) => {
       // Doesn't send MESSAGE if user isn't on right conversation
-      if (this.recipient === data.userid.toString() || this.recipient === data.recipient) {
-        this.messages.push(data)
-      }
+
+    //  if (this.recipient === data.userid.toString() || this.recipient === data.recipient) {*/
+      this.messages.push(data)
+    /*  } */
     })
   },
   methods: {
