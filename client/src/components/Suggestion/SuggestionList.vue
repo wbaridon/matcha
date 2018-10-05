@@ -1,14 +1,20 @@
 <template>
   <div v-if="listData.length > 0">
     <div v-if="viewFilter(element) && filterInterest(element)" v-for="element in paginatedData" :key="element.id" class="card">
-      <h2>{{element.firstname}} {{element.name}}</h2><br>
-      {{element.age}} ans, {{element.gender}} {{element.sexuality}} à {{element.distance}} m<br>
-      Compatible a {{element.compatibility}}% {{element.interests}}
-      Interet commun {{element.tagCount}}
-      Score de popularite
-      <span v-for="(data, index) in element.interest" :key="index">#{{index}} </span>
-      <br>
-      <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
+      <div class="pic">
+          <img v-if="element.isProfile && !element.isFake" :src="'/static/images/uploads/'+element.filename"/>
+          <img v-if="element.isProfile && element.isFake" :src="element.filename"/>
+      </div>
+      <div class="contentCard">
+        <h2>{{element.firstname}} {{element.name}}</h2><br>
+        {{element.age}} ans, {{element.gender}} {{element.sexuality}} à {{element.distance}} m<br>
+        Compatible a {{element.compatibility}}% {{element.interests}}
+        Interet commun {{element.tagCount}}
+        Score de popularite
+        <span v-for="(data, index) in element.interest" :key="index">#{{index}} </span>
+        <br>
+        <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
+      </div>
     </div>
     <button @click="prevPage" :disabled="pageNumber===0">Precedent</button>
     <button @click="nextPage" :disabled="pageNumber > (pageCount -1)">Suivant</button>
@@ -90,5 +96,15 @@ export default {
   margin-top: 15px;
   padding:  5%;
   background-color: lightgrey;
+}
+.card {
+  display: flex;
+}
+.contentCard {
+  padding: 10px;
+}
+.pic img, .pic {
+  width: 150px;
+  height: 150px;
 }
 </style>
