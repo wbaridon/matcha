@@ -162,6 +162,7 @@ export default {
           this.getInterests(this.user.id)
           this.getNotifications('likes', this.user.id)
           this.getNotifications('visits', this.user.id)
+          if (!this.user.city) { this.locate() }
         })
       }
     },

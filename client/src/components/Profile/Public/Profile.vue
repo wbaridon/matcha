@@ -2,7 +2,8 @@
   <div id="profile" v-if="user.userExist" class="container">
     <aside>
         <div v-for="picture in images.gallery" :key="picture.id" class="pic">
-            <img v-if="picture.isProfile" :src="'/static/images/uploads/'+picture.filename"/>
+            <img v-if="picture.isProfile && !picture.isFake" :src="'/static/images/uploads/'+picture.filename"/>
+            <img v-if="picture.isProfile && picture.isFake" :src="picture.filename"/>
         </div>
             <i class="far fa-star"></i>
             <strong>Popularite: {{user.popularite}}</strong><br>

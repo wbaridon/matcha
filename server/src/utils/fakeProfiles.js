@@ -54,6 +54,9 @@ let Profile = function() {
     this.idAccount;
     this.isFill = 1;
     this.popularite = getRandomInt(500);
+    this.picture = 'https://randomuser.me/api/portraits/men/'+getRandomInt(99)+'.jpg';
+    this.isProfile = 1;
+    this.isFake = 1;
 
     this.getSQLAccounts = () => {
         return `(${ACTIVATED_ACCOUNT}, '${this.login}', '${this.email}', ${this.timestamp} )`;
@@ -85,6 +88,11 @@ let Profile = function() {
         }
         return sql;
     };
+
+    this.getSQLPictures = () => {
+        return `('${this.idAccount}', '${this.picture}', '${this.isProfile}', ${this.isFake})`;
+    };
+
 };
 
 /******************************************************************************/
@@ -157,6 +165,26 @@ let addInDbInterests = (nbr) => {
     });
 }
 
+let addInDbPictures = (nbr) => {
+    return new Promise((resolve, reject) => {
+        let SQLQuery = 'INSERT INTO images \
+        (id_account, filename, isProfile, isFake) \
+        VALUES ';
+        for (let i = 0; i < nbr; i++) {
+            SQLQuery += prfs[i].getSQLPictures();
+            if (i !== nbr - 1)
+                SQLQuery += ',';
+        }
+        db.query(SQLQuery, (err, result) => {
+            if (err) throw err;
+            else {
+                console.log(nbr + ' FakeProfiles added in images DB successfully.');
+                resolve();
+            }
+        });
+    });
+}
+
 /******************************************************************************/
 
 const start = async (nbr) => {
@@ -174,9 +202,11 @@ if (process.argv[2]) {
         start(nbr).then(() => {
             getAllIdAccount(nbr).then(() => {
                 addInDbProfiles(nbr).then(() => {
+                  addInDbPictures(nbr).then(() => {
                     addInDbInterests(nbr).then(() => {
                         db.end();
-                    });
+                    })
+                  });
                 });
             });
         });
