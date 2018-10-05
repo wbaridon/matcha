@@ -112,7 +112,7 @@ io.on('connection', function(socket) {
         fillHistory(id, data.recipient, res => {
           var i = 0
           while (userSockets['id'+id][i]) {
-            io.to(userSockets['id'+id][i]).emit('GET_MESSAGES', res);
+            io.to(userSockets['id'+id][i]).emit('GET_MESSAGES', {res, 'recipient': data.recipient });
             i++;
           }
         })
@@ -122,6 +122,7 @@ io.on('connection', function(socket) {
     // ON SEND MESSAGE EVENT
 
     socket.on('SEND_MESSAGE', function(data) {
+      console.log('arrive dans sendmessage')
       if (!data.recipient)
         return
       helpers.getId(data.token, id => {
@@ -136,6 +137,7 @@ io.on('connection', function(socket) {
       // --> to sender
       getUsernameFromId(data.userid, username => {
         data.login = username[0].login
+        data.messageReceive = 0
         for (var i = 0; i < userSockets['id'+data.userid].length; i++) {
           io.to(userSockets['id'+data.userid][i]).emit('MESSAGE', data);
         }
@@ -178,6 +180,7 @@ function sendNotifications(data) {
   if (userSockets['id'+data.recipient]) {
     getUsernameFromId(data.userid, username => {
       data.login = username[0].login
+      data.messageReceive = 1
       for (var i = 0; i < userSockets['id'+data.recipient].length; i++) {
         console.log('emet le message au recipient ' + data.recipient)
         io.to(userSockets['id'+data.recipient][i]).emit('MESSAGE', data);

@@ -30,17 +30,12 @@ export default {
     this.getMessages()
 
     // Displays messages received while page not refreshed
-    /*this.$socket.on('MESSAGE', (data) => {
-      // Doesn't send MESSAGE if user isn't on right conversation
-      console.log(data)
-    /*  if (this.recipient === data.userid.toString() || this.recipient === data.recipient) {*/
-      //  this.messages.push(data)
-    /*  }*/
-  //})
+    this.$socket.on('MESSAGE', (data) => {})
   },
   computed: {
     messages () {
-      return this.$store.state.messages
+    //  console.log(this.$store.state.messages[2])
+      return this.$store.state.messages[this.$route.params.userId]
     }
   },
   methods: {

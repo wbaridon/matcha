@@ -48,8 +48,8 @@ export default {
       // Doesn't send MESSAGE if user isn't on right conversation
 
     //  if (this.recipient === data.userid.toString() || this.recipient === data.recipient) {*/
-        this.messages.push(data)
-    /*  }*/
+      this.messages.push(data)
+    /*  } */
     })
   },
   methods: {
