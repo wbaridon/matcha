@@ -30,7 +30,7 @@ export default {
     this.getMessages()
 
     // Displays messages received while page not refreshed
-    this.$socket.on('MESSAGE', (data) => {})
+    // this.$socket.on('MESSAGE', (data) => {})
   },
   computed: {
     messages () {

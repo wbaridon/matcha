@@ -26,9 +26,7 @@ export const store = new Vuex.Store({
     //  state.messages.push(data)
     },
     SOCKET_GET_MESSAGES: (state, data) => {
-    //  state.messages.$set(data[0].recipient, data[0].res)
       Vue.set(state.messages, data[0].recipient, data[0].res)
-    //  set(state.messages, data[0].recipient, data[0].res)
     }
   }
 
