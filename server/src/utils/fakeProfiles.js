@@ -97,7 +97,6 @@ let Profile = function() {
     this.popularite = getRandomInt(500);
     this.setPicture = () => {
       return new Promise ((resolve, reject) => {
-        console.log('gender: ' + this.gender)
         if (this.gender === false) {
             var pic = 'https://randomuser.me/api/portraits/men/'+getRandomInt(99)+'.jpg';
         } else {
@@ -153,9 +152,7 @@ let Profile = function() {
 
     this.getSQLPictures = (str) => {
       return new Promise(async (resolve, reject) => {
-        console.log('arrive ici')
         await this.setPicture().then( obj => {
-          console.log('rentre')
           this.picture = obj.picture
           str.s = `('${this.idAccount}', '${this.picture}', '${this.isProfile}', ${this.isFake})`;
           resolve();
