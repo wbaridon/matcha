@@ -79,8 +79,14 @@ let Profile = function() {
         })
     }
 
+    this.isFill = 1;
+    this.popularite = getRandomInt(500);
+    this.picture = 'https://randomuser.me/api/portraits/men/'+getRandomInt(99)+'.jpg';
+    this.isProfile = 1;
+    this.isFake = 1;
+
     this.getSQLAccounts = () => {
-        return `(${ACTIVATED_ACCOUNT}, '${this.login}', '${this.email}', ${this.timestamp})`;
+        return `(${ACTIVATED_ACCOUNT}, '${this.login}', '${this.email}', ${this.timestamp} )`;
     };
 
     this.setIdAccount = () => {
@@ -94,9 +100,9 @@ let Profile = function() {
     };
 
     this.getSQLProfiles = () => {
-        this.setLocation()
-        //console.log(this.latitude + " / " + this.longitude);
-        return `('${this.idAccount}', '${this.name}', '${this.firstname}', ${this.gender}, ${this.age}, ${this.sexuality}, ${this.latitude}, ${this.longitude})`;
+    this.setLocation()
+    return `('${this.idAccount}', '${this.name}', '${this.firstname}', ${this.gender}, ${this.age},\
+    ${this.sexuality}, ${this.latitude}, ${this.longitude}, ${this.popularite}, ${this.isFill})`;
     };
 
     this.getSQLInterests = (nbrInterests) => {
@@ -110,6 +116,11 @@ let Profile = function() {
         }
         return sql;
     };
+
+    this.getSQLPictures = () => {
+        return `('${this.idAccount}', '${this.picture}', '${this.isProfile}', ${this.isFake})`;
+    };
+
 };
 
 /******************************************************************************/
@@ -145,7 +156,7 @@ let addInDb = (nbr) => {
 let addInDbProfiles = (nbr) => {
     return new Promise((resolve, reject) => {
         let SQLQuery = 'INSERT INTO profiles \
-        (id_account, name, firstname, gender, age, sexuality, latitude, longitude) \
+        (id_account, name, firstname, gender, age, sexuality, latitude, longitude, popularite, isFill) \
         VALUES ';
         for (let i = 0; i < nbr; i++) {
             SQLQuery += prfs[i].getSQLProfiles();
@@ -182,6 +193,26 @@ let addInDbInterests = (nbr) => {
     });
 }
 
+let addInDbPictures = (nbr) => {
+    return new Promise((resolve, reject) => {
+        let SQLQuery = 'INSERT INTO images \
+        (id_account, filename, isProfile, isFake) \
+        VALUES ';
+        for (let i = 0; i < nbr; i++) {
+            SQLQuery += prfs[i].getSQLPictures();
+            if (i !== nbr - 1)
+                SQLQuery += ',';
+        }
+        db.query(SQLQuery, (err, result) => {
+            if (err) throw err;
+            else {
+                console.log(nbr + ' FakeProfiles added in images DB successfully.');
+                resolve();
+            }
+        });
+    });
+}
+
 /******************************************************************************/
 
 const start = async (nbr) => {
@@ -199,9 +230,11 @@ if (process.argv[2]) {
         start(nbr).then(() => {
             getAllIdAccount(nbr).then(() => {
                 addInDbProfiles(nbr).then(() => {
+                  addInDbPictures(nbr).then(() => {
                     addInDbInterests(nbr).then(() => {
                         db.end();
-                    });
+                    })
+                  });
                 });
             });
         });

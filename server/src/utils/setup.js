@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS accounts ( \
     login VARCHAR(50), \
     password VARCHAR(128), \
     email VARCHAR(50), \
+    isOnline INT DEFAULT 0, \
+    lastVisit DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, \
     timestamp BIGINT NOT NULL, \
     timestampPassword BIGINT DEFAULT 0);',' \
 \
@@ -39,7 +41,29 @@ CREATE TABLE IF NOT EXISTS profiles ( \
     age INT NOT NULL DEFAULT 0, \
     sexuality TINYINT DEFAULT 2, \
     bio TEXT, zipcode INT, city VARCHAR(50), latitude DECIMAL(12,9), longitude DECIMAL(12,9), \
-    popularite INT NOT NULL DEFAULT 0);',' \
+    popularite INT NOT NULL DEFAULT 0, fakeReport INT NOT NULL DEFAULT 0, isFill INT NOT NULL DEFAULT 0);',' \
+\
+CREATE TABLE IF NOT EXISTS images ( \
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    id_account INT NOT NULL, \
+    filename VARCHAR(50), isProfile INT DEFAULT 0, isFake INT DEFAULT 0);',' \
+\
+CREATE TABLE IF NOT EXISTS chat ( \
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    login VARCHAR(50), \
+    recipient VARCHAR(50), \
+    message VARCHAR(200));',' \
+\
+CREATE TABLE IF NOT EXISTS blacklist ( \
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    id_blocked INT NOT NULL, \
+    id_by INT NOT NULL);',' \
+\
+CREATE TABLE IF NOT EXISTS notifications (\
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \
+    id_account INT NOT NULL, \
+    action INT NOT NULL, \
+    emitter INT NOT NULL);','\
 \
 CREATE TABLE IF NOT EXISTS interests ( \
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, \

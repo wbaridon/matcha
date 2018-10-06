@@ -12,6 +12,11 @@ export default {
       callback(response.data)
     })
   },
+  fakeReport (id, callback) {
+    return Api().post('profile/fakeReport', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   updateBio (bio, id, callback) {
     return Api().post('profile/updateBio', {bio, id}, callback).then(function (response) {
       callback(response.data)
@@ -40,6 +45,41 @@ export default {
   getIp (callback) {
     return axios({method: 'GET', 'url': 'https://geoip-db.com/json/'}, callback).then(result => {
       callback(result)
+    })
+  },
+  userLikeUs (id, callback) {
+    return Api().post('profile/userLikeUs', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  getInterests (id, callback) {
+    return Api().post('profile/getInterests', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  addInterest (id, data, callback) {
+    return Api().post('profile/addInterest', {'id': id, 'data': data}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  deleteInterest (id, data, callback) {
+    return Api().post('profile/deleteInterest', {'id': id, 'data': data}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  getInterestsList (callback) {
+    return Api().post('profile/getInterestsList', callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  persoLoc (user, callback) {
+    return Api().post('profile/persoLoc', user, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  blockUser (idBlocked, token, callback) {
+    return Api().post('profile/blockUser', {'id_blocked': idBlocked, token}, callback).then(function (response) {
+      callback(response)
     })
   }
 }

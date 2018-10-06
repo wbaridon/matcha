@@ -2,7 +2,12 @@ var express = require('express');
 var router = express.Router();
 var argon2 = require('argon2');
 var search = require('../models/search.js');
+var profile = require('../models/profile.js');
 var jwt = require('jsonwebtoken')
+var localisation = require('../utils/localisation');
+var interestsCheck = require('../utils/interestsCheck');
+var sexualCheck = require('../utils/sexualCheck');
+var block = require('../utils/block')
 
 router.get('/', (req, res) => {
 	res.send('The server is working...'
@@ -16,14 +21,30 @@ router.post('/ask', function (req, res) {
 	 } else {
 		 id = decoded.id
 	 }
-	 launchSearch(id, req.body.ask, result => {
-		 res.send(result)
+	 profile.select(id, (err, user) => {
+		 sexualPref = user[0].sexuality
+		 gender = user[0].gender
+		 launchSearch(id, gender, sexualPref, req.body.ask, req.body.interests, result => {
+			 if (result.length > 0) {
+				localisation.getDistance(result, id, distance => {
+					interestsCheck.commonTagCount(id, distance, array => {
+							sexualCheck.convertUserData(array, convert => {
+								block.filter(id, convert, blockLess => {
+										res.send(blockLess)
+								})
+						})
+					})
+				})
+			 } else {
+				res.send([])
+			}
+		 })
 	 })
 	})
 });
 
-function launchSearch (id, ask, callback) {
-	search.result(id, ask, data => {
+function launchSearch (id, gender, sexualPref, ask, interests, callback) {
+	search.result(id, gender, sexualPref, ask, interests, data => {
 		callback(data)
 	})
 }

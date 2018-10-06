@@ -29,7 +29,7 @@ input[type=submit] {
 /* Cover */
 .cover {
   height: inherit;
-  padding: 10px 0px 10px 0;
+  padding: 50px 0px 50px 0;
   background-color: #24292e;
   font-size: 1em;
 }
@@ -38,4 +38,31 @@ input[type=submit] {
   min-height: 29vh;
   border: none;
   text-align: center;
+}
+
+button {
+  background-color: white;
+}
+
+/* Search Home */
+
+.searchTitle, .searchContent {
+  width: 100%;
+}
+.searchItem {
+  flex-direction: column;
+}
+.container {
+  flex-direction: column;
+}
+#interests {
+  flex-direction: column;
+}
+.profilePic {
+  margin: auto;
+  justify-content: center;
+}
+
+#FooterDiscussion {
+ right: 0;
 }
