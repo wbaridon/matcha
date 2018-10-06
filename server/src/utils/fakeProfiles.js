@@ -95,10 +95,17 @@ let Profile = function() {
 
     this.isFill = 1;
     this.popularite = getRandomInt(500);
-    if (this.gender === 0)
-        this.picture = 'https://randomuser.me/api/portraits/men/'+getRandomInt(99)+'.jpg';
-    else
-        this.picture = 'https://randomuser.me/api/portraits/women/'+getRandomInt(99)+'.jpg';
+    this.setPicture = () => {
+      return new Promise ((resolve, reject) => {
+        console.log('gender: ' + this.gender)
+        if (this.gender === false) {
+            var pic = 'https://randomuser.me/api/portraits/men/'+getRandomInt(99)+'.jpg';
+        } else {
+            var pic = 'https://randomuser.me/api/portraits/women/'+getRandomInt(99)+'.jpg';
+        }
+        resolve({picture: pic})
+      })
+    }
     this.isProfile = 1;
     this.isFake = 1;
 
@@ -144,8 +151,16 @@ let Profile = function() {
         return sql;
     };
 
-    this.getSQLPictures = () => {
-        return `('${this.idAccount}', '${this.picture}', '${this.isProfile}', ${this.isFake})`;
+    this.getSQLPictures = (str) => {
+      return new Promise(async (resolve, reject) => {
+        console.log('arrive ici')
+        await this.setPicture().then( obj => {
+          console.log('rentre')
+          this.picture = obj.picture
+          str.s = `('${this.idAccount}', '${this.picture}', '${this.isProfile}', ${this.isFake})`;
+          resolve();
+        })
+      })
     };
 
 };
@@ -224,12 +239,15 @@ let addInDbInterests = (nbr) => {
 }
 
 let addInDbPictures = (nbr) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         let SQLQuery = 'INSERT INTO images \
         (id_account, filename, isProfile, isFake) \
         VALUES ';
         for (let i = 0; i < nbr; i++) {
-            SQLQuery += prfs[i].getSQLPictures();
+            var str = { s: "B"};
+            await prfs[i].getSQLPictures(str);
+            SQLQuery += str.s;
+            console.log(SQLQuery)
             if (i !== nbr - 1)
                 SQLQuery += ',';
         }
