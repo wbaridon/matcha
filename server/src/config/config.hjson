@@ -12,19 +12,45 @@
         drink
         stay all night
     ]
-    firstNames: [
-        Jean
-        Pierre
-        Josianne
-        Kiki
-        Jenifer
-        Jessica
-        Nicolas
-        Clément
-        Sebastien
-        Fabien
-
-    ]
+    firstNames: {
+        men: [
+            Jean
+            Pierre
+            Michel
+            Andre
+            Philippe
+            Romain
+            Nicolas
+            Clément
+            Sebastien
+            Fabien
+            Jules
+            Louis
+            Gabriel
+            Raphael
+            LeroyArthur
+            Lucas
+            Hugo
+            Nathan
+        ]
+        women: [
+            Kiki
+            Jenifer
+            Josianne
+            Jessica
+            Adele
+            Alexandra
+            Alice
+            Anne
+            Aude
+            Florence
+            Isabelle
+            Jeanne
+            Julie
+            Morgane
+            Marie
+        ]
+    }
     lastNames: [
         Bon
         Sanstitre
@@ -55,6 +81,16 @@
         Dupont
         Lambert
         Fontaine
-
+        Rousseau
+        Vincent
+        Muller
+        LefebvreFaure
+        Mercier
+        Blanc
+        Boyer
+        Garnier
+        Morin
+        Baridon
+        Rahaingomanana
     ]
 }

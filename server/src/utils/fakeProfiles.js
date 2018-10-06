@@ -1,9 +1,11 @@
-const mysql = require('mysql');
+const NodeGeocoder = require('node-geocoder');
+const geocoder = NodeGeocoder({ provider: 'locationiq', httpAdapter: 'https', apiKey: '2c29b16aa6aabf' });
 const db = require('../config/db');
 const config = require('../config/config');
 const account = require('../models/account');
 
 /******************************************************************************/
+const ALLOW_GEOCODER = true;
 const LOGIN_RANDOM_INT = 10000;
 const MAX_PROFILES = 1000;
 const NBR_OF_INTERESTS_CHANCE = 3;
@@ -12,6 +14,12 @@ const AGE_MIN = 18;
 const AGE_MAX = 65;
 const ACTIVATED_ACCOUNT = true;
 const EMAIL = '@matcha.fr';
+const CENTER_X = 2.318397700
+const CENTER_Y = 48.896722700
+const AROUND_X = 4
+const AROUND_Y = 4
+const NBR_SAMPLES = 5
+const NBR_GRADIENTS = 100000
 /******************************************************************************/
 const NBR_OF_INTERESTS = config.interests.length;
 let SQL_INTERESTS = '';
@@ -34,6 +42,15 @@ let getRandomAge = () => {
     return getRandomInt(AGE_MAX - AGE_MIN) + AGE_MIN;
 }
 
+let gradientGen = (callback) => {
+    let generated_number = NBR_GRADIENTS
+    for(let i = 0; i < NBR_SAMPLES; i++)
+        generated_number = getRandomInt(generated_number)
+    if (getRandomInt(0, 2) === 0)
+        generated_number = -generated_number;
+    callback(generated_number);
+}
+
 /******************************************************************************/
 
 let Profile = function() {
@@ -43,7 +60,7 @@ let Profile = function() {
     else
         Profile.count++;
 
-    this.firstname = config.firstNames[getRandomInt(config.firstNames.length)];
+    this.firstname = config.firstNames.men[getRandomInt(config.firstNames.men.length)];
     this.name = config.lastNames[getRandomInt(config.lastNames.length)];
     this.timestamp = Date.now();
     this.login = this.timestamp + '.' + Profile.count + '.' + getRandomInt(LOGIN_RANDOM_INT);
@@ -52,9 +69,36 @@ let Profile = function() {
     this.age = getRandomAge();
     this.sexuality = getRandomInt(NBR_OF_SEXUALITY);
     this.idAccount;
+    this.latitude;
+    this.longitude;
+    this.zipCode = 0;
+    this.city = 0;
+
+    this.setLocation = () => {
+        return new Promise ((resolve, reject) => {
+            gradientGen(nbr1 => {
+                this.latitude = CENTER_Y + (nbr1 / NBR_GRADIENTS * AROUND_X)
+                gradientGen(nbr2 => {
+                    this.longitude = CENTER_X + (nbr2 / NBR_GRADIENTS * AROUND_X)
+                    let lat = this.latitude
+                    let lon = this.longitude
+                    if (ALLOW_GEOCODER === true)
+                        setTimeout( () => {
+                            geocoder.reverse({lat, lon}).then(call => {
+                                resolve({lati: lat, longi: lon, zip: call[0].zipcode, city: call[0].city});
+                            })
+                        }, 1000);
+                })
+            })
+        })
+    }
+
     this.isFill = 1;
     this.popularite = getRandomInt(500);
-    this.picture = 'https://randomuser.me/api/portraits/men/'+getRandomInt(99)+'.jpg';
+    if (this.gender === 0)
+        this.picture = 'https://randomuser.me/api/portraits/men/'+getRandomInt(99)+'.jpg';
+    else
+        this.picture = 'https://randomuser.me/api/portraits/women/'+getRandomInt(99)+'.jpg';
     this.isProfile = 1;
     this.isFake = 1;
 
@@ -72,9 +116,20 @@ let Profile = function() {
         })
     };
 
-    this.getSQLProfiles = () => {
-        return `('${this.idAccount}', '${this.name}', '${this.firstname}', ${this.gender}, ${this.age},\
-         ${this.sexuality}, ${this.popularite}, ${this.isFill})`;
+    this.getSQLProfiles = (str) => {
+        return new Promise(async (resolve, reject) => {
+            await this.setLocation().then( obj =>
+            {
+                this.longitude = obj.longi
+                this.latitude = obj.lati
+                this.city = obj.city
+                this.zipcode = obj.zip
+                console.log(`Lat : ${this.latitude} - Lon : ${this.longitude}`)
+                str.s = `('${this.idAccount}', '${this.name}', '${this.firstname}', ${this.gender}, ${this.age},\
+                ${this.sexuality}, '${this.zipcode}', '${this.city}', ${this.latitude}, ${this.longitude}, ${this.popularite}, ${this.isFill})`;
+                resolve();
+            })
+        })
     };
 
     this.getSQLInterests = (nbrInterests) => {
@@ -126,12 +181,15 @@ let addInDb = (nbr) => {
 }
 
 let addInDbProfiles = (nbr) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         let SQLQuery = 'INSERT INTO profiles \
-        (id_account, name, firstname, gender, age, sexuality, popularite, isFill) \
+        (id_account, name, firstname, gender, age, sexuality, zipcode, city, latitude, longitude, popularite, isFill) \
         VALUES ';
         for (let i = 0; i < nbr; i++) {
-            SQLQuery += prfs[i].getSQLProfiles();
+            var str = { s: "B"};
+            await prfs[i].getSQLProfiles(str);
+            SQLQuery += str.s;
+            console.log(SQLQuery);
             if (i !== nbr - 1)
                 SQLQuery += ',';
         }

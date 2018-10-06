@@ -31,6 +31,7 @@
     "nodemon": "1.18.3",
     "passport": "0.4.0",
     "socket.io": "^2.1.1",
+    "suspend": "^0.7.0",
     "utils-fs-read-hjson": "^1.0.0",
     "vue-router": "^3.0.1"
   },
