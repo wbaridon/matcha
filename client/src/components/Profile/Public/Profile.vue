@@ -141,8 +141,8 @@ export default {
     margin: 3px;
   }
   .pic img {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
   }
   .container {
     display: flex;

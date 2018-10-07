@@ -75,7 +75,7 @@ export default {
         minAge: '18',
         maxAge: '99',
         minPop: '0',
-        maxPop: '100',
+        maxPop: '1000',
         minDistance: '0',
         maxDistance: '5000',
         checkedInterests: []
