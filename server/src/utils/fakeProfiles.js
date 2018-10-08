@@ -1,5 +1,5 @@
 const NodeGeocoder = require('node-geocoder');
-const geocoder = NodeGeocoder({ provider: 'locationiq', httpAdapter: 'https', apiKey: '2c29b16aa6aabf' });
+const geocoder = NodeGeocoder({ provider: 'here', httpAdapter: 'https', appId: 'xh3cWHhoG245D6y76nOM',appCode: 'Z1SS1BMJB-NZPoYtdJp64Q' });
 const db = require('../config/db');
 const config = require('../config/config');
 const account = require('../models/account');
@@ -86,8 +86,10 @@ let Profile = function() {
                         setTimeout( () => {
                             geocoder.reverse({lat, lon}).then(call => {
                                 resolve({lati: lat, longi: lon, zip: call[0].zipcode, city: call[0].city});
+                            }).catch(err => {
+                                resolve({lati:48.829842700, longi:2.293077700, zip: 75015, city: 'Paris'})
                             })
-                        }, 1000);
+                        }, 1);
                 })
             })
         })
@@ -128,7 +130,8 @@ let Profile = function() {
             {
                 this.longitude = obj.longi
                 this.latitude = obj.lati
-                this.city = obj.city
+                var escape = /'/;
+                this.city = obj.city.replace(escape, " " )
                 this.zipcode = obj.zip
                 console.log(`Lat : ${this.latitude} - Lon : ${this.longitude}`)
                 str.s = `('${this.idAccount}', '${this.name}', '${this.firstname}', ${this.gender}, ${this.age},\
