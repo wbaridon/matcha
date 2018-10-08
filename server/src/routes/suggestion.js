@@ -13,6 +13,7 @@ var interestsCheck = require('../utils/interestsCheck');
 var sexualCheck = require('../utils/sexualCheck');
 var helpers = require('../utils/helpers.js');
 var block = require('../utils/block.js');
+var waterfall = require('async-waterfall');
 
 router.get('/', (req, res) => {
 		res.send('The server is working...')
@@ -36,10 +37,11 @@ router.post('/', function(req, res) {
 					sexualPref = user[0].sexuality
 					gender = user[0].gender
 					userPop = user[0].popularite
-					suggestionList.showList(id, gender, sexualPref, result => {
+					suggestionList.showList(id, gender, sexualPref, req.body.ask, req.body.ask.checkedInterests, result => {
 						sexualCheck.convertUserData(result, user => {
 							localisation.getDistance(user, id, finalUser => {
-										getInterests(finalUser, id, callback => {
+								distanceFilter(finalUser, req.body.ask.minDistance, req.body.ask.maxDistance, distanceFilter => {
+										getInterests(distanceFilter, id, callback => {
 											block.filter(id, callback, filterView => {
 												addCompatibility(filterView, userPop, newArray => {
 														res.send(newArray)
@@ -47,6 +49,7 @@ router.post('/', function(req, res) {
 											})
 
 										})
+								})
 							})
 						})
 					})
@@ -123,6 +126,21 @@ async function addCompatibility(array, userPop, callback) {
 		array[i].compatibility = await compatibilityUser(array[i], userPop)
 	}
 	callback (array)
+}
+
+function distanceFilter(array, min, max, callback) {
+	waterfall([
+		function(callback) {
+			distancemin = array.filter(element => element.distance >= min)
+			callback(null, distancemin)
+		},
+		function(distancemin, callback) {
+			distance = distancemin.filter(element => element.distance <= max)
+			callback(null, distance)
+		}
+	], function (err, result) {
+		callback(result)
+	})
 }
 
 module.exports = router;

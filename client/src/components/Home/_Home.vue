@@ -91,7 +91,6 @@ export default {
   watch: {
     ask: {
       handler: function (val, oldVal) {
-        console.log('enter')
         this.search()
       },
       deep: true
