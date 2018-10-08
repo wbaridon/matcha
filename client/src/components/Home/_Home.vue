@@ -88,6 +88,15 @@ export default {
   mounted () {
     this.getInterestsList()
   },
+  watch: {
+    ask: {
+      handler: function (val, oldVal) {
+        console.log('enter')
+        this.search()
+      },
+      deep: true
+    }
+  },
   computed: {
     isAuth () {
       return this.$store.state.isAuth

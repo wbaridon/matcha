@@ -88,6 +88,7 @@ export default {
   watch: {
     ask: {
       handler: function (val, oldVal) {
+        console.log('arrive')
         this.getAll()
       },
       deep: true
@@ -112,6 +113,7 @@ export default {
     getAll () {
       var token = this.$cookie.get('authToken')
       Suggestion.getAll(token, callback => {
+        console.log('revient')
         if (callback.data.error !== 1) {
           this.array = callback.data
           this.array.sort((a, b) => b.compatibility - a.compatibility)

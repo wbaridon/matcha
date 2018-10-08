@@ -1,6 +1,6 @@
 <template>
   <div v-if="listData.length > 0">
-    <div v-if="element.distance >= filter.minDistance && element.distance <= filter.maxDistance"
+    <div v-if="element.distance"
       v-for="element in paginatedData" :key="element.id" class="searchElement">
       <h2>{{element.firstname}} {{element.name}}</h2>
       {{element.gender}} {{element.age}} ans / Popularite: {{element.popularite}}<br> {{element.distance}}m
