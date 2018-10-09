@@ -99,6 +99,8 @@ export default {
 }
 .card {
   display: flex;
+  min-height: 150px;
+  padding: 10px;
 }
 .contentCard {
   padding: 10px;

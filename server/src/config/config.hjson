@@ -12,19 +12,118 @@
         drink
         stay all night
     ]
-    firstNames: [
-        Jean
-        Pierre
-        Josianne
-        Kiki
-        Jenifer
-        Jessica
-        Nicolas
-        Clément
-        Sebastien
-        Fabien
-
-    ]
+    firstNames: {
+        men: [
+            Jean
+            Pierre
+            Michel
+            Andre
+            Philippe
+            Romain
+            Nicolas
+            Clément
+            Sebastien
+            Fabien
+            Jules
+            Louis
+            Gabriel
+            Raphael
+            LeroyArthur
+            Lucas
+            Hugo
+            Nathan
+            Côme
+            Charles
+            David
+            Mathis
+            Nolan
+            Leonard
+            Aaron
+            Maël
+            Maxence
+            Eliott
+            Ibrahim
+            Valentin
+            Theo
+            Alexis
+            Baptiste
+            Ulysse
+            Benjamin
+            Marius
+            Youssef
+            Elias
+            Jean
+            Lucien
+            Robin
+            Felix
+            William
+            Gustave
+            Hector
+            Auguste
+            Theodore
+        ]
+        women: [
+            Alice
+            Chloe
+            Emma
+            Ines
+            Sarah
+            Jeanne
+            Anna
+            Adele
+            Juliette
+            Camille
+            Lea
+            Lina
+            Eva
+            Sofia
+            Charlotte
+            Victoria
+            Rose
+            Mila
+            Josephine
+            Manon
+            Zoe
+            Nina
+            Jade
+            Olivia
+            Margaux
+            Lou
+            Anaïs
+            Julia
+            Lucie
+            Gabrielle
+            Romane
+            Heloise
+            Valentine
+            Clémence
+            Apolline
+            Mathilde
+            Victoire
+            Alix
+            Ava
+            Agathe
+            Marie
+            Nour
+            Suzanne
+            Margot
+            Kiki
+            Jenifer
+            Josianne
+            Jessica
+            Adele
+            Alexandra
+            Alice
+            Anne
+            Aude
+            Florence
+            Isabelle
+            Jeanne
+            Julie
+            Morgane
+            Marie
+        ]
+    }
     lastNames: [
         Bon
         Sanstitre
@@ -55,6 +154,16 @@
         Dupont
         Lambert
         Fontaine
-
+        Rousseau
+        Vincent
+        Muller
+        LefebvreFaure
+        Mercier
+        Blanc
+        Boyer
+        Garnier
+        Morin
+        Baridon
+        Rahaingomanana
     ]
 }
