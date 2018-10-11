@@ -74,6 +74,14 @@ router.post('/read', function (req, res) {
 	})
 })
 
+router.post('/count', function (req, res) {
+	helpers.getId(req.body.token, id => {
+		notifications.count(id, (err, callback) => {
+			res.send(callback[0])
+		})
+	})
+})
+
 module.exports = router;
 
 async function getUsersResume(array, callback)

@@ -32,7 +32,7 @@
         <div class="element">
           <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
           <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
-            {{notifState}}
+            {{notifNumber}}
             <i class="far fa-bell fa-lg" @click="openNotifications"></i>
           <Notifications v-if="showNotifications" :notifications='notifications' @close="showNotifications = false"></Notifications>
           <i @click="logOut()" class="fas fa-sign-out-alt fa-lg"></i>
@@ -55,7 +55,8 @@ export default {
       },
       showError: false,
       showNotifications: '',
-      notifications: []
+      notifications: [],
+      notifNumber: ''
     }
   },
   components: {
@@ -66,30 +67,27 @@ export default {
     isAuth () {
       return this.$store.state.isAuth
     },
-    // notificationsUnread: function () {
-    //   var j = 0
-    //   for (var i = 0; i < this.notifState.length; i++) {
-    //     if (this.notifState[i].readed === 0) {
-    //       j++
-    //     }
-    //   }
-    //   return (j)
-    // },
     notifState () {
-    //  console.log(this.$store.state.messages[2])
       return this.$store.state.notifNumber
     }
   },
   watch: {
     isAuth: function (newValue, oldValue) {
       if (newValue === true) { this.getNotifications() }
+    },
+    notifState: function (newValue, oldValue) {
+      this.getNotifNumber()
     }
+  },
+  mounted () {
+    this.getNotifNumber()
   },
   methods: {
     openNotifications () {
       this.showNotifications = true
       NotificationsService.readNotifications(this.$cookie.get('authToken'), callback => {
         this.getNotifications()
+        this.getNotifNumber()
       })
     },
     userLogin () {
@@ -110,10 +108,13 @@ export default {
       location.reload()
     },
     getNotifications () {
-      // faudra faire un truc pour afficher les nouvelles cote nombre par rapport
-      // a celle lu, mais ceci est une premiere approche
       NotificationsService.getAllNotifications(this.$cookie.get('authToken'), callback => {
         this.notifications = callback
+      })
+    },
+    getNotifNumber () {
+      NotificationsService.getNotifNumber(this.$cookie.get('authToken'), callback => {
+        this.notifNumber = callback.nb
       })
     }
   }

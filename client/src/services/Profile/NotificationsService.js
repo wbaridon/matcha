@@ -25,5 +25,10 @@ export default {
     return Api().post('notifications/read', {'token': token}, callback).then(function (response) {
       callback(response.data)
     })
+  },
+  getNotifNumber (token, callback) {
+    return Api().post('notifications/count', {'token': token}, callback).then(function (response) {
+      callback(response.data)
+    })
   }
 }
