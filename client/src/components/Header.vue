@@ -32,8 +32,8 @@
         <div class="element">
           <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
           <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
-            {{notifications.length}}
-            <i class="far fa-bell fa-lg" @click="showNotifications = true"></i>
+            {{notifNumber}}
+            <i class="far fa-bell fa-lg" @click="openNotifications"></i>
           <Notifications v-if="showNotifications" :notifications='notifications' @close="showNotifications = false"></Notifications>
           <i @click="logOut()" class="fas fa-sign-out-alt fa-lg"></i>
         </div>
@@ -55,7 +55,8 @@ export default {
       },
       showError: false,
       showNotifications: '',
-      notifications: []
+      notifications: [],
+      notifNumber: ''
     }
   },
   components: {
@@ -65,14 +66,30 @@ export default {
   computed: {
     isAuth () {
       return this.$store.state.isAuth
+    },
+    notifState () {
+      return this.$store.state.notifNumber
     }
   },
   watch: {
     isAuth: function (newValue, oldValue) {
       if (newValue === true) { this.getNotifications() }
+    },
+    notifState: function (newValue, oldValue) {
+      this.getNotifNumber()
     }
   },
+  mounted () {
+    this.getNotifNumber()
+  },
   methods: {
+    openNotifications () {
+      this.showNotifications = true
+      NotificationsService.readNotifications(this.$cookie.get('authToken'), callback => {
+        this.getNotifications()
+        this.getNotifNumber()
+      })
+    },
     userLogin () {
       Login.logIn(this.user).then(res => {
         if (res.error === 0) {
@@ -91,10 +108,13 @@ export default {
       location.reload()
     },
     getNotifications () {
-      // faudra faire un truc pour afficher les nouvelles cote nombre par rapport
-      // a celle lu, mais ceci est une premiere approche
       NotificationsService.getAllNotifications(this.$cookie.get('authToken'), callback => {
         this.notifications = callback
+      })
+    },
+    getNotifNumber () {
+      NotificationsService.getNotifNumber(this.$cookie.get('authToken'), callback => {
+        this.notifNumber = callback.nb
       })
     }
   }

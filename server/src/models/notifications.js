@@ -45,3 +45,11 @@ module.exports.deleteAction = function (action, id_account, emitter, callback) {
     [id_account, action, emitter],
     callback);
 }
+
+module.exports.updateAction = function (id_account, callback) {
+  db.query('UPDATE notifications SET readed = 1 WHERE id_account = ?', [id_account], callback);
+}
+
+module.exports.count = function (id, callback) {
+  db.query('SELECT COUNT(*) AS nb FROM notifications where id_account = ? AND readed = 0', id, callback)
+}

@@ -7,7 +7,8 @@ export const store = new Vuex.Store({
   strict: true, // a retirer au deploiement
   state: {
     isAuth: false,
-    messages: []
+    messages: [],
+    notifNumber: 0
   },
   mutations: {
     logOut: state => {
@@ -27,6 +28,9 @@ export const store = new Vuex.Store({
     },
     SOCKET_GET_MESSAGES: (state, data) => {
       Vue.set(state.messages, data[0].recipient, data[0].res)
+    },
+    SOCKET_UPDATE_NOTIF: (state) => {
+      state.notifNumber++
     }
   }
 

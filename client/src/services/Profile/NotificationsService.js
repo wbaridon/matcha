@@ -20,5 +20,15 @@ export default {
     return Api().post('matches/get', {'userid': userid}, callback).then(function (response) {
       callback(response.data)
     })
+  },
+  readNotifications (token, callback) {
+    return Api().post('notifications/read', {'token': token}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  getNotifNumber (token, callback) {
+    return Api().post('notifications/count', {'token': token}, callback).then(function (response) {
+      callback(response.data)
+    })
   }
 }
