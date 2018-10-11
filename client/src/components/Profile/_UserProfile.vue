@@ -143,6 +143,7 @@ export default {
     updateInterest (name, data) {
       switch (name) {
         case 'add':
+          data = data.replace(/(\s|'|"|<|>)+/g, '')
           Profile.addInterest(this.user.id, data, callback => {
             callback = this.getInterests(this.user.id)
           })
