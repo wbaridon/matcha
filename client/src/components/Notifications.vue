@@ -33,7 +33,7 @@ export default {
     background-color: white;
     color: black;
     border: solid 1px black;
-    width: 250px;
+    width: 300px;
     right: 0;
   }
   #topNotifications {
@@ -49,5 +49,11 @@ export default {
   }
   #all_notifications ul {
     padding: 2px;
+  }
+  #all_notifications {
+      overflow: scroll;
+      height: 250px;
+      display: flex;
+      flex-direction: column-reverse;
   }
 </style>

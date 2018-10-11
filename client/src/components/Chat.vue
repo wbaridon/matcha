@@ -22,19 +22,12 @@ export default {
     }
   },
   mounted () {
-    // Gets recipient
     this.recipient = this.$route.params.userId
-    // Checks if users matched
     this.checkMatch()
-    // Displays messages stored in database so far
     this.getMessages()
-
-    // Displays messages received while page not refreshed
-    // this.$socket.on('MESSAGE', (data) => {})
   },
   computed: {
     messages () {
-    //  console.log(this.$store.state.messages[2])
       return this.$store.state.messages[this.$route.params.userId]
     }
   },
