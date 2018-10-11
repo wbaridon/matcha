@@ -43,7 +43,7 @@ export default {
     })
   },
   getIp (callback) {
-    return axios({method: 'GET', 'url': 'https://geoip-db.com/json/'}, callback).then(result => {
+    return axios({method: 'GET', 'url': 'https://get.geojs.io/v1/ip/geo.json'}, callback).then(result => {
       callback(result)
     })
   },
