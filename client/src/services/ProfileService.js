@@ -67,6 +67,11 @@ export default {
       callback(response.data)
     })
   },
+  havePic (token, callback) {
+    return Api().post('profile/havePic', { 'token': token }, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   getInterestsList (callback) {
     return Api().post('profile/getInterestsList', callback).then(function (response) {
       callback(response.data)

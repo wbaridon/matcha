@@ -63,7 +63,7 @@ router.post('/getAll', function (req, res) {
 })
 
 router.post('/profileVisit', function (req, res) {
-	console.log('arrive dans profile visit')
+	
 })
 
 router.post('/read', function (req, res) {

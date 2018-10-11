@@ -11,8 +11,8 @@
             <span v-if="!user.isOnline">Derniere visite: <strong>{{lastVisit}}</strong><br></span>
     </aside>
     <section class="userProfile">
-    <button @click="setLike(0)" v-if="!like && images.count > 0"> J'aime </button>
-    <button @click="setLike(4)" v-if="like && images.count > 0"> Je n'aime plus </button>
+    <button @click="setLike(0)" v-if="!like && images.count > 0 && havePic"> J'aime </button>
+    <button @click="setLike(4)" v-if="like && images.count > 0 && havePic"> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
     <span v-if="likeUs"> Cet utilisateur vous a like.</span>
     <div v-for="picture in images.gallery" :key="picture.id" class="pic">
@@ -53,7 +53,8 @@ export default {
         gallery: []
       },
       like: false,
-      likeUs: ''
+      likeUs: '',
+      havePic: false
     }
   },
   mounted () {
@@ -91,12 +92,18 @@ export default {
         this.getPic(this.user.id)
         this.getInterests(this.user.id)
         this.userLikeUs(this.user.id)
+        this.iHaveAPic()
       })
     },
     getPic (id) {
       Pictures.getPic(id, callback => {
         this.images.count = callback.count
         this.images.gallery = callback.gallery
+      })
+    },
+    iHaveAPic () {
+      Profile.havePic(this.$cookie.get('authToken'), callback => {
+        if (callback.count > 0) { this.havePic = true }
       })
     },
     getLikeStatus () {

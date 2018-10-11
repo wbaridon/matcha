@@ -62,6 +62,16 @@ module.exports.addPic = function (id_account, isProfile, filename, callback) {
 		});
 }
 
+module.exports.countPic = function (id, callback) {
+	db.query('SELECT COUNT(*) AS count FROM images WHERE id_account=?',
+		[id], function (err, result) {
+			if (err) throw err;
+			else {
+				callback(result)
+			}
+		});
+}
+
 module.exports.getPic = function (id, callback) {
 	db.query('SELECT * FROM images WHERE id_account=?',
 		[id], function (err, result) {

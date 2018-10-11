@@ -40,11 +40,6 @@ router.post('/', function (req, res) {
 							appData.error = 0;
 							appData["token"] = token;
 							res.status(200).json(appData);
-
-							// Faire la gestion des messages en dehors de la console
-							// Ne pas oublier activation par mail pour l inscription a traiter
-							// Cookies
-							//res.send('active')
 						}
 						else {
 							res.send("Merci d'activer votre compte");
