@@ -65,7 +65,7 @@ export default {
   .discussionContent {
     overflow: scroll;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     height: 250px;
   }
   #showMatches {

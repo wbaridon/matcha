@@ -43,7 +43,7 @@ export default {
     })
   },
   getIp (callback) {
-    return axios({method: 'GET', 'url': 'https://geoip-db.com/json/'}, callback).then(result => {
+    return axios({method: 'GET', 'url': 'https://get.geojs.io/v1/ip/geo.json'}, callback).then(result => {
       callback(result)
     })
   },
@@ -69,6 +69,11 @@ export default {
   },
   deleteInterest (id, data, callback) {
     return Api().post('profile/deleteInterest', {'id': id, 'data': data}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
+  havePic (token, callback) {
+    return Api().post('profile/havePic', { 'token': token }, callback).then(function (response) {
       callback(response.data)
     })
   },

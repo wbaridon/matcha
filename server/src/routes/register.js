@@ -25,7 +25,6 @@ function sendMail(user) {
 		}
 	});
 	myhash.hash(user.email + user.timestamp, hash => {
-		console.log("Hash: "+hash);
 		var mailOptions = {
 			from: 'matchawb@gmail.com',
 			to: user.email,
@@ -34,9 +33,7 @@ function sendMail(user) {
 		};
 		tunnel.sendMail(mailOptions, function(err, info){
 			if (err) {
-				console.log(err);
 			} else {
-				console.log('Email sent:' + info.response);
 			}
 		});
 	});
@@ -53,7 +50,6 @@ router.post('/', urlencodedParser, function (req, res) {
 			firstname: req.body.firstname,
 			timestamp: Date.now()
 		}
-		console.log('enter in boucle');
 	} else {
 		res.send('Merci de remplir tous les champs');
 	}
@@ -71,7 +67,6 @@ router.post('/', urlencodedParser, function (req, res) {
 			})
 		}
 		else {
-			console.log('user exist');
 			res.send('Cet utilisateur ou email existe deja');
 		}
 	})

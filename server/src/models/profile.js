@@ -8,7 +8,7 @@ module.exports.createUser = function (user, id_account) {
 		function (err, result) {
 			if (err) throw err;
 			else {
-				console.log('Profile created');
+			
 			}
 		});
 }
@@ -55,6 +55,16 @@ module.exports.addPic = function (id_account, isProfile, filename, callback) {
 		(id_account, isProfile, filename)\
 		VALUES (?,?,?)',
 		[id_account, isProfile, filename], function (err, result) {
+			if (err) throw err;
+			else {
+				callback(result)
+			}
+		});
+}
+
+module.exports.countPic = function (id, callback) {
+	db.query('SELECT COUNT(*) AS count FROM images WHERE id_account=?',
+		[id], function (err, result) {
 			if (err) throw err;
 			else {
 				callback(result)

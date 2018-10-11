@@ -8,7 +8,7 @@ module.exports.createUser = function (id_account) {
 		function (err, result) {
 			if (err) throw err;
 			else {
-				console.log('Interest created');
+		
 			}
 		});
 }
@@ -34,11 +34,9 @@ module.exports.update = function (interest, id, value, callback) {
 }
 
 module.exports.addNew = function (interest, id, callback) {
-	console.log('arrive')
-	db.query("ALTER TABLE interests ADD "+ interest + " TINYINT DEFAULT 0", callback, function (err, result) {
+	db.query(`ALTER TABLE interests ADD `+ interest +` TINYINT DEFAULT 0`, callback, function (err, result) {
 		if (err) throw err;
 		else {
-			console.log('iciicici')
 			callback(result)
 		}
 	});

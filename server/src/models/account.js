@@ -14,7 +14,7 @@ module.exports.createUser = function (user) {
 		function (err, result) {
 			if (err) throw err;
 			else {
-				console.log('User created');
+		
 			}
 		});
 }

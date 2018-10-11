@@ -42,8 +42,6 @@ router.post('/view', function(req, res) {
 })
 
 router.post('/edit', function(req, res) {
-  // On recupere les data, puis il faudra faire le update avant de renvoyer a la Vue
-  // Actuellement l'update n'est pas encore fait
   user = req.body.user
   jwt.verify(req.body.token, 'MatchaSecretKey', function(err, decoded) {
 		if (err) {
@@ -179,7 +177,6 @@ router.post('/updatePref', function(req, res) {
 
 router.post('/updatePerso', function(req, res) {
   id = req.body.id
-	console.log(req.body)
   profile.updateUser(id, 'name', req.body.user.name, (err, result) => {
     profile.updateUser(id, 'firstname', req.body.user.firstname, (err, result) => {
       account.updateUser(id, 'email', req.body.user.email, (err, result) => {
@@ -193,6 +190,14 @@ router.post('/updatePerso', function(req, res) {
       })
     })
   })
+})
+
+router.post('/havePic', function(req, res) {
+	helpers.getId(req.body.token, id => {
+		profile.countPic(id, result => {
+			res.send(result[0])
+		})
+	})
 })
 
 router.post('/localisation', function(req, res) {
@@ -243,7 +248,6 @@ router.post('/persoLoc', function (req, res) {
 })
 
 router.post('/updatePwd', function(req, res) {
-		console.log(req.body)
 		id = req.body.id
 		oldpwd = req.body.password.oldpwd
 		newpwd = req.body.password.newpwd

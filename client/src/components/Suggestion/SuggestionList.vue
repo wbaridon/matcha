@@ -8,9 +8,9 @@
       <div class="contentCard">
         <h2>{{element.firstname}} {{element.name}}</h2><br>
         {{element.age}} ans, {{element.gender}} {{element.sexuality}} à {{element.distance}} m<br>
-        Compatible a {{element.compatibility}}% {{element.interests}}
-        Interet commun {{element.tagCount}}
-        Score de popularite
+        <strong>Compatible a {{element.compatibility}}%</strong><br>
+        Vous avez {{element.tagCount}} interet en commun. <br>
+        Score de popularite {{element.popularite}}<br>
         <span v-for="(data, index) in element.interest" :key="index">#{{index}} </span>
         <br>
         <router-link :to="'/profile/' + element.id">Voir son profil >></router-link>
@@ -104,6 +104,7 @@ export default {
 }
 .contentCard {
   padding: 10px;
+  margin: 15px;
 }
 .pic img, .pic {
   width: 150px;
