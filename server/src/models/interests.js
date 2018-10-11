@@ -8,7 +8,7 @@ module.exports.createUser = function (id_account) {
 		function (err, result) {
 			if (err) throw err;
 			else {
-				console.log('Interest created');
+		
 			}
 		});
 }

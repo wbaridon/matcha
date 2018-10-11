@@ -8,7 +8,7 @@ module.exports.storeMessage = function (newMessage) {
 		function (err, result) {
 			if (err) throw err;
 			else {
-				console.log('Message stored');
+	
 			}
 		});
 }
