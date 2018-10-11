@@ -21,7 +21,6 @@ export default {
   props: ['notifications'],
   methods: {
     close () {
-      console.log(this.notifications)
       this.$emit('close')
     }
   }

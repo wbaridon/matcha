@@ -45,3 +45,7 @@ module.exports.deleteAction = function (action, id_account, emitter, callback) {
     [id_account, action, emitter],
     callback);
 }
+
+module.exports.updateAction = function (id_account, callback) {
+  db.query('UPDATE notifications SET readed = 1 WHERE id_account = ?', [id_account], callback);
+}

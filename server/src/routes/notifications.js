@@ -66,6 +66,14 @@ router.post('/profileVisit', function (req, res) {
 	console.log('arrive dans profile visit')
 })
 
+router.post('/read', function (req, res) {
+	helpers.getId(req.body.token, id => {
+		notifications.updateAction(id, callback => {
+			res.send({success: 'notifications were read'})
+		})
+	})
+})
+
 module.exports = router;
 
 async function getUsersResume(array, callback)

@@ -32,8 +32,8 @@
         <div class="element">
           <router-link :to="{ name: 'myprofile', params: {isAuth: isAuth } }">Mon profil</router-link>
           <router-link :to="{ name: 'suggestion', params: {isAuth: isAuth } }">Suggestions</router-link>
-            {{notificationsUnread}}
-            <i class="far fa-bell fa-lg" @click="showNotifications = true"></i>
+            {{notifState}}
+            <i class="far fa-bell fa-lg" @click="openNotifications"></i>
           <Notifications v-if="showNotifications" :notifications='notifications' @close="showNotifications = false"></Notifications>
           <i @click="logOut()" class="fas fa-sign-out-alt fa-lg"></i>
         </div>
@@ -66,14 +66,18 @@ export default {
     isAuth () {
       return this.$store.state.isAuth
     },
-    notificationsUnread: function () {
-      var j = 0
-      for (var i = 0; i < this.notifications.length; i++) {
-        if (this.notifications[i].readed === 0) {
-          j++
-        }
-      }
-      return (j)
+    // notificationsUnread: function () {
+    //   var j = 0
+    //   for (var i = 0; i < this.notifState.length; i++) {
+    //     if (this.notifState[i].readed === 0) {
+    //       j++
+    //     }
+    //   }
+    //   return (j)
+    // },
+    notifState () {
+    //  console.log(this.$store.state.messages[2])
+      return this.$store.state.notifNumber
     }
   },
   watch: {
@@ -82,6 +86,12 @@ export default {
     }
   },
   methods: {
+    openNotifications () {
+      this.showNotifications = true
+      NotificationsService.readNotifications(this.$cookie.get('authToken'), callback => {
+        this.getNotifications()
+      })
+    },
     userLogin () {
       Login.logIn(this.user).then(res => {
         if (res.error === 0) {

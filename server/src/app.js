@@ -149,6 +149,12 @@ io.on('connection', function(socket) {
       helpers.getId(data.token, id => {
         data.emitter = id
         if (data.emitter != data.receiver) {
+          console.log(data.receiver)
+          var i = 0
+          while (userSockets['id'+data.receiver][i]) {
+            io.to(userSockets['id'+data.receiver][i]).emit('UPDATE_NOTIF', data);
+            i++;
+          }
           profileNewAction(data)
         }
       // Si connecte sent notifications via socket io sinon on store en db
