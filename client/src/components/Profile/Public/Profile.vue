@@ -143,6 +143,7 @@ export default {
   .pic img {
     width: 150px;
     height: 150px;
+    margin-bottom: 5px;
   }
   .container {
     display: flex;
