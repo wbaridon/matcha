@@ -129,6 +129,14 @@ io.on('connection', function(socket) {
         data.userid = id
       })
       chat.storeMessage(data)
+      notifications.newAction(2, data.recipient, data.userid)
+      if (userSockets['id'+data.recipient]) {
+        var i = 0
+        while (userSockets['id'+data.recipient][i]) {
+          io.to(userSockets['id'+data.recipient][i]).emit('UPDATE_NOTIF', data);
+          i++;
+        }
+      }
       // Pushes message to screen with sockets
       // --> To recipient
       console.log('juste avant send notif')
@@ -151,9 +159,11 @@ io.on('connection', function(socket) {
         if (data.emitter != data.receiver) {
           console.log(data.receiver)
           var i = 0
-          while (userSockets['id'+data.receiver][i]) {
-            io.to(userSockets['id'+data.receiver][i]).emit('UPDATE_NOTIF', data);
-            i++;
+          if (userSockets['id'+data.receiver]) {
+            while (userSockets['id'+data.receiver][i]) {
+              io.to(userSockets['id'+data.receiver][i]).emit('UPDATE_NOTIF', data);
+              i++;
+            }
           }
           profileNewAction(data)
         }
@@ -237,9 +247,12 @@ function deleteLike(data) {
           switch (id[0].action) {
             case 3:
               notifications.deleteAction(3, data.receiver, data.emitter)
+
+              notifications.newAction(4, data.receiver, data.emitter)
               break;
             case 0:
                 notifications.deleteAction(0, data.receiver, data.emitter)
+                notifications.newAction(4, data.receiver, data.emitter)
                 notifications.changeAction(3, 0, data.receiver, data.emitter)
             // En plus d'update on va devoir passer l'autre 3 en 0
               break;
