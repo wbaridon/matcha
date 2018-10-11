@@ -41,8 +41,6 @@ router.post('/view', function(req, res) {
 })
 
 router.post('/edit', function(req, res) {
-  // On recupere les data, puis il faudra faire le update avant de renvoyer a la Vue
-  // Actuellement l'update n'est pas encore fait
   user = req.body.user
   jwt.verify(req.body.token, 'MatchaSecretKey', function(err, decoded) {
 		if (err) {

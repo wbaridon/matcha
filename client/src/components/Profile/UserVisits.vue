@@ -1,7 +1,7 @@
 <template>
   <div id="userVisits">
     <h3>Ils vous ont visité</h3>
-      <div v-for="user in visits" v-bind:key='user.id'>
+      <div v-for="(user, index) in visits" v-bind:key='index'>
         <router-link :to="'/profile/' + user.id">{{user.firstname}}</router-link>, {{user.age}} ans
       </div>
   </div>
