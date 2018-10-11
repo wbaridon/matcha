@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const cookieParser = require('cookie-parser')
 const app = express()
 const helpers = require('./utils/helpers.js')
+const block = require('./utils/block.js')
 const jwt = require('jsonwebtoken')
 
 app.use(morgan('tiny'))
@@ -122,7 +123,6 @@ io.on('connection', function(socket) {
     // ON SEND MESSAGE EVENT
 
     socket.on('SEND_MESSAGE', function(data) {
-      console.log('arrive dans sendmessage')
       if (!data.recipient)
         return
       helpers.getId(data.token, id => {
@@ -139,7 +139,6 @@ io.on('connection', function(socket) {
       }
       // Pushes message to screen with sockets
       // --> To recipient
-      console.log('juste avant send notif')
       sendNotifications(data); // Je l'ai deporter en bas pour pouvoir la
       //re utiliser a voir si on peut rendre code + universel egalement pour le receiver
       // --> to sender
@@ -157,20 +156,21 @@ io.on('connection', function(socket) {
       helpers.getId(data.token, id => {
         data.emitter = id
         if (data.emitter != data.receiver) {
-          console.log(data.receiver)
-          var i = 0
-          if (userSockets['id'+data.receiver]) {
-            while (userSockets['id'+data.receiver][i]) {
-              io.to(userSockets['id'+data.receiver][i]).emit('UPDATE_NOTIF', data);
-              i++;
+          block.BlockStatus(data.receiver, data.emitter).then(blockedOrNot => {
+          if (!blockedOrNot) {
+            var i = 0
+            if (userSockets['id'+data.receiver]) {
+              while (userSockets['id'+data.receiver][i]) {
+                io.to(userSockets['id'+data.receiver][i]).emit('UPDATE_NOTIF', data);
+                i++;
+              }
             }
+            profileNewAction(data)
           }
-          profileNewAction(data)
-        }
-      // Si connecte sent notifications via socket io sinon on store en db
-      // LE SOCKET IO N'EST PAS ENCORE FAIT
-      })
+        })
+      }
     })
+  })
 
     // WHEN SOCKET DISCONNECTS
     socket.on('disconnect', function () {

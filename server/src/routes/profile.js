@@ -5,6 +5,7 @@ var profile = require('../models/profile.js');
 var interests = require('../models/interests.js');
 var account = require('../models/account.js');
 var notifications = require('../models/notifications.js');
+var matches = require('../models/matches.js');
 var blacklist = require('../models/blacklist.js');
 var helpers = require('../utils/helpers.js')
 var jwt = require('jsonwebtoken');
@@ -266,6 +267,20 @@ router.post('/userLikeUs', function(req, res) {
 			res.send(true)
 		} else {
 			notifications.getActionsFromEmitter(req.body.id, 3, (err, final) => {
+				if (final.length > 0) {
+					res.send(true)
+				} else { res.send(false) }
+			})
+		}
+	})
+})
+
+router.post('/userMatched', function(req, res) {
+	matches.getMatchesAsReceiver(req.body.id, (err, result) => {
+		if (result.length > 0) {
+			res.send(true)
+		} else {
+			matches.getMatchesAsEmitter(req.body.id, (err, final) => {
 				if (final.length > 0) {
 					res.send(true)
 				} else { res.send(false) }

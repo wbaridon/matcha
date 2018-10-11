@@ -52,6 +52,11 @@ export default {
       callback(response.data)
     })
   },
+  userMatched (id, callback) {
+    return Api().post('profile/userMatched', {'id': id}, callback).then(function (response) {
+      callback(response.data)
+    })
+  },
   getInterests (id, callback) {
     return Api().post('profile/getInterests', {'id': id}, callback).then(function (response) {
       callback(response.data)

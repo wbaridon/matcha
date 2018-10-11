@@ -22,4 +22,14 @@ function BlockStatus (id, user) {
 	})
 }
 
+function BlockStatusForNotif (id, userid) {
+	return new Promise((resolve, reject) => {
+		blacklist.getBlockStatus(id, userid, result => {
+			if (result.length > 0) { resolve(true) }
+			else { resolve(false) }
+		})
+	})
+}
+
 module.exports.filter = filter;
+module.exports.BlockStatus = BlockStatusForNotif;

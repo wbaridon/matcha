@@ -14,7 +14,8 @@
     <button @click="setLike(0)" v-if="!like && images.count > 0"> J'aime </button>
     <button @click="setLike(4)" v-if="like && images.count > 0"> Je n'aime plus </button>
     <h1>{{user.firstname}} {{user.name}}</h1>
-    <span v-if="likeUs"> Cet utilisateur vous a like.</span>
+    <span v-if="likeUs && !haveWeMatched"> Cet utilisateur vous a like.</span>
+    <span v-if="haveWeMatched"> Vous avez matché avec cet utilisateur ! Bien joué</span>
     <div v-for="picture in images.gallery" :key="picture.id" class="pic">
         <img v-if="!picture.isProfile" :src="'/static/images/uploads/'+picture.filename"/>
     </div>
@@ -53,7 +54,8 @@ export default {
         gallery: []
       },
       like: false,
-      likeUs: ''
+      likeUs: '',
+      haveWeMatched: ''
     }
   },
   mounted () {
@@ -61,6 +63,7 @@ export default {
     this.user.id = this.$route.params.userId
     this.getProfile()
     this.getLikeStatus()
+    this.weMatched()
   },
   computed: {
     lastVisit: function () {
@@ -107,6 +110,11 @@ export default {
     userLikeUs () {
       Profile.userLikeUs(this.user.id, callback => {
         this.likeUs = callback
+      })
+    },
+    weMatched () {
+      Profile.userMatched(this.user.id, callback => {
+        this.haveWeMatched = callback
       })
     },
     fakeProfile () {
