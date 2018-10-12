@@ -6,8 +6,8 @@ export default {
       callback(response.data)
     })
   },
-  getLikeStatus (action, token, callback) {
-    return Api().post('notifications/getLikeStatus', {'action': action, 'token': token}, callback).then(function (response) {
+  getLikeStatus (action, token, receiver, callback) {
+    return Api().post('notifications/getLikeStatus', {'action': action, 'token': token, 'receiver': receiver}, callback).then(function (response) {
       callback(response.data)
     })
   },

@@ -43,6 +43,8 @@ export default {
   }
   .link {
     color: black;
+    font-weight: bold;
+    padding-bottom: 5px;
   }
   .notifications {
     list-style-type: none;

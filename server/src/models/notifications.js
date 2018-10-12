@@ -28,6 +28,13 @@ module.exports.getActionsFromEmitter = function (emitter, action, callback) {
         callback);
 }
 
+module.exports.getActionsFromEmitterForReceiver = function (emitter, id, action, callback) {
+    db.query('SELECT * FROM notifications\
+        WHERE emitter = ? AND id_account=? AND action=?',
+        [emitter, id, action],
+        callback);
+}
+
 module.exports.getLikeAction = function (emitter, receiver, callback) {
   db.query('SELECT * FROM notifications WHERE id_account =? AND emitter =? AND (action=3 OR action=0)',
   [receiver, emitter],

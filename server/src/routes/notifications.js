@@ -39,9 +39,11 @@ router.post('/get', function (req, res) {
 
 router.post('/getLikeStatus', function (req, res) {
 	helpers.getId(req.body.token, id => {
-		notifications.getActionsFromEmitter(id, req.body.action, (err, result) => {
-			notifications.getActionsFromEmitter(id, 3, (err, otherResult) => {
+		console.log(req.body)
+		notifications.getActionsFromEmitterForReceiver(id, req.body.receiver, req.body.action, (err, result) => {
+			notifications.getActionsFromEmitterForReceiver(id, req.body.receiver, 3, (err, otherResult) => {
 				final = result.concat(otherResult)
+				console.log(final)
 				if (final.length > 0) { res.send ({'like':true})}
 				else {res.send({'like':false})}
 				})
@@ -63,7 +65,7 @@ router.post('/getAll', function (req, res) {
 })
 
 router.post('/profileVisit', function (req, res) {
-	
+
 })
 
 router.post('/read', function (req, res) {

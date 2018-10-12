@@ -110,7 +110,7 @@ export default {
       })
     },
     getLikeStatus () {
-      Notifications.getLikeStatus(0, this.$cookie.get('authToken'), callback => {
+      Notifications.getLikeStatus(0, this.$cookie.get('authToken'), this.$route.params.userId, callback => {
         this.like = callback.like
       })
     },
