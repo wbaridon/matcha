@@ -92,7 +92,7 @@ io.on('connection', function(socket) {
   // CONNECTION EVENT
 
   if (getCookie('authToken', socket)) { // Check si on a un cookie sinon cela bug
-    console.log('Cookie: '+getCookie('authToken', socket))
+  //  console.log('Cookie: '+getCookie('authToken', socket))
     helpers.getId(getCookie('authToken', socket), function(r){
       if (!userSockets['id'+r]) {
         userSockets['id'+r] = new Array(socket.id)
@@ -101,9 +101,9 @@ io.on('connection', function(socket) {
         userSockets['id'+r].push(socket.id)
       socket.myUsername = r
     });
-    console.log('\n' + socket.myUsername + ' is: ' + socket.id + '\n')
+  //  console.log('\n' + socket.myUsername + ' is: ' + socket.id + '\n')
     accounts.updateUser(socket.myUsername, 'isOnline', 1)
-    console.log(userSockets)
+  //  console.log(userSockets)
 
     // LOADS MESSAGES FROM DATABASE
 
@@ -175,7 +175,7 @@ io.on('connection', function(socket) {
     // WHEN SOCKET DISCONNECTS
     socket.on('disconnect', function () {
 
-        console.log(socket.myUsername+' disconnected')
+    //    console.log(socket.myUsername+' disconnected')
         let userIDs = userSockets['id'+socket.myUsername]
         if (userIDs.length >= 1) {
           for (var i = userIDs.length - 1; i >= 0; i--) {
@@ -198,7 +198,7 @@ function sendNotifications(data) {
       data.login = username[0].login
       data.messageReceive = 1
       for (var i = 0; i < userSockets['id'+data.recipient].length; i++) {
-        console.log('emet le message au recipient ' + data.recipient)
+      //  console.log('emet le message au recipient ' + data.recipient)
         io.to(userSockets['id'+data.recipient][i]).emit('MESSAGE', data);
       }
     })
