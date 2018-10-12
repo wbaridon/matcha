@@ -123,30 +123,35 @@ io.on('connection', function(socket) {
     // ON SEND MESSAGE EVENT
 
     socket.on('SEND_MESSAGE', function(data) {
+
       if (!data.recipient)
         return
       helpers.getId(data.token, id => {
         data.userid = id
       })
-      chat.storeMessage(data)
-      notifications.newAction(2, data.recipient, data.userid)
-      if (userSockets['id'+data.recipient]) {
-        var i = 0
-        while (userSockets['id'+data.recipient][i]) {
-          io.to(userSockets['id'+data.recipient][i]).emit('UPDATE_NOTIF', data);
-          i++;
-        }
-      }
-      // Pushes message to screen with sockets
-      // --> To recipient
-      sendNotifications(data); // Je l'ai deporter en bas pour pouvoir la
-      //re utiliser a voir si on peut rendre code + universel egalement pour le receiver
-      // --> to sender
-      getUsernameFromId(data.userid, username => {
-        data.login = username[0].login
-        data.messageReceive = 0
-        for (var i = 0; i < userSockets['id'+data.userid].length; i++) {
-          io.to(userSockets['id'+data.userid][i]).emit('MESSAGE', data);
+      block.BlockStatus(data.recipient, data.userid).then(blockedOrNot => {
+        if (!blockedOrNot) {
+          chat.storeMessage(data)
+          notifications.newAction(2, data.recipient, data.userid)
+          if (userSockets['id'+data.recipient]) {
+            var i = 0
+            while (userSockets['id'+data.recipient][i]) {
+              io.to(userSockets['id'+data.recipient][i]).emit('UPDATE_NOTIF', data);
+              i++;
+            }
+          }
+          // Pushes message to screen with sockets
+          // --> To recipient
+          sendNotifications(data); // Je l'ai deporter en bas pour pouvoir la
+          //re utiliser a voir si on peut rendre code + universel egalement pour le receiver
+          // --> to sender
+          getUsernameFromId(data.userid, username => {
+            data.login = username[0].login
+            data.messageReceive = 0
+            for (var i = 0; i < userSockets['id'+data.userid].length; i++) {
+              io.to(userSockets['id'+data.userid][i]).emit('MESSAGE', data);
+            }
+          })
         }
       })
     })
