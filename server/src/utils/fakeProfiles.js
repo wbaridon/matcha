@@ -133,7 +133,6 @@ let Profile = function() {
                 var escape = /'/;
                 this.city = obj.city.replace(escape, " " )
                 this.zipcode = obj.zip
-                console.log(`Lat : ${this.latitude} - Lon : ${this.longitude}`)
                 str.s = `('${this.idAccount}', '${this.name}', '${this.firstname}', ${this.gender}, ${this.age},\
                 ${this.sexuality}, '${this.zipcode}', '${this.city}', ${this.latitude}, ${this.longitude}, ${this.popularite}, ${this.isFill})`;
                 resolve();
@@ -204,7 +203,6 @@ let addInDbProfiles = (nbr) => {
             var str = { s: "B"};
             await prfs[i].getSQLProfiles(str);
             SQLQuery += str.s;
-            console.log(SQLQuery);
             if (i !== nbr - 1)
                 SQLQuery += ',';
         }
@@ -247,7 +245,6 @@ let addInDbPictures = (nbr) => {
             var str = { s: "B"};
             await prfs[i].getSQLPictures(str);
             SQLQuery += str.s;
-            console.log(SQLQuery)
             if (i !== nbr - 1)
                 SQLQuery += ',';
         }

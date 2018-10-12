@@ -74,13 +74,11 @@ CREATE TABLE IF NOT EXISTS interests ( \
 
 connection.connect(err => {
 if (err) throw err;
-  console.log('Connected !');
   connection.query('CREATE DATABASE IF NOT EXISTS matcha', (err, result) => {
     if (err) throw err;
     console.log('Database matcha created');
     connection.query('USE matcha', (err, result) => {
       if (err) throw err;
-      console.log('Database matcha selected');
       sql.forEach((elem, index) => {
         connection.query(elem);
         if (sql.length - 1 == index)

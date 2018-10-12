@@ -13,7 +13,6 @@ var sql = 'DROP DATABASE IF EXISTS `matcha`';
 
 connection.connect(err => {
 if (err) throw err;
-  console.log('Connected !');
   connection.query(sql, (err, result) => {
     if (err) throw err;
     else {
