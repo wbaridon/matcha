@@ -13,4 +13,5 @@ Step 2 : Lauch the front server with http-server dist -p8080 si le repertoire ex
 ////////////////////
 
 1. Start la VM Base : docker-machine start Base
-2. Recuperer l' IP : docker-machine ip base
+2. Recuperer l' IP : docker-machine ip Base
+3. Rendre active la machine: eval $(docker-machine env Base)
