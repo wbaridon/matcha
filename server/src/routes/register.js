@@ -29,7 +29,7 @@ function sendMail(user) {
 			from: 'matchawb@gmail.com',
 			to: user.email,
 			subject: 'Confirmation compte matcha',
-			text: 'Bonjour ' + user.firstname + ', et bienvenue sur matcha! Cliquez sur ce lien pour activer votre compte : http://localhost:8080/activate?email=' + user.email + '&key=' + hash
+			text: 'Bonjour ' + user.firstname + ', et bienvenue sur matcha! Cliquez sur ce lien pour activer votre compte : ' + global.host + '/activate?email=' + user.email + '&key=' + hash
 		};
 		tunnel.sendMail(mailOptions, function(err, info){
 			if (err) {
@@ -41,6 +41,7 @@ function sendMail(user) {
 
 
 router.post('/', urlencodedParser, function (req, res) {
+	global.host = req.headers.origin
 	if (Object.keys(req.body).length == 5) {
 		var user = {
 			login: req.body.login,
